@@ -33,7 +33,7 @@ public class MoveTool extends ATool implements IMoveTool {
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				setStatusCode(1);
 			}
 			if (f1.isFile())
 			{
@@ -56,28 +56,37 @@ public class MoveTool extends ATool implements IMoveTool {
 	public void recursivemove(File from, File to) {
 		try {
 			if (from.isDirectory()) {
-				// If the destination is not exist then create it
-				if (!to.exists()) {
-					to.mkdirs();
+				//If destination is a file or a file path
+				if(to.isFile()){
+					if(to.createNewFile()){
+						to.delete();
+					}
+					setStatusCode(1);
 				}
-				File toto = new File(to.toString() + "/" + from.getName());
-				toto.mkdir();
-				// Create list of files and directories on the current source
-				String[] fList = from.list();
-
-				for (int index = 0; index < fList.length; index++) {
-					File dest = new File(toto, fList[index]);
-					File source = new File(from, fList[index]);
-
-					// Recursion call take place here
-					recursivemove(source, dest);
+				else{
+					// If the destination is not exist then create it
+					if (!to.exists()) {
+						to.mkdirs();
+					}
+					File toto = new File(to.toString() + "/" + from.getName());
+					toto.mkdir();
+					// Create list of files and directories on the current source
+					String[] fList = from.list();
+	
+					for (int index = 0; index < fList.length; index++) {
+						File dest = new File(toto, fList[index]);
+						File source = new File(from, fList[index]);
+	
+						// Recursion call take place here
+						recursivemove(source, dest);
+					}
+					// Delete the source folders
+					for (int i = 0; i < fList.length; i++) {
+						File source = new File(from, fList[i]);
+						Files.deleteIfExists(source.toPath());
+					}
+					Files.deleteIfExists(from.toPath());
 				}
-				// Delete the source folders
-				for (int i = 0; i < fList.length; i++) {
-					File source = new File(from, fList[i]);
-					Files.deleteIfExists(source.toPath());
-				}
-				Files.deleteIfExists(from.toPath());
 			}
 			else {
 				// Found a file. Copy it into the destination
@@ -92,7 +101,6 @@ public class MoveTool extends ATool implements IMoveTool {
 
 		} catch (Exception ex) {
 			// Handle all the relevant exceptions here
-			ex.printStackTrace();
 			setStatusCode(1);
 		}
 	}

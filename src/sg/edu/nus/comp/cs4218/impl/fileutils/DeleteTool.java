@@ -28,15 +28,11 @@ public class DeleteTool extends ATool implements IDeleteTool {
 			f1 = new File(f1.getCanonicalPath());
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			setStatusCode(1);
 		}
 		if (delete(f1)) {
-			return "\nFile deleted";
 		}
-		else {
-			return "\nDelete was unsuccessful";
-		}
+		return null; 
 	}
 
 	@Override
@@ -82,7 +78,6 @@ public class DeleteTool extends ATool implements IDeleteTool {
 
 		} catch (Exception ex) {
 			// Handle all the relevant exceptions here
-			ex.printStackTrace();
 			setStatusCode(1);
 		}
 	}

@@ -38,7 +38,7 @@ public class CopyTool extends ATool implements ICopyTool {
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				setStatusCode(1);
 			}
 			if (f1.isFile())
 			{
@@ -61,20 +61,30 @@ public class CopyTool extends ATool implements ICopyTool {
 	public void recursivecopy(File from, File to) {
 		try {
 			if (from.isDirectory()) {
-				// If the destination is not exist then create it
-				if (!to.exists()) {
-					to.mkdirs();
+				//If destination is a file or a file path
+				if(to.isFile()){
+					if(to.createNewFile()){
+						to.delete();
+					}
+					setStatusCode(1);
 				}
-
-				// Create list of files and directories on the current source
-				String[] fList = from.list();
-
-				for (int index = 0; index < fList.length; index++) {
-					File dest = new File(to, fList[index]);
-					File source = new File(from, fList[index]);
-
-					// Recursion call take place here
-					recursivecopy(source, dest);
+				else{
+					// If the destination is not exist then create it
+					if (!to.exists()) {
+						
+						to.mkdirs();
+					}
+	
+					// Create list of files and directories on the current source
+					String[] fList = from.list();
+	
+					for (int index = 0; index < fList.length; index++) {
+						File dest = new File(to, fList[index]);
+						File source = new File(from, fList[index]);
+	
+						// Recursion call take place here
+						recursivecopy(source, dest);
+					}
 				}
 			}
 			else {
@@ -90,7 +100,6 @@ public class CopyTool extends ATool implements ICopyTool {
 
 		} catch (Exception ex) {
 			// Handle all the relevant exceptions here
-			ex.printStackTrace();
 			setStatusCode(1);
 		}
 	}
