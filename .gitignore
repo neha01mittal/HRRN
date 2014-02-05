@@ -6,6 +6,8 @@
 *.ear
 /bin
 
+.classpath
+
 
 .DS_Store
 .AppleDouble
