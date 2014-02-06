@@ -57,26 +57,23 @@ public class Shell implements IShell {
 		}
 		// System.out.println(commandline);
 		// Step 2. find the escape space in quotes
-		regex = Pattern.compile("['][^']*(\\\\\\s)[^']*[']|[\"][^\"]*(\\\\\\s)[^\"]*[\"]");
+		regex = Pattern.compile("['][^']*\\s+[^']*[']|[\"][^\"]*\\s+[^\"]*[\"]");
 		regexMatcher = regex.matcher(commandline);
 		while (regexMatcher.find()) {
-			if (regexMatcher.group(1) != null) {
-				String temp = regexMatcher.group(1);
-				commandline = commandline.replace(temp, dilimiter1);
-			}
-			if (regexMatcher.group(2) != null) {
-				String temp = regexMatcher.group(2);
-				commandline = commandline.replace(temp, dilimiter1);
+			if (regexMatcher.group() != null) {
+				String temp = regexMatcher.group();
+				String replaced = regexMatcher.group().replaceAll("\\s", dilimiter1);
+				commandline = commandline.replace(temp, replaced);
 			}
 		}
-		System.out.println(commandline);
+		// System.out.println(commandline);
 		commandline = commandline.replaceAll("\\\\\\s", dilimiter2);
 		// System.out.println(commandline);
 
 		// Step 3. remove the first one and switch back delimiter
 		List<String> argList = new ArrayList<String>(Arrays.asList(commandline.split("\\s+")));
 		for (int i = 0; i < argList.size(); i++) {
-			argList.set(i, argList.get(i).replaceAll(dilimiter1, "\\\\ ").replaceAll(dilimiter2, " "));
+			argList.set(i, argList.get(i).replaceAll(dilimiter1, " ").replaceAll(dilimiter2, " "));
 		}
 		argList.remove(0);
 
