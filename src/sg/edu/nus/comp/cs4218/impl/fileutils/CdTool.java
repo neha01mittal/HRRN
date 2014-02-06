@@ -20,7 +20,7 @@ public class CdTool extends ATool implements ICdTool {
 	public String execute(File workingDir, String stdin) {
 
 		// check for argument number
-		if ((args == null || args.length < 1) || (stdin == null && stdin.length() < 1)) {
+		if ((args == null || args.length < 1) || (stdin == null || stdin.length() < 1)) {
 			setStatusCode(1);
 			return "No argument recieved.";
 		}
