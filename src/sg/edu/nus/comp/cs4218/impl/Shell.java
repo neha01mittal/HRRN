@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -33,23 +34,37 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
  */
 public class Shell implements IShell {
 
-	private static String dilimiter = "::space::"; // wrap with : which is
-													// not allowed
+	private static String dilimiter1 = "::escape-space::";
+	private static String dilimiter2 = "::space::";
 
-	private String[] getArgsArray(String commandline) {
-		List<String> argList = new ArrayList<String>();
-		commandline = commandline.replaceAll("\\\\\\s", dilimiter);
-		Pattern regex = Pattern.compile("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");
+	public static String[] getArgsArray(String commandline) {
+		// Step 1. remove all the surround quotes
+		Pattern regex = Pattern.compile("[^'\"]*(\"[^\"]*\")[^'\"]*|[^'\"]*('[^']*')[^'\"]*");
 		Matcher regexMatcher = regex.matcher(commandline);
 		while (regexMatcher.find()) {
 			if (regexMatcher.group(1) != null) {
-				argList.add(regexMatcher.group(1).replaceAll(dilimiter, " "));
+				String temp = regexMatcher.group(1);
+				// System.out.println("group1: " + temp);
+				commandline = commandline.replaceAll(temp, temp.substring(1, temp.length() - 1));
 			} else if (regexMatcher.group(2) != null) {
-				argList.add(regexMatcher.group(2).replaceAll(dilimiter, " "));
-			} else {
-				argList.add(regexMatcher.group().replaceAll(dilimiter, " "));
+				String temp = regexMatcher.group(2);
+				// System.out.println("group2: " + temp);
+				commandline = commandline.replaceAll(temp, temp.substring(1, temp.length() - 1));
 			}
 		}
+		// System.out.println(commandline);
+		// Step 2. find the escape space in quotes
+		commandline = commandline.replaceAll("['][^']*(\\\\\\s)[^']*[']|[\"][^\"]*(\\\\\\s)[^\"]*[\"]", dilimiter1);
+		// System.out.println(commandline);
+		commandline = commandline.replaceAll("\\\\\\s", dilimiter2);
+		// System.out.println(commandline);
+
+		// Step 3. remove the first one and switch back delimiter
+		List<String> argList = new ArrayList<String>(Arrays.asList(commandline.split(" ")));
+		for (int i = 0; i < argList.size(); i++) {
+			argList.set(i, argList.get(i).replaceAll(dilimiter1, "\\\\ ").replaceAll(dilimiter2, " "));
+		}
+		argList.remove(0);
 		if (argList.size() > 0) {
 			argList.remove(0);
 			return argList.toArray(new String[0]);
@@ -68,7 +83,7 @@ public class Shell implements IShell {
 	@Override
 	public ITool parse(String commandline) {
 		if (commandline.contains("|")) {
-			return new PipingTool(commandline.split("\\|"));
+			return new PipingTool(commandline.split("|"));
 		} else {
 			commandline = commandline.trim();
 			String[] cmdSplit = commandline.split("\\s+");
@@ -80,23 +95,23 @@ public class Shell implements IShell {
 
 				if (cmd.equals("cat")) {
 					return new CatTool(args);
-				} else if (cmd.equalsIgnoreCase("cd")) {
+				} else if (cmd.equals("cd")) {
 					return new CdTool(args);
-				} else if (cmd.equalsIgnoreCase("copy")) {
+				} else if (cmd.equals("copy")) {
 					return new CopyTool(args);
-				} else if (cmd.equalsIgnoreCase("delete")) {
+				} else if (cmd.equals("delete")) {
 					return new DeleteTool(args);
 				} else if (cmd.equals("echo")) {
 					return new EchoTool(args);
-				} else if (cmd.equalsIgnoreCase("ls")) {
+				} else if (cmd.equals("ls")) {
 					return new LsTool(args);
-				} else if (cmd.equalsIgnoreCase("move")) {
+				} else if (cmd.equals("move")) {
 					return new MoveTool(args);
-				} else if (cmd.equalsIgnoreCase("pwd")) {
+				} else if (cmd.equals("pwd")) {
 					return new PWDTool();
-				} else if (cmd.equalsIgnoreCase("grep")) {
+				} else if (cmd.equals("grep")) {
 					return new GrepTool(args);
-				} else if (cmd.equalsIgnoreCase("long")) {
+				} else if (cmd.equals("long")) {
 					return new LongCmd(args);
 				}
 			}
