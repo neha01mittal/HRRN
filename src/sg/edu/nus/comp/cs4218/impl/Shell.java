@@ -29,6 +29,7 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.MoveTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
 
 /**
+ * 
  * The Shell is used to interpret and execute user's commands. Following
  * sequence explains how a basic shell can be implemented in Java
  */
@@ -75,8 +76,6 @@ public class Shell implements IShell {
 		for (int i = 0; i < argList.size(); i++) {
 			argList.set(i, argList.get(i).replaceAll(dilimiter1, " ").replaceAll(dilimiter2, " "));
 		}
-		argList.remove(0);
-
 		if (argList.size() > 0) {
 			argList.remove(0);
 			return argList.toArray(new String[0]);

@@ -2,18 +2,16 @@ package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -23,69 +21,63 @@ import org.junit.Test;
 
 public class GrepToolTest {
 
-	private static Path rootDirectory;
-	private static String rootDirectoryString;
-	private static List<String> testFileListRelativeString;
-	private static List<String> testFileListAbsoluteString;
-	private static List<File> testDirectories;
-	private static final String[] extensions = { ".txt", ".doc" };
+	private static File file1;
+	private static File file2;
 
 	@BeforeClass
 	public static void before() throws IOException {
+		// create file1.txt and file2.txt in current directory
+		GrepToolTest gtt = new GrepToolTest();
+		String curDir = System.getProperty("user.dir");
+		file1 = new File(curDir, "file1.txt");
+		file2 = new File(curDir, "file2.txt");
+		String content = readFile("file1.txt", gtt);
+		writeToFile(file1, content);
+		String content2 = readFile("file2.txt", gtt);
+		writeToFile(file2, content2);
 
-		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + "/grepToolTest";
+	}
 
-		rootDirectory = Paths.get(rootDirectoryString);
-		Files.createDirectory(rootDirectory);
-		testFileListRelativeString = new ArrayList<String>();
-		testFileListAbsoluteString = new ArrayList<String>();
-		testDirectories = new ArrayList<File>();
-
-		String dirPath = "";
-
-		for (int i = 0; i < 2; i++) {
-			try {
-				dirPath += "level-" + i;
-
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + "/" + dirPath);
-				Files.createDirectory(temp);
-				File f = new File(temp + File.separator + "test" + i + extensions[i]);
-				f.createNewFile();
-				try {
-					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(f, true)));
-					out.println("I am present in file " + i + "\nThis is second (ine of #$ file");
-					out.close();
-				} catch (IOException e) {
-					// exception handling left as an exercise for the reader
-				}
-				testDirectories.add(temp.toFile());
-				testFileListRelativeString.add(dirPath + File.separator + "test" + i + extensions[i]);
-				testFileListAbsoluteString.add(f.getAbsolutePath());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	private static void writeToFile(File file, String content) {
+		try {
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+			out.println(content);
+			out.close();
+		} catch (IOException e) {
+			// exception handling left as an exercise for the reader
 		}
+	}
+
+	private static String readFile(String file, GrepToolTest gtt) throws FileNotFoundException {
+		String path = gtt.getClass().getClassLoader().getResource(file).getPath();
+		BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
+		String line = null;
+		String content = "";
+		try {
+			// content += "Reading file: " + toRead.getName() + ": ";
+			while ((line = reader.readLine()) != null) {
+				content += line + "\n";
+			}
+			reader.close();
+			return content;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	@AfterClass
 	public static void after() throws IOException {
 		// catTool = null;
+		file1.delete();
+		file2.delete();
 
-		for (int i = 0; i < testFileListAbsoluteString.size(); i++) {
-			Path path = Paths.get(testFileListAbsoluteString.get(i));
-			Files.deleteIfExists(path);
-		}
-
-		for (int i = 0; i < testDirectories.size(); i++) {
-			Files.deleteIfExists(testDirectories.get(i).toPath());
-		}
-		Files.deleteIfExists(rootDirectory);
 	}
 
 	@Test
-	public void test_01() {
-		String input = "grep -A 2 \"temp\" " + testFileListAbsoluteString.get(0);
+	public void testSingleOption() {
+		String input = "grep -A 2 \"temp\" file1.txt";
 
 		String[] tokens = input.split(" ");
 		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
@@ -93,13 +85,13 @@ public class GrepToolTest {
 
 		GrepTool gt = new GrepTool(args);
 		gt.getCountOfMatchingLines("temp", input);
-		Map<String, ArrayList<String>> parsed = gt.Parse();
+		Map<String, ArrayList<String>> parsed = gt.parse();
 		assertEquals(parsed.size(), 1);
 
-		String pattern = gt.GetPatternFromInput();
+		String pattern = gt.getPatternFromInput();
 		assertEquals("temp", pattern);
 
-		Vector<String> fileList = gt.GetFileListFromInput();
+		Vector<String> fileList = gt.getFileListFromInput();
 		assertEquals(fileList.size(), 1);
 
 		String result = gt.execute(new File(System.getProperty("user.dir")), "");
@@ -108,8 +100,8 @@ public class GrepToolTest {
 	}
 
 	@Test
-	public void test_02() {
-		String input = "grep -A 2 -B 3 \"temp\" file1.txt file2.txt file3.txt";
+	public void testMultipleOptions() {
+		String input = "grep -A 2 -B 3 \"temp\" file1.txt file2.txt";
 
 		String[] tokens = input.split(" ");
 		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
@@ -117,14 +109,14 @@ public class GrepToolTest {
 
 		GrepTool gt = new GrepTool(args);
 		gt.getCountOfMatchingLines("temp", input);
-		Map<String, ArrayList<String>> parsed = gt.Parse();
+		Map<String, ArrayList<String>> parsed = gt.parse();
 		assertEquals(parsed.size(), 2);
 
-		String pattern = gt.GetPatternFromInput();
+		String pattern = gt.getPatternFromInput();
 		assertEquals(pattern, "temp");
 
-		Vector<String> fileList = gt.GetFileListFromInput();
-		assertEquals(fileList.size(), 3);
+		Vector<String> fileList = gt.getFileListFromInput();
+		assertEquals(fileList.size(), 2);
 
 		String result = gt.execute(new File(System.getProperty("user.dir")), "");
 		// System.out.println(result);
@@ -136,15 +128,15 @@ public class GrepToolTest {
 	}
 
 	@Test
-	public void test_03() {
-		String input = "grep \"\\^A\" file2.txt";
+	public void testRegexPattern() {
+		String input = "grep \"\\^A\" file1.txt";
 
 		String[] tokens = input.split(" ");
 		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
 		args[0] = "\\^A";
 
 		GrepTool gt = new GrepTool(args);
-		Map<String, ArrayList<String>> parsed = gt.Parse();
+		Map<String, ArrayList<String>> parsed = gt.parse();
 		assertEquals(0, parsed.size());
 
 		String result = gt.execute(new File(System.getProperty("user.dir")), "");
@@ -153,7 +145,7 @@ public class GrepToolTest {
 	}
 
 	@Test
-	public void test_04() {
+	public void testCountLines() {
 		String input = "grep -c \"^A\" file2.txt";
 
 		String[] tokens = input.split(" ");

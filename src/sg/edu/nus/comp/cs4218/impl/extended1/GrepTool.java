@@ -45,15 +45,15 @@ public class GrepTool extends ATool implements IGrepTool {
 		// assert tokens[0].toLowerCase().compareTo("grep") == 0;
 
 		// get the pattern
-		Map<String, ArrayList<String>> parsed = Parse();
-		String pattern = GetPatternFromInput();
+		Map<String, ArrayList<String>> parsed = parse();
+		String pattern = getPatternFromInput();
 
 		// get the input
 		String fileContent;
 		if (stdin.compareTo("") != 0)
 			fileContent = stdin;
 		else
-			fileContent = GetFileContentFromInput(GetFileListFromInput());
+			fileContent = getFileContentFromInput(getFileListFromInput());
 
 		mark = new int[fileContent.split("\n").length];
 
@@ -100,7 +100,7 @@ public class GrepTool extends ATool implements IGrepTool {
 	 * 3 following methods are for getting pattern and file content from input
 	 * command
 	 */
-	public String GetFileContentFromInput(Vector<String> stdin) {
+	public String getFileContentFromInput(Vector<String> stdin) {
 		String result = "";
 
 		for (int i = 0; i < stdin.size(); i++) {
@@ -124,7 +124,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		return result;
 	}
 
-	public Vector<String> GetFileListFromInput() {
+	public Vector<String> getFileListFromInput() {
 		Vector<String> result = new Vector<String>();
 
 		// String[] tokens = stdin.trim().replace(" +", " ").split(" ");
@@ -137,7 +137,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		return result;
 	}
 
-	public String GetPatternFromInput() {
+	public String getPatternFromInput() {
 		String result = "";
 		// String[] tokens = stdin.trim().replace(" +", " ").split(" ");
 
@@ -196,7 +196,7 @@ public class GrepTool extends ATool implements IGrepTool {
 	 * grep -A 3 "pattern" folderPath Parse the input command to filter out
 	 * options
 	 */
-	public Map<String, ArrayList<String>> Parse() {
+	public Map<String, ArrayList<String>> parse() {
 		Map<String, ArrayList<String>> parsed = new HashMap<String, ArrayList<String>>();
 		// String[] tokens = input.trim().replace(" +", " ").split(" ");
 

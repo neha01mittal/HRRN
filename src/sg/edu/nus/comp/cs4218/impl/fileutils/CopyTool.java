@@ -42,7 +42,7 @@ public class CopyTool extends ATool implements ICopyTool {
 			}
 			if (f1.isFile()) {
 				if (f2.isDirectory()) {
-					f2 = new File(args[args.length - 1] + "\\" + f1.getName());
+					f2 = new File(args[args.length - 1], f1.getName());
 				}
 			}
 			copy(f1, f2);
@@ -62,9 +62,6 @@ public class CopyTool extends ATool implements ICopyTool {
 			if (from.isDirectory()) {
 				// If destination is a file or a file path
 				if (to.isFile()) {
-					if (to.createNewFile()) {
-						to.delete();
-					}
 					setStatusCode(1);
 				} else {
 					// If the destination is not exist then create it

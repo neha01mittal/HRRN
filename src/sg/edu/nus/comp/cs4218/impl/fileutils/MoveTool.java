@@ -35,10 +35,9 @@ public class MoveTool extends ATool implements IMoveTool {
 				// TODO Auto-generated catch block
 				setStatusCode(1);
 			}
-			if (f1.isFile())
-			{
+			if (f1.isFile()) {
 				if (f2.isDirectory()) {
-					f2 = new File(args[args.length - 1] + "\\" + f1.getName());
+					f2 = new File(args[args.length - 1], f1.getName());
 				}
 			}
 			move(f1, f2);
@@ -56,27 +55,24 @@ public class MoveTool extends ATool implements IMoveTool {
 	public void recursivemove(File from, File to) {
 		try {
 			if (from.isDirectory()) {
-				//If destination is a file or a file path
-				if(to.isFile()){
-					if(to.createNewFile()){
-						to.delete();
-					}
+				// If destination is a file or a file path
+				if (to.isFile()) {
 					setStatusCode(1);
-				}
-				else{
+				} else {
 					// If the destination is not exist then create it
 					if (!to.exists()) {
 						to.mkdirs();
 					}
-					File toto = new File(to.toString() + "/" + from.getName());
+					File toto = new File(to.toString() + File.separator + from.getName());
 					toto.mkdir();
-					// Create list of files and directories on the current source
+					// Create list of files and directories on the current
+					// source
 					String[] fList = from.list();
-	
+
 					for (int index = 0; index < fList.length; index++) {
 						File dest = new File(toto, fList[index]);
 						File source = new File(from, fList[index]);
-	
+
 						// Recursion call take place here
 						recursivemove(source, dest);
 					}
@@ -87,14 +83,12 @@ public class MoveTool extends ATool implements IMoveTool {
 					}
 					Files.deleteIfExists(from.toPath());
 				}
-			}
-			else {
+			} else {
 				// Found a file. Copy it into the destination
 				if (from.exists()) {
 					Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
 					setStatusCode(0);
-				}
-				else {
+				} else {
 					setStatusCode(1);
 				}
 			}
