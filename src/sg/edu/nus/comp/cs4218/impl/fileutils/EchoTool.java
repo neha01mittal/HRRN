@@ -13,12 +13,10 @@ public class EchoTool extends ATool implements IEchoTool {
 
 	public EchoTool(String[] arguments) {
 		super(arguments);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// TODO Auto-generated method stub
 		String userInput = "";
 		boolean error = false;
 		if (args != null) {

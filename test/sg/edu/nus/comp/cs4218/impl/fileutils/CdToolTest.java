@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,13 +18,13 @@ import org.junit.Test;
 
 public class CdToolTest {
 
-	private CdTool			cdTool;
-	private Path			rootDirectory;
-	private String			rootDirectoryString;
-	private List<Path>		testDirectoryList;
-	private List<String>	tdRelativeString;
-	private List<String>	tdAbsoluteString;
-	private String			originalPath;
+	private CdTool cdTool;
+	private Path rootDirectory;
+	private String rootDirectoryString;
+	private List<Path> testDirectoryList;
+	private List<String> tdRelativeString;
+	private List<String> tdAbsoluteString;
+	private String originalPath;
 
 	@BeforeClass
 	public void before() throws IOException {
@@ -69,7 +70,7 @@ public class CdToolTest {
 		cdTool.execute(new File(rootDirectoryString), "");
 
 		// should return an error
-		assertEquals(1, cdTool.getStatusCode());
+		assertNotEquals(0, cdTool.getStatusCode());
 	}
 
 	@Test
@@ -79,7 +80,7 @@ public class CdToolTest {
 		cdTool.execute(new File(rootDirectoryString), "");
 
 		// should return an error
-		assertEquals(1, cdTool.getStatusCode());
+		assertNotEquals(0, cdTool.getStatusCode());
 	}
 
 	@Test
