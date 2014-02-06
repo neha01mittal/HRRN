@@ -18,11 +18,11 @@ import org.junit.Test;
 
 public class LsToolTest {
 
-	private LsTool		lsTool;
-	private Path		rootDirectory;
-	private String		rootDirectoryString;
-	private List<Path>	testFileList;
-	private int			totalVisibleFile;
+	private LsTool lsTool;
+	private Path rootDirectory;
+	private String rootDirectoryString;
+	private List<Path> testFileList;
+	private int totalVisibleFile;
 
 	@Before
 	public void before() throws IOException {
@@ -88,8 +88,7 @@ public class LsToolTest {
 
 		// check for filenames
 		for (String currentFile : resultArray) {
-			assertTrue(testFileList.contains(FileSystems.getDefault().getPath(
-					rootDirectoryString + "/" + currentFile)));
+			assertTrue(testFileList.contains(FileSystems.getDefault().getPath(rootDirectoryString + "/" + currentFile)));
 		}
 	}
 
@@ -106,8 +105,7 @@ public class LsToolTest {
 
 		// check for filenames
 		for (String currentFile : resultArray) {
-			assertTrue(testFileList.contains(FileSystems.getDefault().getPath(
-					rootDirectoryString + "/" + currentFile)));
+			assertTrue(testFileList.contains(FileSystems.getDefault().getPath(rootDirectoryString + "/" + currentFile)));
 		}
 	}
 }

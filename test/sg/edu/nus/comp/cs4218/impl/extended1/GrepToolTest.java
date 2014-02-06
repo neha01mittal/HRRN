@@ -129,7 +129,7 @@ public class GrepToolTest {
 
 	@Test
 	public void testRegexPattern() {
-		String input = "grep \"\\^A\" file1.txt";
+		String input = "grep \"\\^A\" file2.txt";
 
 		String[] tokens = input.split(" ");
 		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);

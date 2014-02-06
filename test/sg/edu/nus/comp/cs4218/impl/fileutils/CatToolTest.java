@@ -22,14 +22,14 @@ import org.junit.Test;
 
 public class CatToolTest {
 
-	private CatTool					catTool;
-	private static Path				rootDirectory;
-	private static String			rootDirectoryString;
-	private static List<String>		testFileListRelativeString;
-	private static List<String>		testFileListAbsoluteString;
-	private static File				root;
-	private static List<File>		testDirectories;
-	private static final String[]	extensions	= { ".txt", ".doc" };
+	private CatTool catTool;
+	private static Path rootDirectory;
+	private static String rootDirectoryString;
+	private static List<String> testFileListRelativeString;
+	private static List<String> testFileListAbsoluteString;
+	private static File root;
+	private static List<File> testDirectories;
+	private static final String[] extensions = { ".txt", ".doc" };
 
 	@BeforeClass
 	public static void before() throws IOException {

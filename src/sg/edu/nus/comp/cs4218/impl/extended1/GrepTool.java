@@ -87,7 +87,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		}
 
 		if (parsed.containsKey("h")) {
-			getHelp();
+			result = getHelp();
 		}
 
 		if (parsed.isEmpty()) {
@@ -116,8 +116,7 @@ public class GrepTool extends ATool implements IGrepTool {
 				in.close();
 				fis.close();
 			} catch (IOException e) {
-				this.statusCode = -1;
-				System.out.println("File not exist");
+				setStatusCode(1);
 			}
 		}
 
@@ -171,8 +170,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			}
 			result = matchingLines.size();
 		} catch (Exception e) {
-			statusCode = -1;
-			e.printStackTrace();
+			setStatusCode(1);
 		}
 		return result;
 	}
@@ -224,7 +222,7 @@ public class GrepTool extends ATool implements IGrepTool {
 	}
 
 	@Override
-	public String getMatchingLinesWithTrailingContext(int option_A, String pattern, String input) {
+	public String getMatchingLinesWithTrailingContext(int optionA, String pattern, String input) {
 		// print NUM lines after the matching lines
 		String result = "";
 		String[] lines = input.split("\n");
@@ -234,7 +232,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			// if (line.matches(pattern))
 			if (match(line, pattern)) {
 				int i = 0;
-				while (i + j < lines.length && i <= option_A) {
+				while (i + j < lines.length && i <= optionA) {
 					mark[i + j] = 1;
 					i++;
 				}
@@ -249,7 +247,7 @@ public class GrepTool extends ATool implements IGrepTool {
 	}
 
 	@Override
-	public String getMatchingLinesWithLeadingContext(int option_B, String pattern, String input) {
+	public String getMatchingLinesWithLeadingContext(int optionB, String pattern, String input) {
 		// print NUM lines before the matching lines
 		String result = "";
 		String[] lines = input.split("\n");
@@ -258,7 +256,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			// if (line.matches(pattern))
 			if (match(line, pattern)) {
 				int i = 0;
-				while (i < j && i <= option_B) {
+				while (i < j && i <= optionB) {
 					// result += lines[j - i];
 					mark[j - i] = 1;
 					i++;
@@ -275,7 +273,7 @@ public class GrepTool extends ATool implements IGrepTool {
 	}
 
 	@Override
-	public String getMatchingLinesWithOutputContext(int option_C, String pattern, String input) {
+	public String getMatchingLinesWithOutputContext(int optionC, String pattern, String input) {
 		String result = "";
 		String[] lines = input.split("\n");
 		for (int j = 0; j < lines.length; j++) {
@@ -284,7 +282,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			// if (line.matches(pattern))
 			if (match(line, pattern)) {
 				int i = 0;
-				while (i + j < lines.length && i < option_C) {
+				while (i + j < lines.length && i < optionC) {
 					// result += lines[i];
 					mark[i + j] = 1;
 					i++;
@@ -296,7 +294,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			// if (line.matches(pattern))
 			if (match(line, pattern)) {
 				int i = 0;
-				while (i < j && i < option_C) {
+				while (i < j && i < optionC) {
 					// result += lines[j - i];
 					mark[j - i] = 1;
 					i++;
@@ -367,8 +365,7 @@ public class GrepTool extends ATool implements IGrepTool {
 				+ "-o : Show only the part of a matching line that matches PATTERN\n" + "-v : Select non-matching (instead of matching) lines\n"
 				+ "-help : Brief information about supported options"
 				+ "ASSUMPTION: Here we assume that PATTERN is always surrounded by a pair of double quotes";
-		System.out.println(helpString);
-		return null;
+		return helpString;
 	}
 
 	/*

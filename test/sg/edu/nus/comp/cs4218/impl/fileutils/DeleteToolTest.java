@@ -18,12 +18,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class DeleteToolTest {
-	private DeleteTool		deleteTool;
-	private Path			rootDirectory;
-	private String			rootDirectoryString;
-	private List<Path>		testDirectoryList;
-	private List<String>	testDirectoryListRelativeString;
-	private List<String>	testDirectoryListAbsoluteString;
+	private DeleteTool deleteTool;
+	private Path rootDirectory;
+	private String rootDirectoryString;
+	private List<Path> testDirectoryList;
+	private List<String> testDirectoryListRelativeString;
+	private List<String> testDirectoryListAbsoluteString;
 
 	@Before
 	public void before() throws IOException {
@@ -144,8 +144,7 @@ public class DeleteToolTest {
 		Writer writer = null;
 
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(filename), "utf-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
 			writer.write(content);
 		} catch (IOException ex) {
 			// report

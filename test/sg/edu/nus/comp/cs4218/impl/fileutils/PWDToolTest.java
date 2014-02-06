@@ -15,7 +15,7 @@ import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
 
 public class PWDToolTest {
 
-	private IPwdTool	pwdtool;
+	private IPwdTool pwdtool;
 
 	@Before
 	public void before() {

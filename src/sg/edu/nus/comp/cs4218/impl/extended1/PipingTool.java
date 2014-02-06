@@ -2,6 +2,7 @@ package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +32,8 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
  */
 public class PipingTool extends ATool implements IPipingTool {
 
-	private static String dilimiter = "::space::";
+	private static String dilimiter1 = "::escape-space::";
+	private static String dilimiter2 = "::space::";
 
 	public PipingTool(String[] arguments) {
 		super(arguments);
@@ -57,14 +59,16 @@ public class PipingTool extends ATool implements IPipingTool {
 		File f = new File(System.getProperty("user.dir"));
 		// execute command
 		String returnedValue = from.execute(f, "");
+		returnedValue = to.execute(f, returnedValue);
 		// print if has output
 		// args 1-> length
-		for (int i = 1; i < args.length; i++) {
+		for (int i = 2; i < args.length; i++) {
 			if (returnedValue != null && returnedValue.trim().length() > 0) {
+				to = parse(args[i]);
 				returnedValue = to.execute(f, returnedValue);
 			}
 		}
-
+		setStatusCode(to.getStatusCode());
 		return returnedValue;
 	}
 
@@ -74,54 +78,47 @@ public class PipingTool extends ATool implements IPipingTool {
 		return null;
 	}
 
-	public ITool parse(String commandline) {
-
-		commandline = commandline.trim();
-		String[] cmdSplit = commandline.split("\\s+");
-		if (commandline.length() > 0 && cmdSplit.length > 0) {
-
-			String cmd = cmdSplit[0]; // This guarantee valid
-			// Now we need to construct arguments
-			String[] args = getArgsArray(commandline);
-
-			if (cmd.equals("cat")) {
-				return new CatTool(args);
-			} else if (cmd.equals("cd")) {
-				return new CdTool(args);
-			} else if (cmd.equals("copy")) {
-				return new CopyTool(args);
-			} else if (cmd.equals("delete")) {
-				return new DeleteTool(args);
-			} else if (cmd.equals("echo")) {
-				return new EchoTool(args);
-			} else if (cmd.equals("ls")) {
-				return new LsTool(args);
-			} else if (cmd.equals("move")) {
-				return new MoveTool(args);
-			} else if (cmd.equals("pwd")) {
-				return new PWDTool();
-			} else if (cmd.equals("grep")) {
-				return new GrepTool(args);
-			} else if (cmd.equals("long")) {
-				return new LongCmd(args);
-			}
-		}
-		return null;
-	}
-
-	private String[] getArgsArray(String commandline) {
-		List<String> argList = new ArrayList<String>();
-		commandline = commandline.replaceAll("\\\\\\s", dilimiter);
-		Pattern regex = Pattern.compile("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");
-		Matcher regexMatcher = regex.matcher(commandline);
+	public static String[] getArgsArray(String command) {
+		// Step 1. remove all the surround quotes
+		Pattern regex = Pattern.compile("[^'\"]*(\"[^\"]*\")[^'\"]*|[^'\"]*('[^']*')[^'\"]*");
+		Matcher regexMatcher = regex.matcher(command);
 		while (regexMatcher.find()) {
 			if (regexMatcher.group(1) != null) {
-				argList.add(regexMatcher.group(1).replaceAll(dilimiter, " "));
-			} else if (regexMatcher.group(2) != null) {
-				argList.add(regexMatcher.group(2).replaceAll(dilimiter, " "));
-			} else {
-				argList.add(regexMatcher.group().replaceAll(dilimiter, " "));
+				String temp = regexMatcher.group(1);
+				// System.out.println("group1: " + temp);
+				String commandline = command.replace(temp, temp.substring(1, temp.length() - 1));
+				command = commandline;
+				// System.out.println("group1: " + commandline);
 			}
+			if (regexMatcher.group(2) != null) {
+				String temp = regexMatcher.group(2);
+				// System.out.println("group2: " + temp);
+				String commandline = command.replace(temp, temp.substring(1, temp.length() - 1));
+				command = commandline;
+				// System.out.println("group2: " + commandline);
+			}
+		}
+		// System.out.println(commandline);
+		// Step 2. find the escape space in quotes
+		regex = Pattern.compile("['][^']*\\s+[^']*[']|[\"][^\"]*\\s+[^\"]*[\"]");
+		regexMatcher = regex.matcher(command);
+		while (regexMatcher.find()) {
+			if (regexMatcher.group() != null) {
+				String temp = regexMatcher.group();
+				String replaced = regexMatcher.group().replaceAll("\\s", dilimiter1);
+				String newString = command.replace(temp, replaced);
+				command = newString;
+			}
+		}
+		// System.out.println(commandline);
+		String replacedCommand = command.replaceAll("\\\\\\s", dilimiter2);
+		command = replacedCommand;
+		// System.out.println(commandline);
+
+		// Step 3. remove the first one and switch back delimiter
+		List<String> argList = new ArrayList<String>(Arrays.asList(command.split("\\s+")));
+		for (int i = 0; i < argList.size(); i++) {
+			argList.set(i, argList.get(i).replaceAll(dilimiter1, " ").replaceAll(dilimiter2, " "));
 		}
 		if (argList.size() > 0) {
 			argList.remove(0);
@@ -129,6 +126,44 @@ public class PipingTool extends ATool implements IPipingTool {
 		} else {
 			return null;
 		}
+	}
+
+	public ITool parse(String commandline) {
+		if (commandline.contains("|")) {
+			return new PipingTool(commandline.split("\\|"));
+		} else {
+			String trimmed = commandline.trim();
+			String[] cmdSplit = trimmed.split("\\s+");
+			if (trimmed.length() > 0 && cmdSplit.length > 0) {
+
+				String cmd = cmdSplit[0].toLowerCase(); // This guarantee valid
+				// Now we need to construct arguments
+				String[] args = getArgsArray(trimmed);
+
+				if (cmd.equalsIgnoreCase("cat")) {
+					return new CatTool(args);
+				} else if (cmd.equalsIgnoreCase("cd")) {
+					return new CdTool(args);
+				} else if (cmd.equalsIgnoreCase("copy")) {
+					return new CopyTool(args);
+				} else if (cmd.equalsIgnoreCase("delete")) {
+					return new DeleteTool(args);
+				} else if (cmd.equalsIgnoreCase("echo")) {
+					return new EchoTool(args);
+				} else if (cmd.equalsIgnoreCase("ls")) {
+					return new LsTool(args);
+				} else if (cmd.equalsIgnoreCase("move")) {
+					return new MoveTool(args);
+				} else if (cmd.equalsIgnoreCase("pwd")) {
+					return new PWDTool();
+				} else if (cmd.equalsIgnoreCase("grep")) {
+					return new GrepTool(args);
+				} else if (cmd.equalsIgnoreCase("long")) {
+					return new LongCmd(args);
+				}
+			}
+		}
+		return null;
 	}
 
 }

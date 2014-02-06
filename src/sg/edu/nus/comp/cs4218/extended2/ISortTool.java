@@ -14,8 +14,10 @@ import sg.edu.nus.comp.cs4218.ITool;
  *	    -help : Brief information about supported options
  */
 
-public interface ISortTool extends ITool{
+public interface ISortTool extends ITool {
 	String sortFile(String input);
+
 	String checkIfSorted(String input);
+
 	String getHelp();
 }

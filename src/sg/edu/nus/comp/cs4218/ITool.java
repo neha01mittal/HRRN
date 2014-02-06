@@ -4,5 +4,6 @@ import java.io.File;
 
 public interface ITool {
 	String execute(File workingDir, String stdin);
+
 	int getStatusCode();
 }
