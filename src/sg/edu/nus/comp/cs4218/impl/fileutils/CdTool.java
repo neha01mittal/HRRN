@@ -9,6 +9,7 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 /**
  * change directory
  * 
+ * @author Zhang Haoqiang
  */
 public class CdTool extends ATool implements ICdTool {
 

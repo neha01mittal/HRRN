@@ -15,7 +15,7 @@ import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
 
 public class PWDToolTest {
 
-	private IPwdTool	pwdtool;
+	private IPwdTool pwdtool;
 
 	@Before
 	public void before() {
@@ -32,7 +32,7 @@ public class PWDToolTest {
 		// Test expected behavior
 		// Create a tmp-file and get (existing) parent directory
 		String existsDirString = File.createTempFile("exists", "tmp").getParent();
-		File existsDir = new File(existsDirString);
+		File existsDir = new File(".");
 
 		String dirString = pwdtool.getStringForDirectory(existsDir);
 		assertTrue(dirString.equals(existsDirString));

@@ -9,6 +9,8 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 /**
  * list the contents of a directory
+ * 
+ * @author Zhang Haoqiang
  */
 public class LsTool extends ATool implements ILsTool {
 
@@ -50,14 +52,14 @@ public class LsTool extends ATool implements ILsTool {
 		List<File> fileList = new ArrayList<File>();
 		for (File f : files) {
 			switch (option) {
-				case 0:
-					if (!f.isHidden()) {
-						fileList.add(f);
-					}
-					break;
-				case 1:
+			case 0:
+				if (!f.isHidden()) {
 					fileList.add(f);
-					break;
+				}
+				break;
+			case 1:
+				fileList.add(f);
+				break;
 			}
 		}
 		// Processing
@@ -77,12 +79,12 @@ public class LsTool extends ATool implements ILsTool {
 		}
 		for (int i = 0; i < files.size(); i++) {
 			switch (option) {
-				case 0:
-					result += files.get(i).getName();
-					break;
-				case 1:
-					result += files.get(i).getName() + " " + files.get(i).getUsableSpace();
-					break;
+			case 0:
+				result += files.get(i).getName();
+				break;
+			case 1:
+				result += files.get(i).getName() + " " + files.get(i).getUsableSpace();
+				break;
 			}
 			if (i != files.size() - 1) {
 				result += "\n";

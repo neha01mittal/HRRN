@@ -16,6 +16,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * @author Zhang Haoqiang
+ */
 public class CdToolTest {
 
 	private CdTool cdTool;

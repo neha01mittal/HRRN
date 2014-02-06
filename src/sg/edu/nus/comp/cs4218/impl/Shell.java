@@ -31,6 +31,8 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
 /**
  * The Shell is used to interpret and execute user's commands. Following
  * sequence explains how a basic shell can be implemented in Java
+ * 
+ * @author Zhang Haoqiang
  */
 public class Shell implements IShell {
 
@@ -38,50 +40,104 @@ public class Shell implements IShell {
 	private static String dilimiter2 = "::space::";
 
 	public static String[] getArgsArray(String commandline) {
-		// Step 1. remove all the surround quotes
-		Pattern regex = Pattern.compile("[^'\"]*(\"[^\"]*\")[^'\"]*|[^'\"]*('[^']*')[^'\"]*");
+
+		// Step 1. find the escape space between quotes
+		Pattern regex = Pattern.compile("[^'\"]*\"([^\"]*)\"[^'\"]*|[^'\"]*'([^']*)'[^'\"]*");
 		Matcher regexMatcher = regex.matcher(commandline);
 		while (regexMatcher.find()) {
 			if (regexMatcher.group(1) != null) {
 				String temp = regexMatcher.group(1);
 				// System.out.println("group1: " + temp);
-				commandline = commandline.replace(temp, temp.substring(1, temp.length() - 1));
-				// System.out.println("group1: " + commandline);
+				String replaced = temp.replaceAll("\\s", dilimiter1);
+				// System.out.println("group1: " + replaced);
+				commandline = commandline.replace("\"" + temp + "\"", "\"" + replaced + "\"");
 			}
 			if (regexMatcher.group(2) != null) {
 				String temp = regexMatcher.group(2);
 				// System.out.println("group2: " + temp);
-				commandline = commandline.replace(temp, temp.substring(1, temp.length() - 1));
-				// System.out.println("group2: " + commandline);
+				String replaced = temp.replaceAll("\\s", dilimiter1);
+				// System.out.println("group2: " + replaced);
+				commandline = commandline.replace("'" + temp + "'", "'" + replaced + "'");
 			}
 		}
 		// System.out.println(commandline);
-		// Step 2. find the escape space in quotes
-		regex = Pattern.compile("['][^']*\\s+[^']*[']|[\"][^\"]*\\s+[^\"]*[\"]");
-		regexMatcher = regex.matcher(commandline);
-		while (regexMatcher.find()) {
-			if (regexMatcher.group() != null) {
-				String temp = regexMatcher.group();
-				String replaced = regexMatcher.group().replaceAll("\\s", dilimiter1);
-				commandline = commandline.replace(temp, replaced);
-			}
-		}
-		// System.out.println(commandline);
+
+		// Step 2. remove all escape space
 		commandline = commandline.replaceAll("\\\\\\s", dilimiter2);
 		// System.out.println(commandline);
 
 		// Step 3. remove the first one and switch back delimiter
 		List<String> argList = new ArrayList<String>(Arrays.asList(commandline.split("\\s+")));
 		for (int i = 0; i < argList.size(); i++) {
-			argList.set(i, argList.get(i).replaceAll(dilimiter1, " ").replaceAll(dilimiter2, " "));
+			String newArg = argList.get(i);
+			// Step 4. remove all the surround quotes
+			regex = Pattern.compile("[^'\"]*(\"[^\"]*\")[^'\"]*|[^'\"]*('[^']*')[^'\"]*");
+			regexMatcher = regex.matcher(newArg);
+			while (regexMatcher.find()) {
+				if (regexMatcher.group(1) != null) {
+					String temp = regexMatcher.group(1);
+					// System.out.println("group1: " + temp);
+					newArg = newArg.replace(temp, temp.substring(1, temp.length() - 1));
+					// System.out.println("group1: " + newArg);
+				}
+				if (regexMatcher.group(2) != null) {
+					String temp = regexMatcher.group(2);
+					// System.out.println("group2: " + temp);
+					newArg = newArg.replace(temp, temp.substring(1, temp.length() - 1));
+					// System.out.println("group2: " + newArg);
+				}
+			}
+			argList.set(i, newArg.replaceAll(dilimiter1, " ").replaceAll(dilimiter2, " "));
 		}
-		argList.remove(0);
 
 		if (argList.size() > 0) {
 			argList.remove(0);
-			return argList.toArray(new String[0]);
+			return argList.toArray(new String[argList.size()]);
 		} else {
 			return null;
+		}
+	}
+
+	public void start() {
+		// Input scanner
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		Scanner scanner = new Scanner(in);
+		while (true) {
+			// 1. Wait for a user input
+			System.out.print("$: ");
+			// 2. Parse the user input
+			String input = scanner.nextLine();
+			ITool itool = parse(input);
+			if (itool != null) {
+				// 3. Create a new thread to execute the command
+				ExecutorService executorService = Executors.newSingleThreadExecutor();
+				Runnable toolExecution = execute(itool);
+				// 4. Execute the command on the newly created thread.
+				Future<?> future = executorService.submit(toolExecution);
+				// 5. In the shell, wait for the thread to complete
+				while (true) {
+					try {
+						if (in.ready() && (in.readLine().equals("ctrl-z") | in.readLine().equals("c"))) {
+							boolean cancellable = future.cancel(true);
+							if (!cancellable) {
+								System.out.println("Cannot stop thread, thus quit!");
+								System.exit(1);
+							} else {
+								System.out.println("[" + itool.getStatusCode() + "]+  Stopped                 " + itool.getClass().getSimpleName());
+							}
+						}
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+
+					if (future.isCancelled() || future.isDone()) {
+						break;
+					}
+				}
+				executorService.shutdownNow();
+			} else {
+				System.out.println("   cmd: " + input + " not recognized.");
+			}
 		}
 	}
 
@@ -104,6 +160,9 @@ public class Shell implements IShell {
 				String cmd = cmdSplit[0].toLowerCase(); // This guarantee valid
 				// Now we need to construct arguments
 				String[] args = getArgsArray(commandline);
+				// for (String t : args) {
+				// System.out.println("-------------" + t);
+				// }
 
 				if (cmd.equals("cat")) {
 					return new CatTool(args);
@@ -167,50 +226,9 @@ public class Shell implements IShell {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 
-		// Input scanner
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		Scanner scanner = new Scanner(in);
-
 		// Create Shell object
-		Shell shell = new Shell();
+		new Shell().start();
 
-		// while (true) {
-		// 1. Wait for a user input
-		System.out.print("$: ");
-		// try {
-		// 2. Parse the user input
-		String input = scanner.nextLine();
-		ITool itool = shell.parse(input);
-		if (itool != null) {
-			// 3. Create a new thread to execute the command
-			ExecutorService executorService = Executors.newSingleThreadExecutor();
-			Runnable toolExecution = shell.execute(itool);
-			// 4. Execute the command on the newly created thread.
-			Future<?> future = executorService.submit(toolExecution);
-			// 5. In the shell, wait for the thread to complete
-			while (true) {
-				try {
-					if (in.ready() && in.readLine().equals("c")) {
-						break;
-					}
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-
-				if (future.isCancelled() || future.isDone()) {
-					break;
-				}
-			}
-			executorService.shutdownNow();
-			// 6. Report the exit status
-			System.out.println("   status code: " + itool.getStatusCode());
-		} else {
-			System.out.println("   cmd: " + input + " not recognized.");
-		}
-		// } catch (Exception e) {
-		// System.out.println("Exception:\n" + e.getMessage());
-		// }
 	}
-	// }
 
 }
