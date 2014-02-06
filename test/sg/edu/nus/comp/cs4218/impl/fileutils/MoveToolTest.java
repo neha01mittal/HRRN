@@ -19,6 +19,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
+
 public class MoveToolTest {
 	private MoveTool moveTool;
 	private Path rootDirectory;
@@ -60,14 +62,7 @@ public class MoveToolTest {
 	@After
 	public void after() throws IOException {
 		moveTool = null;
-		for (int i = 0; i < testDirectoryList.size(); i++) {
-			Files.deleteIfExists(testDirectoryList.get(i));
-		}
-		for (int i = 0; i < testDirectoryListAbsoluteString.size(); i++) {
-			Path path = Paths.get(testDirectoryListAbsoluteString.get(i));
-			Files.deleteIfExists(path);
-		}
-		delete(new File(rootDirectoryString));
+		TestUtils.delete(new File(rootDirectoryString));
 	}
 
 	@Test
@@ -376,32 +371,4 @@ public class MoveToolTest {
 		}
 	}
 
-	public static void delete(File file) {
-		if (file.isDirectory()) {
-			// directory is empty, then delete it
-			if (file.list().length == 0) {
-				file.delete();
-			} else {
-				// list all the directory contents
-				String files[] = file.list();
-
-				for (String temp : files) {
-					// construct the file structure
-					File fileDelete = new File(file, temp);
-
-					// recursive delete
-					delete(fileDelete);
-				}
-
-				// check the directory again, if empty then delete it
-				if (file.list().length == 0) {
-					file.delete();
-				}
-			}
-
-		} else {
-			// if file, then delete it
-			file.delete();
-		}
-	}
 }

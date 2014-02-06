@@ -22,6 +22,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
+
 /**
  * @author Ranjini Aravind
  */
@@ -67,14 +69,7 @@ public class CopyToolTest {
 	@AfterClass
 	public static void after() throws IOException {
 		copyTool = null;
-		for (int i = 0; i < testDirectoryList.size(); i++) {
-			Files.deleteIfExists(testDirectoryList.get(i));
-		}
-		for (int i = 0; i < testDirectoryListAbsoluteString.size(); i++) {
-			Path path = Paths.get(testDirectoryListAbsoluteString.get(i));
-			Files.deleteIfExists(path);
-		}
-		Files.deleteIfExists(rootDirectory);
+		TestUtils.delete(new File(rootDirectoryString));
 	}
 
 	// Test copying file into a new file
@@ -201,7 +196,7 @@ public class CopyToolTest {
 	@Test
 	public void testCopyFolderIntoInvalidPath() {
 		copyTool = new CopyTool(null);
-		String a[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(0) + "F:" };
+		String a[] = { testDirectoryListAbsoluteString.get(0), "invalid" };
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
 

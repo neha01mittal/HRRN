@@ -17,6 +17,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
+
 /**
  * @author Ranjini Aravind
  */
@@ -33,7 +35,6 @@ public class DeleteToolTest {
 
 		// create new dir and files inside
 		rootDirectoryString = System.getProperty("user.dir") + "/deleteToolTest";
-		System.setProperty("user.dir", rootDirectoryString);
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -60,21 +61,9 @@ public class DeleteToolTest {
 	}
 
 	@After
-	public void after() throws IOException {
+	public void afterClass() throws IOException {
 		deleteTool = null;
-
-		for (int i = 0; i < testDirectoryList.size(); i++) {
-			Files.deleteIfExists(testDirectoryList.get(i));
-		}
-		for (int i = 0; i < testDirectoryListAbsoluteString.size(); i++) {
-			Path path = Paths.get(testDirectoryListAbsoluteString.get(i));
-			Files.deleteIfExists(path);
-		}
-		// System.out.println("ROOT" + rootDirectory.getParent().toString());
-
-		Files.deleteIfExists(rootDirectory);
-		System.setProperty("user.dir", rootDirectory.getParent().toString());
-
+		TestUtils.delete(new File(rootDirectoryString));
 	}
 
 	@Test

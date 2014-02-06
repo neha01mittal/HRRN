@@ -12,9 +12,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
 /**
  * @author Zhang Haoqiang
@@ -25,6 +28,7 @@ public class LsToolTest {
 	private static String rootDirectoryString;
 	private static List<Path> testFileList;
 	private static int totalVisibleFile;
+	private LsTool lsTool;
 
 	@BeforeClass
 	public static void before() throws IOException {
@@ -69,17 +73,19 @@ public class LsToolTest {
 	}
 
 	@AfterClass
-	public static void after() throws IOException {
-		for (int i = 0; i < testFileList.size(); i++) {
-			Files.deleteIfExists(testFileList.get(i));
-		}
-		Files.deleteIfExists(rootDirectory);
+	public static void afterClass() throws IOException {
+		TestUtils.delete(new File(rootDirectoryString));
+	}
+
+	@After
+	public void after() throws IOException {
+		lsTool = null;
 	}
 
 	@Test
 	public void testNoArgument() {
 		String[] args = null;
-		LsTool lsTool = new LsTool(args);
+		lsTool = new LsTool(args);
 
 		String result = lsTool.execute(new File(rootDirectoryString), null);
 		String[] resultArray = result.split("\n");
@@ -98,7 +104,7 @@ public class LsToolTest {
 	@Test
 	public void testWithArgumentShowAll() {
 		String[] args = new String[] { "-a" };
-		LsTool lsTool = new LsTool(args);
+		lsTool = new LsTool(args);
 
 		String result = lsTool.execute(new File(rootDirectoryString), null);
 		String[] resultArray = result.split("\n");

@@ -12,9 +12,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
 /**
  * @author Zhang Haoqiang
@@ -28,6 +31,7 @@ public class CdToolTest {
 	private static List<String> tdAbsoluteString;
 	private static String originalPath;
 	private static File testFile;
+	private CdTool cdTool;
 
 	@BeforeClass
 	public static void before() throws IOException {
@@ -65,13 +69,14 @@ public class CdToolTest {
 	}
 
 	@AfterClass
-	public static void after() throws IOException {
-		testFile.delete();
-		for (int i = testDirectoryList.size() - 1; i >= 0; i--) {
-			Files.deleteIfExists(testDirectoryList.get(i));
-		}
-		Files.deleteIfExists(rootDirectory);
+	public static void afterClass() throws IOException {
+		TestUtils.delete(new File(rootDirectoryString));
 		System.setProperty("user.dir", originalPath);
+	}
+
+	@After
+	public void after() throws IOException {
+		cdTool = null;
 	}
 
 	@Test
@@ -79,7 +84,7 @@ public class CdToolTest {
 		// Test error-handling 1
 		// Reference non-existing file
 		String[] args = new String[] { "invalid" };
-		CdTool cdTool = new CdTool(args);
+		cdTool = new CdTool(args);
 		cdTool.execute(new File(rootDirectoryString), null);
 
 		assertNotEquals(0, cdTool.getStatusCode());
@@ -88,7 +93,7 @@ public class CdToolTest {
 	@Test
 	public void testCdWithNoArguments() {
 		// Test error-handling 2
-		CdTool cdTool = new CdTool(null);
+		cdTool = new CdTool(null);
 		cdTool.execute(new File(rootDirectoryString), null);
 
 		assertNotEquals(0, cdTool.getStatusCode());
@@ -98,7 +103,7 @@ public class CdToolTest {
 	public void testCdWithAFile() {
 		// Test error-handling 3
 		String[] args = new String[] { rootDirectoryString + "/testFile" };
-		CdTool cdTool = new CdTool(args);
+		cdTool = new CdTool(args);
 		cdTool.execute(new File(rootDirectoryString), null);
 
 		assertNotEquals(0, cdTool.getStatusCode());
@@ -107,7 +112,7 @@ public class CdToolTest {
 	@Test
 	public void testCdWithStdin() {
 		String[] args = null;
-		CdTool cdTool = new CdTool(args);
+		cdTool = new CdTool(args);
 		cdTool.execute(new File(rootDirectoryString), tdRelativeString.get(0));
 
 		assertEquals(0, cdTool.getStatusCode());
@@ -117,7 +122,7 @@ public class CdToolTest {
 	@Test
 	public void testCdWithRelativePath() {
 		String[] args = new String[] { tdRelativeString.get(0) };
-		CdTool cdTool = new CdTool(args);
+		cdTool = new CdTool(args);
 		cdTool.execute(new File(rootDirectoryString), null);
 
 		assertEquals(0, cdTool.getStatusCode());
@@ -127,8 +132,8 @@ public class CdToolTest {
 	@Test
 	public void testCdWithAbsolutePath() {
 		String[] args = new String[] { tdAbsoluteString.get(0) };
-		CdTool cdTool = new CdTool(args);
-		System.out.println(cdTool.execute(new File(rootDirectoryString), null));
+		cdTool = new CdTool(args);
+		cdTool.execute(new File(rootDirectoryString), null);
 
 		assertEquals(0, cdTool.getStatusCode());
 		assertEquals(normalizePath(tdAbsoluteString.get(0)), normalizePath(System.getProperty("user.dir")));
@@ -137,7 +142,7 @@ public class CdToolTest {
 	@Test
 	public void testCdWithDoubleDotNotation() {
 		String[] args = new String[] { "../.." };
-		CdTool cdTool = new CdTool(args);
+		cdTool = new CdTool(args);
 		cdTool.execute(new File(tdAbsoluteString.get(2)), null);
 
 		assertEquals(0, cdTool.getStatusCode());
@@ -147,7 +152,7 @@ public class CdToolTest {
 	@Test
 	public void testCdWithSingleDotNotation() {
 		String[] args = new String[] { "." };
-		CdTool cdTool = new CdTool(args);
+		cdTool = new CdTool(args);
 		cdTool.execute(new File(tdAbsoluteString.get(0)), null);
 
 		assertEquals(0, cdTool.getStatusCode());
@@ -156,7 +161,7 @@ public class CdToolTest {
 
 	@Test
 	public void testChangeDirectoryWithAbsolutePath() {
-		CdTool cdTool = new CdTool(null);
+		cdTool = new CdTool(null);
 
 		// change to the testing directory
 		File result = cdTool.changeDirectory(tdAbsoluteString.get(0));

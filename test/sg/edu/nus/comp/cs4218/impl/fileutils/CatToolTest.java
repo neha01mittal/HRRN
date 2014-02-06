@@ -17,9 +17,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
 /**
  * @author Neha Mittal
@@ -75,17 +78,13 @@ public class CatToolTest {
 	}
 
 	@AfterClass
-	public static void after() throws IOException {
+	public static void afterClass() throws IOException {
+		TestUtils.delete(new File(rootDirectoryString));
+	}
 
-		for (int i = 0; i < testFileListAbsoluteString.size(); i++) {
-			Path path = Paths.get(testFileListAbsoluteString.get(i));
-			Files.deleteIfExists(path);
-		}
-
-		for (int i = 0; i < testDirectories.size(); i++) {
-			Files.deleteIfExists(testDirectories.get(i).toPath());
-		}
-		Files.deleteIfExists(rootDirectory);
+	@After
+	public void after() throws IOException {
+		catTool = null;
 	}
 
 	@Test
