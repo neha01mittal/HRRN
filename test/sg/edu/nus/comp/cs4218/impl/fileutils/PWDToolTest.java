@@ -32,11 +32,12 @@ public class PWDToolTest {
 		// Test expected behavior
 		// Create a tmp-file and get (existing) parent directory
 		String existsDirString = File.createTempFile("exists", "tmp").getParent();
-		File existsDir = new File(".");
+		File existsDir = new File(existsDirString);
 
 		String dirString = pwdtool.getStringForDirectory(existsDir);
+
+		assertEquals(0, pwdtool.getStatusCode());
 		assertTrue(dirString.equals(existsDirString));
-		assertEquals(pwdtool.getStatusCode(), 0);
 	}
 
 	@Test
@@ -45,14 +46,16 @@ public class PWDToolTest {
 		// Reference non-existing file
 		File notExistsDir = new File("notexists");
 		pwdtool.getStringForDirectory(notExistsDir);
-		assertNotEquals(pwdtool.getStatusCode(), 0);
+
+		assertNotEquals(0, pwdtool.getStatusCode());
 	}
 
 	@Test
 	public void getStringForNullDirectoryTest() throws IOException {
 		// Test error-handling 2
 		pwdtool.getStringForDirectory(null);
-		assertNotEquals(pwdtool.getStatusCode(), 0);
+
+		assertNotEquals(0, pwdtool.getStatusCode());
 	}
 
 }

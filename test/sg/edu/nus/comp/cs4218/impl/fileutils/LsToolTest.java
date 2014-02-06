@@ -12,8 +12,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -21,14 +21,13 @@ import org.junit.Test;
  */
 public class LsToolTest {
 
-	private LsTool lsTool;
-	private Path rootDirectory;
-	private String rootDirectoryString;
-	private List<Path> testFileList;
-	private int totalVisibleFile;
+	private static Path rootDirectory;
+	private static String rootDirectoryString;
+	private static List<Path> testFileList;
+	private static int totalVisibleFile;
 
-	@Before
-	public void before() throws IOException {
+	@BeforeClass
+	public static void before() throws IOException {
 
 		// create new dir and files inside
 		rootDirectoryString = System.getProperty("user.dir") + "/lsToolTest";
@@ -69,10 +68,8 @@ public class LsToolTest {
 		}
 	}
 
-	@After
-	public void after() throws IOException {
-		lsTool = null;
-
+	@AfterClass
+	public static void after() throws IOException {
 		for (int i = 0; i < testFileList.size(); i++) {
 			Files.deleteIfExists(testFileList.get(i));
 		}
@@ -81,13 +78,16 @@ public class LsToolTest {
 
 	@Test
 	public void testNoArgument() {
-		lsTool = new LsTool(null);
+		String[] args = null;
+		LsTool lsTool = new LsTool(args);
 
-		String result = lsTool.execute(new File(rootDirectoryString), "");
+		String result = lsTool.execute(new File(rootDirectoryString), null);
 		String[] resultArray = result.split("\n");
 
+		assertEquals(0, lsTool.getStatusCode());
+
 		// check for the number of files returned
-		assertEquals(resultArray.length, testFileList.size() - totalVisibleFile);
+		assertEquals(testFileList.size() - totalVisibleFile, resultArray.length);
 
 		// check for filenames
 		for (String currentFile : resultArray) {
@@ -98,10 +98,12 @@ public class LsToolTest {
 	@Test
 	public void testWithArgumentShowAll() {
 		String[] args = new String[] { "-a" };
-		lsTool = new LsTool(args);
+		LsTool lsTool = new LsTool(args);
 
-		String result = lsTool.execute(new File(rootDirectoryString), "");
+		String result = lsTool.execute(new File(rootDirectoryString), null);
 		String[] resultArray = result.split("\n");
+
+		assertEquals(0, lsTool.getStatusCode());
 
 		// check for the number of files returned
 		assertEquals(resultArray.length, testFileList.size());

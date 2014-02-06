@@ -1,7 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 
@@ -11,6 +11,10 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
 
+/**
+ * @author Neha Mittal
+ * @author Zhang Haoqiang
+ */
 public class EchoToolTest {
 
 	private IEchoTool echotool;
@@ -26,63 +30,83 @@ public class EchoToolTest {
 	}
 
 	@Test
-	public void printOneWordInput() throws IOException {
+	public void testOneWordInput() throws IOException {
 		// Test expected behavior
 		// Assume args are correctly parsed by shell
 		String[] args = { "test1" };
 		echotool = new EchoTool(args);
 		String result = echotool.execute(null, "");
-		assertTrue(result.equals(args[0] + "\n"));
-		assertEquals(echotool.getStatusCode(), 0);
+
+		assertEquals(0, echotool.getStatusCode());
+		assertEquals(args[0], result);
 	}
 
 	@Test
-	public void printInputWithDollarSign() throws IOException {
+	public void testNoInput() throws IOException {
 		// Test error-handling 1
-		// Assume args are correctly parsed by shell
-		String[] args = { "I", "am", "a", "str$ing" };
+		echotool = new EchoTool(null);
+		echotool.execute(null, null);
+
+		assertNotEquals(0, echotool.getStatusCode());
+	}
+
+	@Test
+	public void testMultipleWordInput() throws IOException {
+		String[] args = { "I", "am", "a", "string" };
 		echotool = new EchoTool(args);
 		String result = echotool.execute(null, "");
-		assertTrue(result.equals("Error in input. Cannot enter $ sign"));
-		assertEquals(1, echotool.getStatusCode());
+
+		assertEquals(echotool.getStatusCode(), 0);
+		assertEquals("I am a string", result);
 	}
 
 	@Test
-	public void printInputWithSpecialSymbols() throws IOException {
+	public void testInputWithSpecialSymbols() throws IOException {
 		// Test error-handling 1
 		// Assume args are correctly parsed by shell
-		// Assume all characters (except quotes) including / are printed
-		// correctly
-		String[] args = { "/%+I", "a@#m", "^a", "st\"r*\"\"(ing" };
+		// Assume all characters (except quotes) including / are tested
+		String[] args = { "/%+I", "a@#m", "^a", "st\"r*\"  \"(ing" };
 		String expectedOutput = "";
 		for (String arg : args) {
 			expectedOutput += arg + " ";
 		}
 		expectedOutput = expectedOutput.substring(0, expectedOutput.length() - 1);
-		expectedOutput += "\n";
 		echotool = new EchoTool(args);
-		String result = echotool.execute(null, "");
-		assertTrue(result.equals(expectedOutput));
-		assertEquals(echotool.getStatusCode(), 0);
+		String result = echotool.execute(null, null);
+
+		assertEquals(0, echotool.getStatusCode());
+		assertEquals(expectedOutput, result);
 	}
 
 	@Test
-	public void printNoInput() throws IOException {
-		// Test error-handling 2
+	public void testInputWithExtraSpacing() throws IOException {
+		// Parser should trim off unnecessary spaces
+		String[] args = { "I", " am", " a ", "string" };
+		echotool = new EchoTool(args);
+		String result = echotool.execute(null, null);
+
+		assertEquals(echotool.getStatusCode(), 0);
+		assertEquals("I  am  a  string", result);
+	}
+
+	@Test
+	public void testInputWithOnlyStdin() throws IOException {
+		// Parser should trim off unnecessary spaces
 		echotool = new EchoTool(null);
-		String result = echotool.execute(null, "");
-		assertTrue(result.equals("\n"));
+		String result = echotool.execute(null, "I am a string");
+
 		assertEquals(echotool.getStatusCode(), 0);
+		assertEquals("I am a string", result);
 	}
 
 	@Test
-	public void printMultipleWordInput() throws IOException {
-		// Test error-handling 1
-		// Assume args are correctly parsed by shell
+	public void testInputWithBothArgsandStdin() throws IOException {
+		// Parser should trim off unnecessary spaces
 		String[] args = { "I", "am", "a", "string" };
 		echotool = new EchoTool(args);
-		String result = echotool.execute(null, "");
-		assertTrue(result.equals("I am a string\n"));
+		String result = echotool.execute(null, "I am also a string");
+
 		assertEquals(echotool.getStatusCode(), 0);
+		assertEquals("I am a string I am also a string", result);
 	}
 }

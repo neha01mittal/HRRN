@@ -98,6 +98,7 @@ public class Shell implements IShell {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public void start() {
 		// Input scanner
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -199,7 +200,7 @@ public class Shell implements IShell {
 				// get current path
 				File f = new File(System.getProperty("user.dir"));
 				// execute command
-				String returnedValue = tool.execute(f, "");
+				String returnedValue = tool.execute(f, null);
 				// print if has output
 				if (returnedValue != null && returnedValue.trim().length() > 0) {
 					System.out.println(returnedValue);
@@ -223,7 +224,6 @@ public class Shell implements IShell {
 	 * for the thread to complete execution 6. Report the exit status of the
 	 * command to the user
 	 */
-	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 
 		// Create Shell object

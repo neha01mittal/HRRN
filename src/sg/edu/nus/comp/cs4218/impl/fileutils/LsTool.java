@@ -14,19 +14,39 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 public class LsTool extends ATool implements ILsTool {
 
-	public LsTool() {
-		super(null);
-	}
+	private final List<String> argList;
+	private final List<String> inputList;
 
 	public LsTool(String[] arguments) {
 		super(arguments);
+		setStatusCode(1);
+		argList = new ArrayList<String>();
+		inputList = new ArrayList<String>();
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
 
+		// check for argument number
+		if (!(args == null || args.length < 1)) {
+
+			// split arguments and inputs
+			for (String arg : args) {
+				if (arg.startsWith("-")) {
+					argList.add(arg);
+				} else {
+					inputList.add(arg);
+				}
+			}
+
+			if (stdin != null && stdin.trim().length() > 1) {
+				inputList.add(stdin);
+			}
+		}
+
 		List<File> fileList = getFiles(workingDir);
 		if (fileList != null) {
+			setStatusCode(0);
 			return getStringForFiles(fileList);
 		}
 		return null;
@@ -37,7 +57,6 @@ public class LsTool extends ATool implements ILsTool {
 
 		// Error Handling
 		if (directory == null || !directory.exists() || !directory.isDirectory()) {
-			setStatusCode(1);
 			return null;
 		}
 
@@ -70,7 +89,6 @@ public class LsTool extends ATool implements ILsTool {
 	public String getStringForFiles(List<File> files) {
 
 		String result = "";
-
 		int option = 0;
 		if (args != null && args.length > 0) {
 			if (args[0].equals("-l")) {

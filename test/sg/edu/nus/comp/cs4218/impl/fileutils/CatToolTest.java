@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,16 +21,19 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * @author Neha Mittal
+ */
 public class CatToolTest {
 
-	private CatTool					catTool;
-	private static Path				rootDirectory;
-	private static String			rootDirectoryString;
-	private static List<String>		testFileListRelativeString;
-	private static List<String>		testFileListAbsoluteString;
-	private static File				root;
-	private static List<File>		testDirectories;
-	private static final String[]	extensions	= { ".txt", ".doc" };
+	private CatTool catTool;
+	private static Path rootDirectory;
+	private static String rootDirectoryString;
+	private static List<String> testFileListRelativeString;
+	private static List<String> testFileListAbsoluteString;
+	private static File root;
+	private static List<File> testDirectories;
+	private static final String[] extensions = { ".txt", ".doc" };
 
 	@BeforeClass
 	public static void before() throws IOException {
@@ -72,7 +76,6 @@ public class CatToolTest {
 
 	@AfterClass
 	public static void after() throws IOException {
-		// catTool = null;
 
 		for (int i = 0; i < testFileListAbsoluteString.size(); i++) {
 			Path path = Paths.get(testFileListAbsoluteString.get(i));
@@ -93,9 +96,11 @@ public class CatToolTest {
 			catTool = new CatTool(filePath);
 			File f = new File(filePath[0]);
 			String fileContent = catTool.execute(root, null);
+
+			assertEquals(0, catTool.getStatusCode());
+
 			expectedOutput = readFile(f);
 			assertEquals(fileContent, expectedOutput);
-			assertEquals(0, catTool.getStatusCode());
 		}
 	}
 
@@ -107,9 +112,11 @@ public class CatToolTest {
 			catTool = new CatTool(filePath);
 			File f = new File(testFileListAbsoluteString.get(0));
 			String fileContent = catTool.execute(root, null);
+
+			assertEquals(catTool.getStatusCode(), 0);
+
 			expectedOutput = readFile(f);
 			assertEquals(fileContent, expectedOutput);
-			assertEquals(catTool.getStatusCode(), 0);
 		}
 	}
 
@@ -123,23 +130,26 @@ public class CatToolTest {
 		File f = new File(testFileListAbsoluteString.get(0));
 		File f1 = new File(testFileListAbsoluteString.get(1));
 		String fileContent = catTool.execute(root, null);
+
+		assertEquals(0, catTool.getStatusCode());
+
 		expectedOutput = readFile(f);
 		expectedOutput2 = readFile(f1);
 		expectedOutput += expectedOutput2;
 		assertEquals(expectedOutput, fileContent);
-		assertEquals(0, catTool.getStatusCode());
 	}
 
 	@Test
 	public void catWithInvalidArgs() {
 		// reads the first file, ignores the rest
-		String[] filePath = { "rubbish", "C:/Users/NonExisitingFile" };
+		String[] filePath = { "rubbish", "NonExisitingFile" };
 		String expectedOutput = "cat: No such file exists\n";
 		expectedOutput += expectedOutput;
 		catTool = new CatTool(filePath);
 		String fileContent = catTool.execute(root, null);
+
+		assertNotEquals(0, catTool.getStatusCode());
 		assertEquals(expectedOutput, fileContent);
-		assertEquals(1, catTool.getStatusCode());
 	}
 
 	@Test
@@ -148,8 +158,9 @@ public class CatToolTest {
 		catTool = new CatTool(null);
 		expectedOutput = null;
 		catTool.execute(root, null);
+
+		assertNotEquals(0, catTool.getStatusCode());
 		assertEquals(null, expectedOutput);
-		assertEquals(1, catTool.getStatusCode());
 	}
 
 	@Test
@@ -161,8 +172,8 @@ public class CatToolTest {
 		File f = new File(testFileListAbsoluteString.get(0));
 		String fileContent = catTool.getStringForFile(f);
 		expectedOutput = readFile(f);
+
 		assertEquals(fileContent, expectedOutput);
-		assertEquals(0, catTool.getStatusCode());
 	}
 
 	private String readFile(File f) {
@@ -175,7 +186,6 @@ public class CatToolTest {
 			}
 			br.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return expectedOutput;

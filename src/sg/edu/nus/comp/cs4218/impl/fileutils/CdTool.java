@@ -2,6 +2,8 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
@@ -13,39 +15,67 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 public class CdTool extends ATool implements ICdTool {
 
+	private final List<String> argList;
+	private final List<String> inputList;
+
 	public CdTool(String[] arguments) {
 		super(arguments);
+		setStatusCode(1);
+		argList = new ArrayList<String>();
+		inputList = new ArrayList<String>();
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
 
 		// check for argument number
-		if ((args == null || args.length < 1) || (stdin == null || stdin.length() < 1)) {
-			setStatusCode(1);
-			return "No argument recieved.";
+		if (args == null || args.length < 1) {
+
+			if (stdin == null || stdin.trim().length() < 1) {
+				return "No input recieved.";
+			} else {
+				inputList.add(stdin);
+			}
+		} else {
+
+			// split arguments and inputs
+			for (String arg : args) {
+				if (arg.startsWith("-")) {
+					argList.add(arg);
+				} else {
+					inputList.add(arg);
+				}
+			}
+
+			if (stdin != null && stdin.trim().length() > 1) {
+				inputList.add(stdin);
+			}
 		}
 
-		File newdir = null;
-		File file = new File(args[0]);
+		// Only need the first one
+		String validInput = inputList.get(0);
+
+		File newdir;
+		File file = new File(validInput);
+		System.out.println(file.getAbsolutePath());
 		if (file.isAbsolute()) {
-			newdir = changeDirectory(args[0]);
+			newdir = changeDirectory(validInput);
 		} else {
-			newdir = changeDirectory(workingDir.getAbsolutePath() + "/" + args[0]);
+			newdir = changeDirectory(workingDir.getAbsolutePath() + File.separator + validInput);
 		}
 
 		if (newdir != null) {
 			try {
 				// get the nicely looking path
 				System.setProperty("user.dir", newdir.getCanonicalPath());
+				setStatusCode(0);
 				return "";
 			} catch (IOException e) {
 				// error code 2: IOException to get canonical path
-				setStatusCode(2);
 				e.printStackTrace();
 			}
 		}
-		return "   cd: " + args[0] + ": No such directory or not directory";
+		return "   cd: " + validInput + ": No such directory or not directory";
 	}
 
 	// String newDirectory must be an absolute path
@@ -57,7 +87,6 @@ public class CdTool extends ATool implements ICdTool {
 		// Error Handling
 		if (newdir == null || !newdir.exists() || !newdir.isDirectory()) {
 			// error code 1: Path not valid, not exist
-			setStatusCode(1);
 			return null;
 		}
 
