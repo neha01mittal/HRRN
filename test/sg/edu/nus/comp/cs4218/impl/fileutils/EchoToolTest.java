@@ -13,7 +13,7 @@ import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
 
 public class EchoToolTest {
 
-	private IEchoTool	echotool;
+	private IEchoTool echotool;
 
 	@Before
 	public void before() {
@@ -31,7 +31,7 @@ public class EchoToolTest {
 		// Assume args are correctly parsed by shell
 		String[] args = { "test1" };
 		echotool = new EchoTool(args);
-		String result = echotool.execute(null, null);
+		String result = echotool.execute(null, "");
 		assertTrue(result.equals(args[0] + "\n"));
 		assertEquals(echotool.getStatusCode(), 0);
 	}
@@ -42,9 +42,9 @@ public class EchoToolTest {
 		// Assume args are correctly parsed by shell
 		String[] args = { "I", "am", "a", "str$ing" };
 		echotool = new EchoTool(args);
-		String result = echotool.execute(null, null);
+		String result = echotool.execute(null, "");
 		assertTrue(result.equals("Error in input. Cannot enter $ sign"));
-		assertEquals(echotool.getStatusCode(), 1);
+		assertEquals(1, echotool.getStatusCode());
 	}
 
 	@Test
@@ -60,9 +60,8 @@ public class EchoToolTest {
 		}
 		expectedOutput = expectedOutput.substring(0, expectedOutput.length() - 1);
 		expectedOutput += "\n";
-		System.out.println(expectedOutput);
 		echotool = new EchoTool(args);
-		String result = echotool.execute(null, null);
+		String result = echotool.execute(null, "");
 		assertTrue(result.equals(expectedOutput));
 		assertEquals(echotool.getStatusCode(), 0);
 	}
@@ -71,7 +70,7 @@ public class EchoToolTest {
 	public void printNoInput() throws IOException {
 		// Test error-handling 2
 		echotool = new EchoTool(null);
-		String result = echotool.execute(null, null);
+		String result = echotool.execute(null, "");
 		assertTrue(result.equals("\n"));
 		assertEquals(echotool.getStatusCode(), 0);
 	}
@@ -82,8 +81,8 @@ public class EchoToolTest {
 		// Assume args are correctly parsed by shell
 		String[] args = { "I", "am", "a", "string" };
 		echotool = new EchoTool(args);
-		String result = echotool.execute(null, null);
+		String result = echotool.execute(null, "");
+		assertTrue(result.equals("I am a string\n"));
 		assertEquals(echotool.getStatusCode(), 0);
 	}
-
 }

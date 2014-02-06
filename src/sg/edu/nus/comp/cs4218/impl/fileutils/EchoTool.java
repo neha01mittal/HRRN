@@ -21,10 +21,7 @@ public class EchoTool extends ATool implements IEchoTool {
 		// TODO Auto-generated method stub
 		String userInput = "";
 		boolean error = false;
-		if (!stdin.equals("")) {
-			// TODO
-		}
-		else if (args != null) {
+		if (args != null) {
 			// print the user input to stdout
 			for (String arg : args) {
 				// TODO handle printing special character (esp quotes)
@@ -37,8 +34,8 @@ public class EchoTool extends ATool implements IEchoTool {
 
 			if (error == true) {
 				return echo("Error in input. Cannot enter $ sign");
-			}
-			else {
+
+			} else {
 				setStatusCode(0);
 			}
 
@@ -48,6 +45,9 @@ public class EchoTool extends ATool implements IEchoTool {
 
 			userInput += "\n";
 			return echo(userInput);
+		} else if (!stdin.equals("")) {
+			// TODO
+			// does nothing
 		}
 		return "\n";
 	}

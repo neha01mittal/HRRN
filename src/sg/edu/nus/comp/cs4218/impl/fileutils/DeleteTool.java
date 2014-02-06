@@ -32,17 +32,15 @@ public class DeleteTool extends ATool implements IDeleteTool {
 		}
 		if (delete(f1)) {
 		}
-		return null; 
+		return null;
 	}
 
 	@Override
 	public boolean delete(File toDelete) {
 		// TODO Auto-generated method stub
-		if (toDelete.exists())
-		{
+		if (toDelete.exists()) {
 			recursivedelete(toDelete);
-		}
-		else {
+		} else {
 			setStatusCode(1);
 		}
 		return true;
@@ -64,13 +62,11 @@ public class DeleteTool extends ATool implements IDeleteTool {
 					Files.deleteIfExists(source.toPath());
 				}
 				Files.deleteIfExists(file.toPath());
-			}
-			else {
+			} else {
 				// Found a file. Delete it
 				if (!(Files.deleteIfExists(file.toPath()))) {
 					setStatusCode(1);
-				}
-				else {
+				} else {
 					setStatusCode(0);
 				}
 

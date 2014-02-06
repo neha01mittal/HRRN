@@ -34,18 +34,26 @@ public class CatTool extends ATool implements ICatTool {
 		File file;
 		if ((args != null && args.length != 0) || (stdin != null && !stdin.equals(""))) {
 			String content = "";
-			if (!stdin.equals("")) {
-				// TODO
-				content = stdin;
-				setStatusCode(0);
-			}
-			else if (args.length >= 1) {
+
+			if (args.length >= 1 && !args[0].equals("-")) {
 				for (String arg : args) {
 					file = new File(arg);
 					if (!file.isAbsolute()) {
 						file = new File(workingDir, arg);
 					}
 					content += getStringForFile(file);
+				}
+			} else {
+				if (!stdin.equals("")) {
+					content = stdin;
+					setStatusCode(0);
+				}
+				// TODO
+				else if (args[0].equals("-")) {
+					for (int i = 1; i < args.length; i++) {
+						content += args[i];
+					}
+					setStatusCode(0);
 				}
 			}
 			return content;
@@ -64,8 +72,7 @@ public class CatTool extends ATool implements ICatTool {
 
 		else if (!toRead.canRead()) {
 			content = "Unable to read this file type";
-		}
-		else {
+		} else {
 			try {
 				br = new BufferedReader(new FileReader(toRead));
 				String line = null;

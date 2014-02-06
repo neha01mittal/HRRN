@@ -33,8 +33,8 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
  */
 public class Shell implements IShell {
 
-	private static String	dilimiter	= "::space::";	// wrap with : which is
-														// not allowed
+	private static String dilimiter = "::space::"; // wrap with : which is
+													// not allowed
 
 	private String[] getArgsArray(String commandline) {
 		List<String> argList = new ArrayList<String>();
@@ -68,7 +68,7 @@ public class Shell implements IShell {
 	@Override
 	public ITool parse(String commandline) {
 		if (commandline.contains("|")) {
-			return new PipingTool(commandline.split("|"));
+			return new PipingTool(commandline.split("\\|"));
 		} else {
 			commandline = commandline.trim();
 			String[] cmdSplit = commandline.split("\\s+");
@@ -80,23 +80,23 @@ public class Shell implements IShell {
 
 				if (cmd.equals("cat")) {
 					return new CatTool(args);
-				} else if (cmd.equals("cd")) {
+				} else if (cmd.equalsIgnoreCase("cd")) {
 					return new CdTool(args);
-				} else if (cmd.equals("copy")) {
+				} else if (cmd.equalsIgnoreCase("copy")) {
 					return new CopyTool(args);
-				} else if (cmd.equals("delete")) {
+				} else if (cmd.equalsIgnoreCase("delete")) {
 					return new DeleteTool(args);
 				} else if (cmd.equals("echo")) {
 					return new EchoTool(args);
-				} else if (cmd.equals("ls")) {
+				} else if (cmd.equalsIgnoreCase("ls")) {
 					return new LsTool(args);
-				} else if (cmd.equals("move")) {
+				} else if (cmd.equalsIgnoreCase("move")) {
 					return new MoveTool(args);
-				} else if (cmd.equals("pwd")) {
+				} else if (cmd.equalsIgnoreCase("pwd")) {
 					return new PWDTool();
-				} else if (cmd.equals("grep")) {
+				} else if (cmd.equalsIgnoreCase("grep")) {
 					return new GrepTool(args);
-				} else if (cmd.equals("long")) {
+				} else if (cmd.equalsIgnoreCase("long")) {
 					return new LongCmd(args);
 				}
 			}

@@ -31,7 +31,7 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
  */
 public class PipingTool extends ATool implements IPipingTool {
 
-	private static String	dilimiter	= "::space::";
+	private static String dilimiter = "::space::";
 
 	public PipingTool(String[] arguments) {
 		super(arguments);

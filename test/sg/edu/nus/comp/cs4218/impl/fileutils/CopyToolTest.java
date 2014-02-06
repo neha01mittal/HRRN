@@ -20,12 +20,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CopyToolTest {
-	private CopyTool		copyTool;
-	private Path			rootDirectory;
-	private String			rootDirectoryString;
-	private List<Path>		testDirectoryList;
-	private List<String>	testDirectoryListRelativeString;
-	private List<String>	testDirectoryListAbsoluteString;
+	private CopyTool copyTool;
+	private Path rootDirectory;
+	private String rootDirectoryString;
+	private List<Path> testDirectoryList;
+	private List<String> testDirectoryListRelativeString;
+	private List<String> testDirectoryListAbsoluteString;
 
 	@Before
 	public void before() throws IOException {
@@ -72,7 +72,7 @@ public class CopyToolTest {
 		System.setProperty("user.dir", rootDirectory.getParent().toString());
 	}
 
-	//Test copying file into a new file
+	// Test copying file into a new file
 	@Test
 	public void testCopyFile() {
 		copyTool = new CopyTool(null);
@@ -84,8 +84,8 @@ public class CopyToolTest {
 		f1.delete();
 		f2.delete();
 	}
-	
-	//Test copying file with relative path into a new file
+
+	// Test copying file with relative path into a new file
 	@Test
 	public void testCopyFileWithRelativePath() {
 		copyTool = new CopyTool(null);
@@ -97,8 +97,8 @@ public class CopyToolTest {
 		f1.delete();
 		f2.delete();
 	}
-	
-	//Test file name with two extensions (.txt.txt)
+
+	// Test file name with two extensions (.txt.txt)
 	@Test
 	public void testCopyFileWithTwoExtensions() {
 		copyTool = new CopyTool(null);
@@ -110,54 +110,54 @@ public class CopyToolTest {
 		f1.delete();
 		f2.delete();
 	}
-	
-	//Test file name with invalid characters
+
+	// Test file name with invalid characters
 	@Test
 	public void testCopyFileWithInvalidCharacters() {
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test@#22.xt");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		String a[] = {f1.getPath().toString(),f2.getPath().toString()};
+		String a[] = { f1.getPath().toString(), f2.getPath().toString() };
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
-		assert(copyTool.getStatusCode()==1);
+		assert (copyTool.getStatusCode() == 1);
 	}
-	
-	//Test with no file names (just "copy" command)
+
+	// Test with no file names (just "copy" command)
 	@Test
 	public void testCopyCommandWithNoArguments() {
 		String a[] = {};
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
-		assert(copyTool.getStatusCode()==1);
+		assert (copyTool.getStatusCode() == 1);
 	}
 
-	//Test copying file into invalid path
+	// Test copying file into invalid path
 	@Test
 	public void testCopyFileIntoInvalidPath() {
 		copyTool = new CopyTool(null);
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
 		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		String a[] = {f1.getPath().toString(),testDirectoryListAbsoluteString.get(0) + "//blah//test.txt"};
+		String a[] = { f1.getPath().toString(), testDirectoryListAbsoluteString.get(0) + "//blah//test.txt" };
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
 		f1.delete();
-		assert(copyTool.getStatusCode()==1);
+		assert (copyTool.getStatusCode() == 1);
 	}
-	
-	//Test copying file into same folder
+
+	// Test copying file into same folder
 	@Test
 	public void testCopyFileIntoSameFolder() {
 		copyTool = new CopyTool(null);
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
 		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		String a[] = {f1.getPath().toString(),testDirectoryListAbsoluteString.get(0)};
+		String a[] = { f1.getPath().toString(), testDirectoryListAbsoluteString.get(0) };
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
-		assert(copyTool.getStatusCode()==0);
+		assert (copyTool.getStatusCode() == 0);
 		f1.delete();
 	}
-	
-	//Test copying file into an existing file
+
+	// Test copying file into an existing file
 	@Test
 	public void testCopyAndReplaceExistingFile() {
 		copyTool = new CopyTool(null);
@@ -173,186 +173,188 @@ public class CopyToolTest {
 		f1.delete();
 		f2.delete();
 	}
-	//Test copying folder into file 
+
+	// Test copying folder into file
 	@Test
 	public void testCopyFolderIntoFile() {
 
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
 		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		String a[] = {testDirectoryListAbsoluteString.get(0),f1.getPath().toString()};
+		String a[] = { testDirectoryListAbsoluteString.get(0), f1.getPath().toString() };
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
 		f1.delete();
-		assert(copyTool.getStatusCode()==1);
+		assert (copyTool.getStatusCode() == 1);
 	}
-	//Test copying folder to invalid path
+
+	// Test copying folder to invalid path
 	@Test
 	public void testCopyFolderIntoInvalidPath() {
 		copyTool = new CopyTool(null);
-		String a[] = {testDirectoryListAbsoluteString.get(0),testDirectoryListAbsoluteString.get(0) + "F:"};
+		String a[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(0) + "F:" };
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
-		assert(copyTool.getStatusCode()==1);
+		assert (copyTool.getStatusCode() == 1);
 	}
-	
-	
-	//Test copying folder into its parent folder (does it replace or rename)
+
+	// Test copying folder into its parent folder (does it replace or rename)
 	@Test
 	public void testCopyFolderIntoParentFolder() {
 		copyTool = new CopyTool(null);
-		String a[] = {testDirectoryListAbsoluteString.get(0),testDirectoryListAbsoluteString.get(0) + "//.."};
+		String a[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(0) + "//.." };
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
-		assert(copyTool.getStatusCode()==1);
-		
+		assert (copyTool.getStatusCode() == 1);
+
 	}
-		
-	//Test copying multiple files into a folder
-		@Test
-		public void testCopyMultipleFiles() {
-			// copyTool = new CopyTool(null);
-			File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-			File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
-			String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
-					testDirectoryListAbsoluteString.get(1) };
-			copyTool = new CopyTool(arg);
-			copyTool.execute(rootDirectory.toFile(), "");
-			File f3 = new File(testDirectoryListAbsoluteString.get(1) + "//test.txt");
-			File f4 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
-			assert (compare(f1, f3) && compare(f2, f4));
-			f1.delete();
-			f2.delete();
-			f3.delete();
-			f4.delete();
-		}
 
-	//Test copying multiple files into existing file - the last copy operation overwrites old contents
-		@Test
-		public void testCopyMultipleFilesintoExisitingFile() {
-			File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-			File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
-			File f = new File(testDirectoryListAbsoluteString.get(1) + "//a.txt");
-			create(testDirectoryListAbsoluteString.get(1) + "//a.txt", "something33");
-			String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
-					testDirectoryListAbsoluteString.get(1) + "//a.txt" };
-			copyTool = new CopyTool(arg);
-			copyTool.execute(rootDirectory.toFile(), "");
-			assert (compare(f2,f));
-			f1.delete();
-			f2.delete();
-			f.delete();
-		}
-	//Test copying multiple files into a new file - the last copy operation overwrites previous ones
-		@Test
-		public void testCopyMultipleFilesintoNewFile() {
-			File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-			File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
-			String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
-					testDirectoryListAbsoluteString.get(1) + "//a.txt" };
-			copyTool = new CopyTool(arg);
-			copyTool.execute(rootDirectory.toFile(), "");
-			File f = new File(testDirectoryListAbsoluteString.get(1) + "//a.txt");
-			assert (compare(f2,f));
-			f1.delete();
-			f2.delete();
-			f.delete();
-		}
-	//Test copying multiple folders into a file -Test if it creates a folder with  destination file name 
-		@Test
-		public void testCopyMultipleFoldersintoFile() {
-			File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-			File f2 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
-			create(testDirectoryListAbsoluteString.get(1) + "//test2.txt", "something2");
-			File f = new File(testDirectoryListAbsoluteString.get(2) + "//a.txt");
-			create(testDirectoryListAbsoluteString.get(2) + "//a.txt", "something33");
-			String arg[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(1),
-					testDirectoryListAbsoluteString.get(2) + "//a.txt" };
-			copyTool = new CopyTool(arg);
-			copyTool.execute(rootDirectory.toFile(), "");
-			assert (copyTool.getStatusCode() ==1);
-			f1.delete();
-			f2.delete();
-			f.delete();
+	// Test copying multiple files into a folder
+	@Test
+	public void testCopyMultipleFiles() {
+		// copyTool = new CopyTool(null);
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
+		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
+				testDirectoryListAbsoluteString.get(1) };
+		copyTool = new CopyTool(arg);
+		copyTool.execute(rootDirectory.toFile(), "");
+		File f3 = new File(testDirectoryListAbsoluteString.get(1) + "//test.txt");
+		File f4 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
+		assert (compare(f1, f3) && compare(f2, f4));
+		f1.delete();
+		f2.delete();
+		f3.delete();
+		f4.delete();
+	}
 
-		}
-	//Test copying multiple files into a folder where one file does not exist
-		@Test
-		public void testCopyMultipleFileWithOneInvalidFile() {
-			File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-			File f2 = new File(testDirectoryListAbsoluteString.get(2) + "//test.txt");
-			create(testDirectoryListAbsoluteString.get(2) + "//test.txt", "something33");
-			String arg[] = { testDirectoryListAbsoluteString.get(0)+ "//test.txt", testDirectoryListAbsoluteString.get(1)+ "//test.txt",
-					testDirectoryListAbsoluteString.get(2)};
-			copyTool = new CopyTool(arg);
-			copyTool.execute(rootDirectory.toFile(), "");
-			assert (copyTool.getStatusCode() ==1 && compare(f1,f2));
-			f1.delete();
-			f2.delete();
-		}
-		
-	//Test copying multiple files into new folder
-		@Test
-		public void testCopyMultipleFilesintoNewFolder() {
-			// copyTool = new CopyTool(null);
-			File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-			File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
-			String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
-					testDirectoryListAbsoluteString.get(0) +"//..//new" };
-			copyTool = new CopyTool(arg);
-			copyTool.execute(rootDirectory.toFile(), "");
-			File f3 = new File(testDirectoryListAbsoluteString.get(1) + "//test.txt");
-			File f4 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
-			assert (compare(f1, f3) && compare(f2, f4));
-			f1.delete();
-			f2.delete();
-			f3.delete();
-			f4.delete();
+	// Test copying multiple files into existing file - the last copy operation
+	// overwrites old contents
+	@Test
+	public void testCopyMultipleFilesintoExisitingFile() {
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
+		File f = new File(testDirectoryListAbsoluteString.get(1) + "//a.txt");
+		create(testDirectoryListAbsoluteString.get(1) + "//a.txt", "something33");
+		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
+				testDirectoryListAbsoluteString.get(1) + "//a.txt" };
+		copyTool = new CopyTool(arg);
+		copyTool.execute(rootDirectory.toFile(), "");
+		assert (compare(f2, f));
+		f1.delete();
+		f2.delete();
+		f.delete();
+	}
 
-			File f = new File(testDirectoryListAbsoluteString.get(1) + "//..//new");
-			f.delete();
-		}
-		
+	// Test copying multiple files into a new file - the last copy operation
+	// overwrites previous ones
+	@Test
+	public void testCopyMultipleFilesintoNewFile() {
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
+		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
+				testDirectoryListAbsoluteString.get(1) + "//a.txt" };
+		copyTool = new CopyTool(arg);
+		copyTool.execute(rootDirectory.toFile(), "");
+		File f = new File(testDirectoryListAbsoluteString.get(1) + "//a.txt");
+		assert (compare(f2, f));
+		f1.delete();
+		f2.delete();
+		f.delete();
+	}
 
-	//Test copying multiple folders into a folder
-		@Test
-		public void testCopyMultipleFoldersintoFolder() {
-			File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-			create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-			File f2 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
-			create(testDirectoryListAbsoluteString.get(1) + "//test2.txt", "something2");
-			File f = new File(testDirectoryListAbsoluteString.get(2) + "//a.txt");
-			create(testDirectoryListAbsoluteString.get(2) + "//a.txt", "something33");
-			String arg[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(1),
-					testDirectoryListAbsoluteString.get(2) };
-			copyTool = new CopyTool(arg);
-			copyTool.execute(rootDirectory.toFile(), "");
-			File f3 = new File(testDirectoryListAbsoluteString.get(2) + "//test.txt");
-			File f4 = new File(testDirectoryListAbsoluteString.get(2) + "//test2.txt");
-			assert (compare(f1, f3) && compare(f2, f4));
-			f1.delete();
-			f2.delete();
-			f.delete();
-			f3.delete();
-			f4.delete();
+	// Test copying multiple folders into a file -Test if it creates a folder
+	// with destination file name
+	@Test
+	public void testCopyMultipleFoldersintoFile() {
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
+		create(testDirectoryListAbsoluteString.get(1) + "//test2.txt", "something2");
+		File f = new File(testDirectoryListAbsoluteString.get(2) + "//a.txt");
+		create(testDirectoryListAbsoluteString.get(2) + "//a.txt", "something33");
+		String arg[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(1), testDirectoryListAbsoluteString.get(2) + "//a.txt" };
+		copyTool = new CopyTool(arg);
+		copyTool.execute(rootDirectory.toFile(), "");
+		assert (copyTool.getStatusCode() == 1);
+		f1.delete();
+		f2.delete();
+		f.delete();
 
+	}
 
-		}
-	
-	//Test copying one folder to another folder
+	// Test copying multiple files into a folder where one file does not exist
+	@Test
+	public void testCopyMultipleFileWithOneInvalidFile() {
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(2) + "//test.txt");
+		create(testDirectoryListAbsoluteString.get(2) + "//test.txt", "something33");
+		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(1) + "//test.txt",
+				testDirectoryListAbsoluteString.get(2) };
+		copyTool = new CopyTool(arg);
+		copyTool.execute(rootDirectory.toFile(), "");
+		assert (copyTool.getStatusCode() == 1 && compare(f1, f2));
+		f1.delete();
+		f2.delete();
+	}
+
+	// Test copying multiple files into new folder
+	@Test
+	public void testCopyMultipleFilesintoNewFolder() {
+		// copyTool = new CopyTool(null);
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
+		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
+				testDirectoryListAbsoluteString.get(0) + "//..//new" };
+		copyTool = new CopyTool(arg);
+		copyTool.execute(rootDirectory.toFile(), "");
+		File f3 = new File(testDirectoryListAbsoluteString.get(1) + "//test.txt");
+		File f4 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
+		assert (compare(f1, f3) && compare(f2, f4));
+		f1.delete();
+		f2.delete();
+		f3.delete();
+		f4.delete();
+
+		File f = new File(testDirectoryListAbsoluteString.get(1) + "//..//new");
+		f.delete();
+	}
+
+	// Test copying multiple folders into a folder
+	@Test
+	public void testCopyMultipleFoldersintoFolder() {
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
+		create(testDirectoryListAbsoluteString.get(1) + "//test2.txt", "something2");
+		File f = new File(testDirectoryListAbsoluteString.get(2) + "//a.txt");
+		create(testDirectoryListAbsoluteString.get(2) + "//a.txt", "something33");
+		String arg[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(1), testDirectoryListAbsoluteString.get(2) };
+		copyTool = new CopyTool(arg);
+		copyTool.execute(rootDirectory.toFile(), "");
+		File f3 = new File(testDirectoryListAbsoluteString.get(2) + "//test.txt");
+		File f4 = new File(testDirectoryListAbsoluteString.get(2) + "//test2.txt");
+		assert (compare(f1, f3) && compare(f2, f4));
+		f1.delete();
+		f2.delete();
+		f.delete();
+		f3.delete();
+		f4.delete();
+
+	}
+
+	// Test copying one folder to another folder
 	@Test
 	public void testCopyToExistingFolder() {
-		copyTool = new
-				CopyTool(null);
+		copyTool = new CopyTool(null);
 		String result = "true";
 
 		File from = new File(testDirectoryListAbsoluteString.get(1));
@@ -362,8 +364,7 @@ public class CopyToolTest {
 		String[] fList = from.list();
 
 		for (int index = 0; index < fList.length; index++) {
-			File dest = new
-					File(to, fList[index]);
+			File dest = new File(to, fList[index]);
 			File source = new File(from, fList[index]);
 			if (compare(dest, source) == false) {
 				result = "false";
@@ -376,7 +377,7 @@ public class CopyToolTest {
 		f2.delete();
 	}
 
-	//Test copying file into new folder
+	// Test copying file into new folder
 	@Test
 	public void testCopyToNewFolder() {
 		copyTool = new CopyTool(null);
@@ -385,20 +386,19 @@ public class CopyToolTest {
 		File f2 = new File(testDirectoryListAbsoluteString.get(1) + "//test1.txt");
 		copyTool.copy(f2, to);
 		File f1 = new File(testDirectoryListAbsoluteString.get(1) + "//..//newfolder//test1.txt");
-		
+
 		assert (compare(f1, f2));
 		f1.delete();
 		to.delete();
 		f2.delete();
 
-	}	
-	
+	}
+
 	public void create(String filename, String content) {
 		Writer writer = null;
 
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(filename), "utf-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
 			writer.write(content);
 		} catch (IOException ex) {
 			// report
