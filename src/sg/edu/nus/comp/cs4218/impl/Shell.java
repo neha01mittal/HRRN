@@ -152,7 +152,7 @@ public class Shell implements IShell {
 	@Override
 	public ITool parse(String commandline) {
 		if (commandline.contains("|")) {
-			return new PipingTool(commandline.split("|"));
+			return new PipingTool(commandline.split("|", 2));
 		} else {
 			commandline = commandline.trim();
 			String[] cmdSplit = commandline.split("\\s+");

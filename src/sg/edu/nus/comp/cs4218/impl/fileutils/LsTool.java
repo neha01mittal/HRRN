@@ -26,7 +26,6 @@ public class LsTool extends ATool implements ILsTool {
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-
 		// check for argument number
 		if (!(args == null || args.length < 1)) {
 
@@ -54,31 +53,22 @@ public class LsTool extends ATool implements ILsTool {
 
 	@Override
 	public List<File> getFiles(File directory) {
-
 		// Error Handling
 		if (directory == null || !directory.exists() || !directory.isDirectory()) {
 			return null;
 		}
 
-		int option = 0;
-		if (args != null && args.length > 0) {
-			if (args[0].equals("-a")) {
-				option = 1;
-			}
-		}
 		File[] files = directory.listFiles();
 
 		List<File> fileList = new ArrayList<File>();
 		for (File f : files) {
-			switch (option) {
-			case 0:
-				if (!f.isHidden()) {
-					fileList.add(f);
-				}
-				break;
-			case 1:
+			if (argList.contains("-a") && !f.isHidden()) {
 				fileList.add(f);
-				break;
+			} else {
+				fileList.add(f);
+			}
+			if (argList.contains("-R") && f.isDirectory()) {
+				fileList.addAll(getFiles(f));
 			}
 		}
 		// Processing
@@ -87,22 +77,14 @@ public class LsTool extends ATool implements ILsTool {
 
 	@Override
 	public String getStringForFiles(List<File> files) {
-
 		String result = "";
-		int option = 0;
-		if (args != null && args.length > 0) {
-			if (args[0].equals("-l")) {
-				option = 1;
-			}
-		}
 		for (int i = 0; i < files.size(); i++) {
-			switch (option) {
-			case 0:
-				result += files.get(i).getName();
-				break;
-			case 1:
+			if (argList.contains("-l")) {
 				result += files.get(i).getName() + " " + files.get(i).getUsableSpace();
-				break;
+			} else if (argList.contains("-R")) {
+				result += files.get(i).getAbsolutePath();
+			} else {
+				result += files.get(i).getName();
 			}
 			if (i != files.size() - 1) {
 				result += "\n";

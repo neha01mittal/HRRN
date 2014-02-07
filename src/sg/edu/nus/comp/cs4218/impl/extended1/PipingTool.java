@@ -1,21 +1,16 @@
 package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.Shell;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CdTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CopyTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.DeleteTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.EchoTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.LongCmd;
 import sg.edu.nus.comp.cs4218.impl.fileutils.LsTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.MoveTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
@@ -32,113 +27,56 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
  */
 public class PipingTool extends ATool implements IPipingTool {
 
-	private static String dilimiter1 = "::escape-space::";
-	private static String dilimiter2 = "::space::";
+	File workingDir;
 
 	public PipingTool(String[] arguments) {
 		super(arguments);
-		// TODO Auto-generated constructor stub
+		setStatusCode(1);
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// TODO Auto-generated method stub
-		if (args.length > 1) {
-			String result = "";
+		this.workingDir = workingDir;
+		if (args.length == 2) {
 			ITool from = parse(args[0]);
 			ITool to = parse(args[1]);
-			result = pipe(from, to);
-			return result;
+
+			return pipe(from, to);
 		}
 		return null;
 	}
 
 	@Override
 	public String pipe(ITool from, ITool to) {
-		// TODO Auto-generated method stub
-		File f = new File(System.getProperty("user.dir"));
-		// execute command
-		String returnedValue = from.execute(f, "");
-		returnedValue = to.execute(f, returnedValue);
-		// print if has output
-		// args 1-> length
-		for (int i = 2; i < args.length; i++) {
-			if (returnedValue != null && returnedValue.trim().length() > 0) {
-				to = parse(args[i]);
-				returnedValue = to.execute(f, returnedValue);
-			}
+		// execute command 1
+		String returnedValue = from.execute(workingDir, null);
+		if (from.getStatusCode() != 0) {
+			setStatusCode(1);
+			return "Error executing first tool.";
 		}
-		setStatusCode(to.getStatusCode());
-		return returnedValue;
+		return pipe(returnedValue, to);
 	}
 
 	@Override
 	public String pipe(String stdout, ITool to) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static String[] getArgsArray(String command) {
-		// Step 1. remove all the surround quotes
-		Pattern regex = Pattern.compile("[^'\"]*(\"[^\"]*\")[^'\"]*|[^'\"]*('[^']*')[^'\"]*");
-		Matcher regexMatcher = regex.matcher(command);
-		while (regexMatcher.find()) {
-			if (regexMatcher.group(1) != null) {
-				String temp = regexMatcher.group(1);
-				// System.out.println("group1: " + temp);
-				String commandline = command.replace(temp, temp.substring(1, temp.length() - 1));
-				command = commandline;
-				// System.out.println("group1: " + commandline);
-			}
-			if (regexMatcher.group(2) != null) {
-				String temp = regexMatcher.group(2);
-				// System.out.println("group2: " + temp);
-				String commandline = command.replace(temp, temp.substring(1, temp.length() - 1));
-				command = commandline;
-				// System.out.println("group2: " + commandline);
-			}
+		// execute command 2
+		String returnedValue = to.execute(workingDir, stdout);
+		if (to.getStatusCode() != 0) {
+			setStatusCode(1);
+			return "Error executing second tool.";
 		}
-		// System.out.println(commandline);
-		// Step 2. find the escape space in quotes
-		regex = Pattern.compile("['][^']*\\s+[^']*[']|[\"][^\"]*\\s+[^\"]*[\"]");
-		regexMatcher = regex.matcher(command);
-		while (regexMatcher.find()) {
-			if (regexMatcher.group() != null) {
-				String temp = regexMatcher.group();
-				String replaced = regexMatcher.group().replaceAll("\\s", dilimiter1);
-				String newString = command.replace(temp, replaced);
-				command = newString;
-			}
-		}
-		// System.out.println(commandline);
-		String replacedCommand = command.replaceAll("\\\\\\s", dilimiter2);
-		command = replacedCommand;
-		// System.out.println(commandline);
-
-		// Step 3. remove the first one and switch back delimiter
-		List<String> argList = new ArrayList<String>(Arrays.asList(command.split("\\s+")));
-		for (int i = 0; i < argList.size(); i++) {
-			argList.set(i, argList.get(i).replaceAll(dilimiter1, " ").replaceAll(dilimiter2, " "));
-		}
-		if (argList.size() > 0) {
-			argList.remove(0);
-			return argList.toArray(new String[0]);
-		} else {
-			return null;
-		}
+		return returnedValue;
 	}
 
 	public ITool parse(String commandline) {
 		if (commandline.contains("|")) {
-			return new PipingTool(commandline.split("\\|"));
+			return new PipingTool(commandline.split("|", 2));
 		} else {
 			String trimmed = commandline.trim();
 			String[] cmdSplit = trimmed.split("\\s+");
 			if (trimmed.length() > 0 && cmdSplit.length > 0) {
-
-				String cmd = cmdSplit[0].toLowerCase(); // This guarantee valid
-				// Now we need to construct arguments
-				String[] args = getArgsArray(trimmed);
+				String cmd = cmdSplit[0].toLowerCase();
+				String[] args = Shell.getArgsArray(trimmed);
 
 				if (cmd.equalsIgnoreCase("cat")) {
 					return new CatTool(args);
@@ -158,8 +96,6 @@ public class PipingTool extends ATool implements IPipingTool {
 					return new PWDTool();
 				} else if (cmd.equalsIgnoreCase("grep")) {
 					return new GrepTool(args);
-				} else if (cmd.equalsIgnoreCase("long")) {
-					return new LongCmd(args);
 				}
 			}
 		}
