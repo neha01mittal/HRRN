@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -152,6 +153,43 @@ public class LsToolTest {
 	}
 
 	@Test
+	public void testInvalidArguments() {
+
+		String input = "ls lalal";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+
+		LsTool gt = new LsTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), "");
+		String expected = "Error: invalid input: lalal";
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testListFile() {
+
+		String filePath = rootDirectory + File.separator + "testFile-1.txt";
+		Path temp = FileSystems.getDefault().getPath(filePath);
+		try {
+			Files.createFile(temp);
+		} catch (IOException e) {
+
+		}
+		String input = "ls testFile-1.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+
+		LsTool gt = new LsTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), "");
+		String expected = "testFile-1.txt";
+		assertEquals(expected, result);
+	}
+
+	@Test
 	public void testWithArgumentShowRecursive() {
 		String[] args = new String[] { "-R" };
 		lsTool = new LsTool(args);
@@ -230,11 +268,22 @@ public class LsToolTest {
 	}
 
 	@Test
-	public void testWithPathToFile() {
+	public void testWithPathToFileRelativePath() {
+		String[] args = new String[] { testFileListLevel0.get(0).toFile().getPath() };
+		lsTool = new LsTool(args);
+		String result = lsTool.execute(new File(rootDirectoryString), null);
+
+		assertEquals(0, lsTool.getStatusCode());
+		assertEquals(args[0], result);
+	}
+
+	@Test
+	public void testWithPathToFileAbsolutePath() {
 		String[] args = new String[] { testFileListLevel0.get(0).toFile().getAbsolutePath() };
 		lsTool = new LsTool(args);
-		lsTool.execute(new File(rootDirectoryString), null);
+		String result = lsTool.execute(new File(rootDirectoryString), null);
 
-		assertEquals(1, lsTool.getStatusCode());
+		assertEquals(0, lsTool.getStatusCode());
+		assertEquals(args[0], result);
 	}
 }

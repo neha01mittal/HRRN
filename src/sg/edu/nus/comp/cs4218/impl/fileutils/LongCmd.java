@@ -16,17 +16,17 @@ public class LongCmd extends ATool implements ITool {
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-		return LongWrite();
+		return longWrite();
 	}
 
 	public String inputBlocked() {
 		for (double i = 1; i < 1000000; i += 0.1) {
-			System.out.println("" + i + "");
+			// System.out.println("" + i + "");
 		}
 		return "finished!";
 	}
 
-	public String SimpleSleep() {
+	public String simpleSleep() {
 		for (int i = 0; i < 10; i++) {
 			try {
 				Thread.sleep(1000);
@@ -39,7 +39,7 @@ public class LongCmd extends ATool implements ITool {
 		return "finished!";
 	}
 
-	public String LongWrite() {
+	public String longWrite() {
 		try {
 			File file = new File("test.txt");
 			if (!file.exists()) {
@@ -53,7 +53,7 @@ public class LongCmd extends ATool implements ITool {
 			}
 			bw.close();
 
-			System.out.println("Done");
+			// System.out.println("Done");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

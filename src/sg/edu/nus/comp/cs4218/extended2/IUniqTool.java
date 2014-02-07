@@ -21,7 +21,7 @@ public interface IUniqTool extends ITool {
 
 	String getUnique(boolean checkCase, String input);
 
-	String getUniqueSkipNum(int NUM, boolean checkCase, String input);
+	String getUniqueSkipNum(int num, boolean checkCase, String input);
 
 	String getHelp();
 

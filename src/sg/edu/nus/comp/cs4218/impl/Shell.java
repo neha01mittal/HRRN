@@ -39,8 +39,8 @@ public class Shell implements IShell {
 	private static String dilimiter1 = "::escape-space::";
 	private static String dilimiter2 = "::space::";
 
-	public static String[] getArgsArray(String commandline) {
-
+	public static String[] getArgsArray(String c) {
+		String commandline = c;
 		// Step 1. find the escape space between quotes
 		Pattern regex = Pattern.compile("[^'\"]*\"([^\"]*)\"[^'\"]*|[^'\"]*'([^']*)'[^'\"]*");
 		Matcher regexMatcher = regex.matcher(commandline);
@@ -153,7 +153,8 @@ public class Shell implements IShell {
 	 * Check for syntax and construct tool with the arguments
 	 */
 	@Override
-	public ITool parse(String commandline) {
+	public ITool parse(String c) {
+		String commandline = c;
 		if (commandline.contains("|")) {
 			return new PipingTool(commandline.split("\\|"));
 		} else {
