@@ -130,6 +130,120 @@ public class GrepToolTest {
 		assertEquals(expected, result);
 	}
 
+	@Test
+	public void testCountLinesForTwoFiles() {
+		String input = "grep -c \"A\" file1.txt file2.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[1] = "A";
+
+		GrepTool gt = new GrepTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), "");
+		// String expected = "file1.txt:23\n" + "file2.txt:9";
+		String expected = "32";
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testCountLinesWhichContainPattern() {
+		String input = "grep -c \"This has\" file1.txt file2.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[1] = "This has";
+
+		GrepTool gt = new GrepTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), "");
+		// String expected = "file1.txt:1\n" + "file2.txt:0";
+		String expected = "1";
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testCountLinesWhichDoNotContainPattern() {
+
+		// Does not work.. It only handles -c
+		String input = "grep -c -v \"This\" file1.txt file2.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[1] = "This";
+
+		GrepTool gt = new GrepTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), "");
+		// String expected = "file1.txt:294\n" + "file2.txt:19";
+		String expected = "313";
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testCountLinesInvalidFile() {
+
+		// Does not work.. It only handles -c
+		String input = "grep -c \"This\" filex.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[1] = "This";
+
+		GrepTool gt = new GrepTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), "");
+		String expected = "0";
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testGrepWithNoOptions() {
+
+		// Does not work.. It only handles -c
+		String input = "grep file1.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		// args[1] = "";
+
+		GrepTool gt = new GrepTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), input);
+		assertEquals("grep file1.txt\n", result);
+	}
+
+	@Test
+	public void testOnlyGrep() {
+
+		String input = "grep";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		// args[1] = "";
+
+		GrepTool gt = new GrepTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), input);
+		assertEquals("grep\n", result);
+	}
+
+	@Test
+	public void testGrepWithAbsolutePath() {
+
+		File f = new File("file1.txt");
+		String input = "grep -c \"A\" " + f.getAbsolutePath();
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[1] = "A";
+
+		GrepTool gt = new GrepTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), "");
+		assertEquals("23", result);
+	}
+
 	private static void writeToFile(File file, String content) {
 		try {
 			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
