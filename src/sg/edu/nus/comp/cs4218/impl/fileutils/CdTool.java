@@ -32,7 +32,7 @@ public class CdTool extends ATool implements ICdTool {
 		if (args == null || args.length < 1) {
 
 			if (stdin == null || stdin.trim().length() < 1) {
-				return "No input recieved.";
+				return "No input received.";
 			} else {
 				inputList.add(stdin);
 			}

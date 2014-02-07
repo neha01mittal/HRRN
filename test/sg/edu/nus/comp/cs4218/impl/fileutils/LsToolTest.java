@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -149,6 +150,43 @@ public class LsToolTest {
 		for (int i = 0; i < testFileListLevel0All.size(); i++) {
 			assertEquals(testFileListLevel0All.get(i), FileSystems.getDefault().getPath(rootDirectoryString + File.separator + resultArray[i]));
 		}
+	}
+
+	@Test
+	public void testInvalidArguments() {
+
+		String input = "ls lalal";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+
+		LsTool gt = new LsTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), "");
+		String expected = "Error: invalid input: lalal";
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testListFile() {
+
+		String filePath = rootDirectory + File.separator + "testFile-1.txt";
+		Path temp = FileSystems.getDefault().getPath(filePath);
+		try {
+			Files.createFile(temp);
+		} catch (IOException e) {
+
+		}
+		String input = "ls testFile-1.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+
+		LsTool gt = new LsTool(args);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), "");
+		String expected = "testFile-1.txt";
+		assertEquals(expected, result);
 	}
 
 	@Test
