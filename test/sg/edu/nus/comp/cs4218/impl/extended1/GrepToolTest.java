@@ -93,10 +93,10 @@ public class GrepToolTest {
 
 		String result = gt.execute(new File(System.getProperty("user.dir")), "");
 		// System.out.println(result);
-		String expected = "              could have inter-word spacing that lined up by accident.\n"
-				+ "#Cell Size:#  If you have more than one line (as just above) then\n"
-				+ "              you will simply get empty cells where the other column is empty.\n"
-				+ "#Alignment:#  Alignment of cells is attempted to be preserved.\n" + "\n" + "BORDER\n";
+		String expected = "file1.txt:               could have inter-word spacing that lined up by accident.\n"
+				+ "file1.txt: #Cell Size:#  If you have more than one line (as just above) then\n"
+				+ "file1.txt:               you will simply get empty cells where the other column is empty.\n"
+				+ "file1.txt: #Alignment:#  Alignment of cells is attempted to be preserved.\n" + "file1.txt: \n" + "file1.txt: BORDER\n";
 		assertEquals(expected, result);
 	}
 
@@ -143,8 +143,8 @@ public class GrepToolTest {
 		GrepTool gt = new GrepTool(args);
 
 		String result = gt.execute(new File(System.getProperty("user.dir")), "");
-		// String expected = "file1.txt:23\n" + "file2.txt:9";
-		String expected = "32";
+		String expected = "file1.txt: 23\n" + "file2.txt: 9\n";
+		// String expected = "32";
 		assertEquals(expected, result);
 	}
 
@@ -153,14 +153,15 @@ public class GrepToolTest {
 		String input = "grep -c \"This has\" file1.txt file2.txt";
 
 		String[] tokens = input.split(" ");
-		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		String[] args = Arrays.copyOfRange(tokens, 2, tokens.length);
+		args[0] = "-c";
 		args[1] = "This has";
 
 		GrepTool gt = new GrepTool(args);
 
 		String result = gt.execute(new File(System.getProperty("user.dir")), "");
-		// String expected = "file1.txt:1\n" + "file2.txt:0";
-		String expected = "1";
+		String expected = "file1.txt: 1\n" + "file2.txt: 0\n";
+		// String expected = "1";
 		assertEquals(expected, result);
 	}
 
@@ -177,8 +178,8 @@ public class GrepToolTest {
 		GrepTool gt = new GrepTool(args);
 
 		String result = gt.execute(new File(System.getProperty("user.dir")), "");
-		// String expected = "file1.txt:294\n" + "file2.txt:19";
-		String expected = "313";
+		String expected = "file1.txt: 294\n" + "file2.txt: 19\n";
+		// String expected = "313";
 		assertEquals(expected, result);
 	}
 
@@ -255,7 +256,7 @@ public class GrepToolTest {
 		CatTool ct = new CatTool(catArgs);
 		String catToolOutput = ct.execute(new File(System.getProperty("user.dir")), "");
 
-		String[] grepArgs = Arrays.copyOfRange(tokens, 3, tokens.length);
+		String[] grepArgs = Arrays.copyOfRange(tokens, 4, tokens.length);
 		grepArgs[0] = "A";
 
 		GrepTool gt = new GrepTool(grepArgs);
