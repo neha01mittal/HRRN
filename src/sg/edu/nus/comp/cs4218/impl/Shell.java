@@ -41,9 +41,6 @@ public class Shell implements IShell {
 
 	public static String[] getArgsArray(String commandline) {
 
-		// Step 0. remove all escape space
-		commandline = commandline.replaceAll("\\\\\\s", dilimiter2);
-
 		// Step 1. find the escape space between quotes
 		Pattern regex = Pattern.compile("[^'\"]*\"([^\"]*)\"[^'\"]*|[^'\"]*'([^']*)'[^'\"]*");
 		Matcher regexMatcher = regex.matcher(commandline);
@@ -63,7 +60,7 @@ public class Shell implements IShell {
 				commandline = commandline.replace("'" + temp + "'", "'" + replaced + "'");
 			}
 		}
-		// System.out.println(commandline);
+		System.out.println(commandline);
 
 		// Step 2. remove all escape space
 		commandline = commandline.replaceAll("\\\\\\s", dilimiter2);
