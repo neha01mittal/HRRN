@@ -50,7 +50,7 @@ public class GrepTool extends ATool implements IGrepTool {
 
 		// get the input
 		String fileContent;
-		if (stdin.compareTo("") != 0)
+		if (stdin != null && stdin.compareTo("") != 0)
 			fileContent = stdin;
 		else
 			fileContent = getFileContentFromInput(getFileListFromInput());
@@ -86,7 +86,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			result = getNonMatchingLines(pattern, fileContent);
 		}
 
-		if (parsed.containsKey("h")) {
+		if (parsed.containsKey("h") || parsed.containsKey("help")) {
 			result = getHelp();
 		}
 
@@ -105,7 +105,16 @@ public class GrepTool extends ATool implements IGrepTool {
 
 		for (int i = 0; i < stdin.size(); i++) {
 			try {
-				FileInputStream fis = new FileInputStream(stdin.get(i));
+				String filePath;
+				if (stdin.get(i).startsWith("~/") || (stdin.get(i).contains(":\\")))
+					filePath = stdin.get(i);
+				else
+					filePath = System.getProperty("user.dir") + "\\" + stdin.get(i);
+				File f = new File(filePath);
+				if (!f.isFile())
+					continue;
+
+				FileInputStream fis = new FileInputStream(filePath);
 				DataInputStream in = new DataInputStream(fis);
 				BufferedReader br = new BufferedReader(new InputStreamReader(in));
 				String strLine;
@@ -123,6 +132,10 @@ public class GrepTool extends ATool implements IGrepTool {
 		return result;
 	}
 
+	/*
+	 * Get list of files to read from input args
+	 */
+
 	public Vector<String> getFileListFromInput() {
 		Vector<String> result = new Vector<String>();
 
@@ -136,6 +149,9 @@ public class GrepTool extends ATool implements IGrepTool {
 		return result;
 	}
 
+	/*
+	 * Get pattern from args
+	 */
 	public String getPatternFromInput() {
 		String result = "";
 		// String[] tokens = stdin.trim().replace(" +", " ").split(" ");
