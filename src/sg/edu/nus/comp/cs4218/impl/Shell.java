@@ -37,6 +37,9 @@ public class Shell implements IShell {
 
 	private static String dilimiter1 = "::escape-space::";
 	private static String dilimiter2 = "::space::";
+	private BufferedReader in;
+	private Scanner scanner;
+	private ExecutorService backExecutorService;
 
 	public static String[] getArgsArray(String c) {
 		String commandline = c;
@@ -97,11 +100,10 @@ public class Shell implements IShell {
 		}
 	}
 
-	@SuppressWarnings("resource")
 	public void start() {
 		// Input scanner
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		Scanner scanner = new Scanner(in);
+		in = new BufferedReader(new InputStreamReader(System.in));
+		scanner = new Scanner(in);
 		while (true) {
 			// 1. Wait for a user input
 			System.out.print(System.getProperty("user.dir") + " $: ");
@@ -142,6 +144,28 @@ public class Shell implements IShell {
 				System.out.println("   cmd: " + input + " not recognized.");
 			}
 		}
+	}
+
+	public Future<?> runItool(ITool itool) {
+		// 3. Create a new thread to execute the command
+		backExecutorService = Executors.newSingleThreadExecutor();
+		Runnable toolExecution = execute(itool);
+		// 4. Execute the command on the newly created thread.
+		Future<?> future = backExecutorService.submit(toolExecution);
+		// 5. In the shell, wait for the thread to completed
+		return future;
+	}
+
+	public boolean stopItool(Future<?> future, ITool itool) {
+		boolean cancellable = future.cancel(true);
+		if (!cancellable) {
+			System.out.println("Cannot stop thread, thus quit!");
+			System.exit(1);
+		} else {
+			System.out.println("[" + itool.getStatusCode() + "]+  Stopped                 " + itool.getClass().getSimpleName());
+			return true;
+		}
+		return false;
 	}
 
 	/*
