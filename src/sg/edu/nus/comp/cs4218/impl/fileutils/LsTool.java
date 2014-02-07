@@ -97,9 +97,7 @@ public class LsTool extends ATool implements ILsTool {
 	public String getStringForFiles(List<File> files) {
 		String result = "";
 		for (int i = 0; i < files.size(); i++) {
-			if (argList.contains("-l")) {
-				result += files.get(i).getName() + " " + files.get(i).getUsableSpace();
-			} else if (argList.contains("-R")) {
+			if (argList.contains("-R")) {
 				result += files.get(i).getAbsolutePath();
 			} else {
 				result += files.get(i).getName();
