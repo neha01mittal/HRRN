@@ -43,6 +43,12 @@ public class LsTool extends ATool implements ILsTool {
 		if (inputList.size() > 0) {
 			String validInput = inputList.get(0);
 			File newDir = new File(validInput);
+
+			if (!newDir.isAbsolute()) {
+				newDir = new File(workingDir.getAbsolutePath() + File.separator + validInput);
+				System.out.println(workingDir.getAbsolutePath() + File.separator + validInput);
+			}
+
 			if (newDir != null && newDir.isDirectory() && newDir.exists()) {
 				fileList = getFiles(newDir);
 			} else if (newDir != null && newDir.isFile() && newDir.exists()) {

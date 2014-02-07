@@ -154,38 +154,25 @@ public class LsToolTest {
 
 	@Test
 	public void testInvalidArguments() {
-
 		String input = "ls lalal";
 
 		String[] tokens = input.split(" ");
 		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
 
-		LsTool gt = new LsTool(args);
+		lsTool = new LsTool(args);
 
-		String result = gt.execute(new File(System.getProperty("user.dir")), "");
+		String result = lsTool.execute(new File(System.getProperty("user.dir")), null);
 		String expected = "Error: invalid input: lalal";
 		assertEquals(expected, result);
 	}
 
 	@Test
-	public void testListFile() {
+	public void testListFileWithAnotherWorkingDirectory() {
+		String[] args = { "testFile-1" };
+		lsTool = new LsTool(args);
 
-		String filePath = rootDirectory + File.separator + "testFile-1.txt";
-		Path temp = FileSystems.getDefault().getPath(filePath);
-		try {
-			Files.createFile(temp);
-		} catch (IOException e) {
-
-		}
-		String input = "ls testFile-1.txt";
-
-		String[] tokens = input.split(" ");
-		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
-
-		LsTool gt = new LsTool(args);
-
-		String result = gt.execute(new File(System.getProperty("user.dir")), "");
-		String expected = "testFile-1.txt";
+		String result = lsTool.execute(new File(rootDirectoryString), null);
+		String expected = "testFile-1";
 		assertEquals(expected, result);
 	}
 
