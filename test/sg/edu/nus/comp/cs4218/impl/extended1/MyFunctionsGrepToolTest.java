@@ -76,6 +76,21 @@ public class MyFunctionsGrepToolTest {
 	}
 
 	@Test
+	public void testGetFileListFromMultipleFileInput() {
+		String input = "grep -A 2 \"temp\" file1.txt file2.txt file3.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[2] = "temp";
+
+		GrepTool gt = new GrepTool(args);
+		gt.getCountOfMatchingLines("temp", input);
+		gt.lastOpt = 1;
+		Vector<String> fileList = gt.getFileListFromInput();
+		assertEquals(fileList.size(), 3);
+	}
+
+	@Test
 	public void testGetPatternFromInput() {
 		String input = "grep -A 2 \"temp\" file1.txt";
 
@@ -88,6 +103,21 @@ public class MyFunctionsGrepToolTest {
 		gt.getCountOfMatchingLines("temp", input);
 		String pattern = gt.getPatternFromInput();
 		assertEquals("temp", pattern);
+	}
+
+	@Test
+	public void testGetPatternInDoubleQuotesFromInput() {
+		String input = "grep -A 2 \"=\" file1.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[2] = "\"=\"";
+
+		GrepTool gt = new GrepTool(args);
+		gt.lastOpt = 1;
+		gt.getCountOfMatchingLines("\"=\"", input);
+		String pattern = gt.getPatternFromInput();
+		assertEquals("\"=\"", pattern);
 	}
 
 	private static void writeToFile(File file, String content) {
