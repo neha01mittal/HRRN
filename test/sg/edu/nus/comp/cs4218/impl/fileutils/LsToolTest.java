@@ -230,11 +230,22 @@ public class LsToolTest {
 	}
 
 	@Test
-	public void testWithPathToFile() {
+	public void testWithPathToFileRelativePath() {
+		String[] args = new String[] { testFileListLevel0.get(0).toFile().getPath() };
+		lsTool = new LsTool(args);
+		String result = lsTool.execute(new File(rootDirectoryString), null);
+
+		assertEquals(0, lsTool.getStatusCode());
+		assertEquals(args[0], result);
+	}
+
+	@Test
+	public void testWithPathToFileAbsolutePath() {
 		String[] args = new String[] { testFileListLevel0.get(0).toFile().getAbsolutePath() };
 		lsTool = new LsTool(args);
-		lsTool.execute(new File(rootDirectoryString), null);
+		String result = lsTool.execute(new File(rootDirectoryString), null);
 
-		assertEquals(1, lsTool.getStatusCode());
+		assertEquals(0, lsTool.getStatusCode());
+		assertEquals(args[0], result);
 	}
 }
