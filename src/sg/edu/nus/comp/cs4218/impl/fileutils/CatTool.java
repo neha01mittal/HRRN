@@ -9,28 +9,14 @@ import java.io.IOException;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
-/**
- * cat copies each file or standard input ( denoted by ï¿½-ï¿½) if no files are
- * given to the standard output
- */
-
-/**
- * 
- * @author Neha Requirements/ Assumptions 1. Set status code to 0 even if one
- *         file is copied correctly 2. Does not handle cat file1 file2 > newFile
- *         3.
- * 
- */
 public class CatTool extends ATool implements ICatTool {
 
 	public CatTool(String[] arguments) {
 		super(arguments);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// TODO Auto-generated method stub
 		File file;
 
 		if ((args != null && args.length != 0) || (stdin != null && !stdin.equals(""))) {

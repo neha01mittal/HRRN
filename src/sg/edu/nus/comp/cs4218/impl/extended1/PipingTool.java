@@ -55,6 +55,8 @@ public class PipingTool extends ATool implements IPipingTool {
 						break;
 					}
 				}
+			} else {
+				return result;
 			}
 			if (to.getStatusCode() == 0) {
 				setStatusCode(0);

@@ -21,9 +21,6 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
 
-/**
- * @author Phuoc Truong Hoang
- */
 public class GrepToolTest {
 
 	private static File file1;

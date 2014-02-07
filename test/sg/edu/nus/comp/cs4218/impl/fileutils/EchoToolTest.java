@@ -10,10 +10,6 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
 
-/**
- * @author Neha Mittal
- * @author Zhang Haoqiang
- */
 public class EchoToolTest {
 
 	private IEchoTool echotool;
