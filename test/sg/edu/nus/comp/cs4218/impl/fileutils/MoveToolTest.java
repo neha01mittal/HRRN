@@ -21,6 +21,25 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
+/**
+ * Move a file/folder to a given location
+ * 
+ * @usage move [path] [path] … [path to folder]
+ * @options move file1 file2 - Moves file1 contents into file2 
+ * move /../file1 file2 - Moves file1 contents into file2 
+ * move "file1" "file2" - Moves file1 contents into file2 
+ * move file1 newfile - Creates newfile and moves file1 contents into newfile 
+ * move file1 folder - Moves file1 into folder 
+ * move file1 newfolder - Moves file1 into newfolder 
+ * move folder1 folder2 - Moves contents of folder1 into folder2 
+ * move folder1 newfolder - Moves folder1 into newfolder
+ * move file1 file2 file3 folder1 - Moves file1, file2, file3 in folder1 
+ * move folder1 folder2 file3 newfolder - Moves folder1, folder2, file3 into newfolder
+ * @note
+ * @success
+ * @exceptions
+ */
+
 public class MoveToolTest {
 	private MoveTool moveTool;
 	private Path rootDirectory;

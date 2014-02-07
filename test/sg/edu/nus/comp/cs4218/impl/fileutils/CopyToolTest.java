@@ -24,6 +24,25 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
+/**
+ * copy a file/folder to a given location
+ * 
+ * @usage copy [path1] [path2] … [path to folder]
+ * @options 
+ * copy file1 file2 Copies file1 contents into file2 
+ * copy /../file1 file2  Copies file1 contents into file2 
+ * copy "file1" "file2" Copies file1 contents into file2 
+ * copy file1 newfile Creates newfile and copies file1 contents into newfile 
+ * copy file1 folder Copies file1 contents into folder 
+ * copy file1 newfolder Creates newfolder and copies file1 contents into newfolder 
+ * copy folder1 folder2 Copies contents of folder1 into folder2 
+ * copy folder1 newfolder Creates newfolder and copies folder1 contents into newfolder 
+ * copy file1 file2 file3 folder1 Copies/Replaces file1, file2, file3 in folder1
+ * copy folder1 folder2 file3 newfolder - Creates and copies folder1, folder2, file3 into newfolder
+ * @note
+ * @success
+ * @exceptions
+ */
 public class CopyToolTest {
 
 	private static CopyTool copyTool;
