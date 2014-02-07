@@ -24,9 +24,6 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
-/**
- * @author Ranjini Aravind
- */
 public class CopyToolTest {
 
 	private static CopyTool copyTool;

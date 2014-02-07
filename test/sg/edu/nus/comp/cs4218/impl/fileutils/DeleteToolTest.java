@@ -19,9 +19,6 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
-/**
- * @author Ranjini Aravind
- */
 public class DeleteToolTest {
 	private DeleteTool deleteTool;
 	private Path rootDirectory;

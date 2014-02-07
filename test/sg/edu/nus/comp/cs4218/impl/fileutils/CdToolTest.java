@@ -19,9 +19,6 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
-/**
- * @author Zhang Haoqiang
- */
 public class CdToolTest {
 
 	private static Path rootDirectory;

@@ -32,7 +32,6 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
  * The Shell is used to interpret and execute user's commands. Following
  * sequence explains how a basic shell can be implemented in Java
  * 
- * @author Zhang Haoqiang
  */
 public class Shell implements IShell {
 

@@ -83,7 +83,7 @@ public class PipingToolTest {
 		String commandline = "echo 'print me' | cat | cat a | cat ";
 		pipingTool = new PipingTool(commandline.split("\\|"));
 
-		String result = pipingTool.execute(new File(rootDirectoryString), null);
+		pipingTool.execute(new File(rootDirectoryString), null);
 
 		assertNotEquals(0, pipingTool.getStatusCode());
 	}
@@ -96,6 +96,17 @@ public class PipingToolTest {
 		String result = pipingTool.execute(new File(rootDirectoryString), null);
 
 		assertEquals(result, "");
+	}
+
+	@Test
+	public void testPipeStateWhenFirstPipeFail() {
+		// The error is through before we check for the statestus code for to
+		String commandline = "cd invalid | echo ";
+		pipingTool = new PipingTool(commandline.split("\\|"));
+
+		pipingTool.execute(new File(rootDirectoryString), null);
+
+		assertNotEquals(0, pipingTool.getStatusCode());
 	}
 
 }

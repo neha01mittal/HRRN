@@ -14,9 +14,6 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.ITool;
 
-/**
- * @author Zhang Haoqiang
- */
 public class ShellTest {
 
 	private Shell shell;

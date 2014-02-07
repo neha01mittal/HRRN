@@ -11,7 +11,6 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  * echo writes its arguments separated by blanks and terminated by a newline on
  * the standard output
  * 
- * @author Neha Mittal
  */
 public class EchoTool extends ATool implements IEchoTool {
 

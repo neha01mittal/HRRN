@@ -10,7 +10,6 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 /**
  * list the contents of a directory
  * 
- * @author Zhang Haoqiang
  */
 public class LsTool extends ATool implements ILsTool {
 
