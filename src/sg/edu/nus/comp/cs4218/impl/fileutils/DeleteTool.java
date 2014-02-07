@@ -3,6 +3,8 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
@@ -12,17 +14,33 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 public class DeleteTool extends ATool implements IDeleteTool {
 
+	private final List<String> inputList;
+
 	public DeleteTool(String[] arguments) {
 		super(arguments);
 		// TODO Auto-generated constructor stub
+		setStatusCode(1);
+		inputList = new ArrayList<String>();
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
-		File f1 = new File(args[0]);
+		// check for argument number
+		if (args == null || args.length < 1) {
+			if (stdin == null || stdin.trim().length() < 1) {
+				return "No input received.";
+			}
+		} else {
+
+			for (String arg : args) {
+				inputList.add(arg);
+			}
+
+		}
+		File f1 = new File(inputList.get(0));
 		if (!(f1.isAbsolute())) {
-			f1 = new File(workingDir, args[0]);
+			f1 = new File(workingDir, inputList.get(0));
 		}
 		try {
 			f1 = new File(f1.getCanonicalPath());
@@ -33,6 +51,7 @@ public class DeleteTool extends ATool implements IDeleteTool {
 		if (delete(f1)) {
 		}
 		return null;
+
 	}
 
 	@Override

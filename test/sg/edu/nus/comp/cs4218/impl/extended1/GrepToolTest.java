@@ -19,6 +19,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
+
 /**
  * @author Phuoc Truong Hoang
  */
@@ -170,7 +172,7 @@ public class GrepToolTest {
 
 		String[] tokens = input.split(" ");
 		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
-		args[1] = "This";
+		args[2] = "This";
 
 		GrepTool gt = new GrepTool(args);
 
@@ -244,10 +246,29 @@ public class GrepToolTest {
 		assertEquals("23", result);
 	}
 
+	@Test
+	public void TestPipingWithGrepFullOption() {
+		String input = "cat file1.txt | grep \"A\" file2.txt";
+		String[] tokens = input.split(" ");
+
+		String[] catArgs = Arrays.copyOfRange(tokens, 1, 1);
+		CatTool ct = new CatTool(catArgs);
+		String catToolOutput = ct.execute(new File(System.getProperty("user.dir")), "");
+
+		String[] grepArgs = Arrays.copyOfRange(tokens, 3, tokens.length);
+		grepArgs[0] = "A";
+
+		GrepTool gt = new GrepTool(grepArgs);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")), catToolOutput);
+		String expected = "^A^A^A\n" + "A\n" + "AA\n" + "A B\n" + "A\n" + "BAA\n" + "BBAA\n" + "B^A\n" + "BBB^A\n";
+		assertEquals(expected, result);
+	}
+
 	private static void writeToFile(File file, String content) {
 		try {
 			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
-			out.println(content);
+			out.print(content);
 			out.close();
 		} catch (IOException e) {
 			// exception handling left as an exercise for the reader
@@ -258,14 +279,14 @@ public class GrepToolTest {
 		String path = gtt.getClass().getClassLoader().getResource(file).getPath();
 		BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
 		String line = null;
-		String content = "";
+		StringBuilder content = new StringBuilder();
 		try {
 			// content += "Reading file: " + toRead.getName() + ": ";
 			while ((line = reader.readLine()) != null) {
-				content += line + "\n";
+				content.append(line + "\n");
 			}
 			reader.close();
-			return content;
+			return content.toString();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

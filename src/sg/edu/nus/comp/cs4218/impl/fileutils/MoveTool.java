@@ -4,28 +4,46 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 import sg.edu.nus.comp.cs4218.fileutils.IMoveTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class MoveTool extends ATool implements IMoveTool {
 
+	private final List<String> inputList;
+
 	public MoveTool(String[] arguments) {
 		super(arguments);
 		// TODO Auto-generated constructor stub
+		setStatusCode(1);
+		inputList = new ArrayList<String>();
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
+
 		// TODO Auto-generated method stub
-		for (int i = 0; i < (args.length - 1); i++) {
+		if (args == null || args.length < 1) {
+			if (stdin == null || stdin.trim().length() < 1) {
+				return "No input received.";
+			}
+		} else {
+
+			for (String arg : args) {
+				inputList.add(arg);
+			}
+
+		}
+		for (int i = 0; i < inputList.size() - 1; i++) {
 			File f1 = new File(args[i]);
-			File f2 = new File(args[args.length - 1]);
+			File f2 = new File(inputList.get(inputList.size() - 1));
 			if (!(f1.isAbsolute())) {
-				f1 = new File(workingDir, args[i]);
+				f1 = new File(workingDir, inputList.get(i));
 			}
 			if (!(f2.isAbsolute())) {
-				f2 = new File(workingDir, args[args.length - 1]);
+				f2 = new File(workingDir, inputList.get(inputList.size() - 1));
 			}
 			try {
 				f1 = new File(f1.getCanonicalPath());
@@ -37,7 +55,7 @@ public class MoveTool extends ATool implements IMoveTool {
 			}
 			if (f1.isFile()) {
 				if (f2.isDirectory()) {
-					f2 = new File(args[args.length - 1], f1.getName());
+					f2 = new File(inputList.get(inputList.size() - 1), f1.getName());
 				}
 			}
 			move(f1, f2);
