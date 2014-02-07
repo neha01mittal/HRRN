@@ -96,7 +96,8 @@ public class CdToolTest {
 		cdTool = new CdTool(null);
 		cdTool.execute(new File(rootDirectoryString), null);
 
-		assertNotEquals(0, cdTool.getStatusCode());
+		assertEquals(0, cdTool.getStatusCode());
+		assertEquals(normalizePath(System.getProperty("user.home")), normalizePath(System.getProperty("user.dir")));
 	}
 
 	@Test
@@ -116,7 +117,7 @@ public class CdToolTest {
 		cdTool.execute(new File(rootDirectoryString), tdRelativeString.get(0));
 
 		assertEquals(0, cdTool.getStatusCode());
-		assertEquals(normalizePath(tdAbsoluteString.get(0)), normalizePath(System.getProperty("user.dir")));
+		assertEquals(normalizePath(System.getProperty("user.home")), normalizePath(System.getProperty("user.dir")));
 	}
 
 	@Test

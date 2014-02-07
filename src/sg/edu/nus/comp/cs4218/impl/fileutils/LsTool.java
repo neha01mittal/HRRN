@@ -62,6 +62,9 @@ public class LsTool extends ATool implements ILsTool {
 
 		if (fileList != null) {
 			setStatusCode(0);
+			if (fileList.size() < 1) {
+				return null;
+			}
 			return getStringForFiles(fileList);
 		}
 		return "Error: retrieve file list error";

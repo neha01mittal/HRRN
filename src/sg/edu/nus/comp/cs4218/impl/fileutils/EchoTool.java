@@ -12,7 +12,6 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  * the standard output
  * 
  * @author Neha Mittal
- * @author Zhang Haoqiang
  */
 public class EchoTool extends ATool implements IEchoTool {
 
@@ -29,25 +28,15 @@ public class EchoTool extends ATool implements IEchoTool {
 
 		// check for argument number
 		if (args == null || args.length < 1) {
-
-			if (stdin == null || stdin.trim().length() < 1) {
-				return "No input recieved.";
-			} else {
-				inputList.add(stdin);
-			}
+			setStatusCode(0);
+			return "";
 		} else {
-
-			// no difference between arguments and inputs
+			// there's no difference between arguments and inputs
 			for (String arg : args) {
 				inputList.add(arg);
 			}
-
-			if (stdin != null && stdin.trim().length() > 1) {
-				inputList.add(stdin);
-			}
 		}
 
-		// Only get the first one
 		String userInput = "";
 		for (String arg : inputList) {
 			userInput += echo(arg);

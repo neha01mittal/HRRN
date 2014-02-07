@@ -32,46 +32,47 @@ public class CatTool extends ATool implements ICatTool {
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
 		File file;
+
 		if ((args != null && args.length != 0) || (stdin != null && !stdin.equals(""))) {
 			String content = "";
-
-			if (args.length >= 1 && !args[0].equals("-")) {
-				for (String arg : args) {
-					file = new File(arg);
-					if (!file.isAbsolute()) {
-						file = new File(workingDir, arg);
-					}
-					content += getStringForFile(file);
-				}
-			} else {
-				if (!stdin.equals("")) {
+			if (args == null || args.length == 0 || args[0].equals("-")) {
+				if (stdin != null && stdin != "") {
 					content = stdin;
 					setStatusCode(0);
 				}
-				// TODO
-				else if (args[0].equals("-")) {
-					for (int i = 1; i < args.length; i++) {
-						content += args[i];
+			} else {
+				if (args.length >= 1 && !args[0].equals("-")) {
+					for (String arg : args) {
+						file = new File(arg);
+						if (!file.isAbsolute()) {
+							file = new File(workingDir, arg);
+						}
+						content += getStringForFile(file);
 					}
-					setStatusCode(0);
+				} else {
+					if (args[0].equals("-")) {
+						for (int i = 1; i < args.length; i++) {
+							content += args[i];
+						}
+						setStatusCode(0);
+					}
 				}
 			}
 			return content;
 		}
-		return null;
+		return "Error: No input receieved";
 	}
 
 	@Override
 	public String getStringForFile(File toRead) {
-		// TODO Auto-generated method stub
 		BufferedReader br;
 		String content = "";
 		if (!toRead.isFile()) { // checks for Exists and !isDirectory
-			content = "cat: No such file exists\n";
+			content = "Error: No such file or directory\n";
 		}
 
 		else if (!toRead.canRead()) {
-			content = "Unable to read this file type";
+			content = "Error: Unable to read this file type";
 		} else {
 			try {
 				br = new BufferedReader(new FileReader(toRead));
@@ -84,11 +85,9 @@ public class CatTool extends ATool implements ICatTool {
 					br.close();
 					setStatusCode(0);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

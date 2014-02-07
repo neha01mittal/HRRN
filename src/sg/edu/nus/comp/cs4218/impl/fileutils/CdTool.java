@@ -30,12 +30,9 @@ public class CdTool extends ATool implements ICdTool {
 
 		// check for argument number
 		if (args == null || args.length < 1) {
-
-			if (stdin == null || stdin.trim().length() < 1) {
-				return "No input recieved.";
-			} else {
-				inputList.add(stdin);
-			}
+			System.setProperty("user.dir", System.getProperty("user.home"));
+			setStatusCode(0);
+			return null;
 		} else {
 
 			// split arguments and inputs
@@ -68,13 +65,13 @@ public class CdTool extends ATool implements ICdTool {
 				// get the nicely looking path
 				System.setProperty("user.dir", newdir.getCanonicalPath());
 				setStatusCode(0);
-				return "";
+				return null;
 			} catch (IOException e) {
 				// error code 2: IOException to get canonical path
 				e.printStackTrace();
 			}
 		}
-		return "   cd: " + validInput + ": No such directory or not directory";
+		return "Error: No such directory or not directory: " + validInput;
 	}
 
 	// String newDirectory must be an absolute path

@@ -2,6 +2,7 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -104,6 +105,15 @@ public class CatToolTest {
 	}
 
 	@Test
+	public void catWithStdin() {
+		String stdin = "This is stdin text";
+		catTool = new CatTool(null);
+		String actualOutput = catTool.execute(root, stdin);
+		assertEquals(0, catTool.getStatusCode());
+		assertTrue(stdin.equals(actualOutput));
+	}
+
+	@Test
 	public void catWithRelativePath() {
 		for (int i = 0; i < 2; i++) {
 			String[] filePath = { testFileListRelativeString.get(0) };
@@ -142,7 +152,7 @@ public class CatToolTest {
 	public void catWithInvalidArgs() {
 		// reads the first file, ignores the rest
 		String[] filePath = { "rubbish", "NonExisitingFile" };
-		String expectedOutput = "cat: No such file exists\n";
+		String expectedOutput = "Error: No such file or directory\n";
 		expectedOutput += expectedOutput;
 		catTool = new CatTool(filePath);
 		String fileContent = catTool.execute(root, null);
@@ -153,13 +163,9 @@ public class CatToolTest {
 
 	@Test
 	public void catWithNoArgs() {
-		String expectedOutput = "";
 		catTool = new CatTool(null);
-		expectedOutput = null;
 		catTool.execute(root, null);
-
 		assertNotEquals(0, catTool.getStatusCode());
-		assertEquals(null, expectedOutput);
 	}
 
 	@Test
@@ -189,4 +195,5 @@ public class CatToolTest {
 		}
 		return expectedOutput;
 	}
+
 }

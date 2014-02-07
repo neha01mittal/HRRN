@@ -192,13 +192,11 @@ public class LsToolTest {
 	@Test
 	public void testWithEmptyFolder() {
 		lsTool = new LsTool(null);
-
 		String result = lsTool.execute(emptyFolder.toFile(), null);
 
-		assertEquals(0, lsTool.getStatusCode());
-
 		// check for the number of files returned
-		assertEquals("", result);
+		assertEquals(0, lsTool.getStatusCode());
+		assertEquals(null, result);
 	}
 
 	@Test
@@ -247,5 +245,42 @@ public class LsToolTest {
 
 		assertEquals(0, lsTool.getStatusCode());
 		assertEquals(args[0], result);
+	}
+
+	@Test
+	public void testWithOnlyStdin() {
+		lsTool = new LsTool(null);
+
+		String result = lsTool.execute(new File(rootDirectoryString), testFileListLevel0.get(0).toFile().getAbsolutePath());
+		String[] resultArray = result.split("\n");
+
+		assertEquals(0, lsTool.getStatusCode());
+
+		// check for the number of files returned
+		assertEquals(testFileListLevel0.size(), resultArray.length);
+
+		// check for filenames
+		for (int i = 0; i < testFileListLevel0.size(); i++) {
+			assertEquals(testFileListLevel0.get(i), FileSystems.getDefault().getPath(rootDirectoryString + File.separator + resultArray[i]));
+		}
+	}
+
+	@Test
+	public void testWithArgumentsAndStdin() {
+		String[] args = new String[] { "-a" };
+		lsTool = new LsTool(args);
+
+		String result = lsTool.execute(new File(rootDirectoryString), testFileListLevel0.get(0).toFile().getAbsolutePath());
+		String[] resultArray = result.split("\n");
+
+		assertEquals(0, lsTool.getStatusCode());
+
+		// check for the number of files returned
+		assertEquals(testFileListLevel0All.size(), resultArray.length);
+
+		// check for filenames
+		for (int i = 0; i < testFileListLevel0All.size(); i++) {
+			assertEquals(testFileListLevel0All.get(i), FileSystems.getDefault().getPath(rootDirectoryString + File.separator + resultArray[i]));
+		}
 	}
 }

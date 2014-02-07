@@ -105,7 +105,7 @@ public class Shell implements IShell {
 		Scanner scanner = new Scanner(in);
 		while (true) {
 			// 1. Wait for a user input
-			System.out.print("$: ");
+			System.out.print(System.getProperty("user.dir") + " $: ");
 			// 2. Parse the user input
 			String input = scanner.nextLine();
 			ITool itool = parse(input);
@@ -208,7 +208,7 @@ public class Shell implements IShell {
 				// print if has output
 				if (returnedValue != null && returnedValue.trim().length() > 0) {
 					System.out.println(returnedValue);
-				} else {
+				} else if (returnedValue != null) {
 					System.out.println();
 				}
 			}

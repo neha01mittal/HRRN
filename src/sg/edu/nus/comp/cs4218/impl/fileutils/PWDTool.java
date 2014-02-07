@@ -22,7 +22,6 @@ public class PWDTool extends ATool implements IPwdTool {
 
 		// Error Handling
 		if (directory == null || !directory.exists() || !directory.isDirectory()) {
-			setStatusCode(1);
 			return "Error: Cannot find working directory";
 		}
 		// Processing

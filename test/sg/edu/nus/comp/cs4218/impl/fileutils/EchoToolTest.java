@@ -1,7 +1,6 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 
@@ -45,9 +44,10 @@ public class EchoToolTest {
 	public void testNoInput() throws IOException {
 		// Test error-handling 1
 		echotool = new EchoTool(null);
-		echotool.execute(null, null);
+		String result = echotool.execute(null, null);
 
-		assertNotEquals(0, echotool.getStatusCode());
+		assertEquals(0, echotool.getStatusCode());
+		assertEquals("", result);
 	}
 
 	@Test
@@ -91,22 +91,21 @@ public class EchoToolTest {
 
 	@Test
 	public void testInputWithOnlyStdin() throws IOException {
-		// Parser should trim off unnecessary spaces
 		echotool = new EchoTool(null);
 		String result = echotool.execute(null, "I am a string");
 
 		assertEquals(echotool.getStatusCode(), 0);
-		assertEquals("I am a string", result);
+		assertEquals("", result);
 	}
 
 	@Test
 	public void testInputWithBothArgsandStdin() throws IOException {
-		// Parser should trim off unnecessary spaces
+		// should always process the back part
 		String[] args = { "I", "am", "a", "string" };
 		echotool = new EchoTool(args);
 		String result = echotool.execute(null, "I am also a string");
 
 		assertEquals(echotool.getStatusCode(), 0);
-		assertEquals("I am a string I am also a string", result);
+		assertEquals("I am a string", result);
 	}
 }
