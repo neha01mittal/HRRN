@@ -75,7 +75,6 @@ public class PipingTool extends ATool implements IPipingTool {
 	public String pipe(String stdout, ITool to) {
 		// execute command 2
 		String returnedValue = to.execute(workingDir, stdout);
-		System.out.println(">>>" + returnedValue + "<<<<");
 		return returnedValue;
 	}
 
