@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class PipingToolTest {
 	}
 
 	@Test
-	public void test() {
+	public void testLsPipeToGrep() {
 		String commandline = "ls | grep .";
 		pipingTool = new PipingTool(commandline.split("\\|"));
 
@@ -46,4 +47,55 @@ public class PipingToolTest {
 		assertEquals("file1.txt", results[0]);
 		assertEquals("file2.txt", results[1]);
 	}
+
+	@Test
+	public void testEchoPipeToCat() {
+		String commandline = "echo 'print me' | cat ";
+		pipingTool = new PipingTool(commandline.split("\\|"));
+
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
+
+		assertEquals("print me", result);
+	}
+
+	@Test
+	public void tesPipeChaining() {
+		String commandline = "echo 'print me' | cat | cat | cat ";
+		pipingTool = new PipingTool(commandline.split("\\|"));
+
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
+
+		assertEquals("print me", result);
+	}
+
+	@Test
+	public void testHandlePipeErrorAtFirst() {
+		String commandline = "cd | cat | cat | cat ";
+		pipingTool = new PipingTool(commandline.split("\\|"));
+
+		pipingTool.execute(new File(rootDirectoryString), null);
+
+		assertNotEquals(0, pipingTool.getStatusCode());
+	}
+
+	@Test
+	public void testHandlePipeErrorInMiddle() {
+		String commandline = "echo 'print me' | cat | cat a | cat ";
+		pipingTool = new PipingTool(commandline.split("\\|"));
+
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
+
+		assertNotEquals(0, pipingTool.getStatusCode());
+	}
+
+	@Test
+	public void testPipeToInvalidTool() {
+		String commandline = "pwd | echo ";
+		pipingTool = new PipingTool(commandline.split("\\|"));
+
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
+
+		assertEquals(result, "");
+	}
+
 }
