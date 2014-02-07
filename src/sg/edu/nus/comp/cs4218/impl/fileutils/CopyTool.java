@@ -16,12 +16,10 @@ public class CopyTool extends ATool implements ICopyTool {
 
 	public CopyTool(String[] arguments) {
 		super(arguments);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// TODO Auto-generated method stub
 		for (int i = 0; i < (args.length - 1); i++) {
 
 			File f1 = new File(args[i]);
@@ -37,7 +35,6 @@ public class CopyTool extends ATool implements ICopyTool {
 				f2 = new File(f2.getCanonicalPath());
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				setStatusCode(1);
 			}
 			if (f1.isFile()) {
@@ -52,7 +49,6 @@ public class CopyTool extends ATool implements ICopyTool {
 
 	@Override
 	public boolean copy(File from, File to) {
-		// TODO Auto-generated method stub
 		recursivecopy(from, to);
 		return true;
 	}

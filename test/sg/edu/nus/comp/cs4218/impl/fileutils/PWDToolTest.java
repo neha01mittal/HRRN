@@ -15,7 +15,7 @@ import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
 
 public class PWDToolTest {
 
-	private IPwdTool	pwdtool;
+	private IPwdTool pwdtool;
 
 	@Before
 	public void before() {
@@ -35,8 +35,9 @@ public class PWDToolTest {
 		File existsDir = new File(existsDirString);
 
 		String dirString = pwdtool.getStringForDirectory(existsDir);
+
+		assertEquals(0, pwdtool.getStatusCode());
 		assertTrue(dirString.equals(existsDirString));
-		assertEquals(pwdtool.getStatusCode(), 0);
 	}
 
 	@Test
@@ -45,14 +46,16 @@ public class PWDToolTest {
 		// Reference non-existing file
 		File notExistsDir = new File("notexists");
 		pwdtool.getStringForDirectory(notExistsDir);
-		assertNotEquals(pwdtool.getStatusCode(), 0);
+
+		assertNotEquals(0, pwdtool.getStatusCode());
 	}
 
 	@Test
 	public void getStringForNullDirectoryTest() throws IOException {
 		// Test error-handling 2
 		pwdtool.getStringForDirectory(null);
-		assertNotEquals(pwdtool.getStatusCode(), 0);
+
+		assertNotEquals(0, pwdtool.getStatusCode());
 	}
 
 }

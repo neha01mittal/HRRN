@@ -17,20 +17,24 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
+
+/**
+ * @author Ranjini Aravind
+ */
 public class DeleteToolTest {
-	private DeleteTool		deleteTool;
-	private Path			rootDirectory;
-	private String			rootDirectoryString;
-	private List<Path>		testDirectoryList;
-	private List<String>	testDirectoryListRelativeString;
-	private List<String>	testDirectoryListAbsoluteString;
+	private DeleteTool deleteTool;
+	private Path rootDirectory;
+	private String rootDirectoryString;
+	private List<Path> testDirectoryList;
+	private List<String> testDirectoryListRelativeString;
+	private List<String> testDirectoryListAbsoluteString;
 
 	@Before
 	public void before() throws IOException {
 
 		// create new dir and files inside
 		rootDirectoryString = System.getProperty("user.dir") + "/deleteToolTest";
-		System.setProperty("user.dir", rootDirectoryString);
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -57,21 +61,9 @@ public class DeleteToolTest {
 	}
 
 	@After
-	public void after() throws IOException {
+	public void afterClass() throws IOException {
 		deleteTool = null;
-
-		for (int i = 0; i < testDirectoryList.size(); i++) {
-			Files.deleteIfExists(testDirectoryList.get(i));
-		}
-		for (int i = 0; i < testDirectoryListAbsoluteString.size(); i++) {
-			Path path = Paths.get(testDirectoryListAbsoluteString.get(i));
-			Files.deleteIfExists(path);
-		}
-		// System.out.println("ROOT" + rootDirectory.getParent().toString());
-
-		Files.deleteIfExists(rootDirectory);
-		System.setProperty("user.dir", rootDirectory.getParent().toString());
-
+		TestUtils.delete(new File(rootDirectoryString));
 	}
 
 	@Test
@@ -144,8 +136,7 @@ public class DeleteToolTest {
 		Writer writer = null;
 
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(filename), "utf-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
 			writer.write(content);
 		} catch (IOException ex) {
 			// report

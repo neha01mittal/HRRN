@@ -9,55 +9,80 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 /**
  * list the contents of a directory
+ * 
+ * @author Zhang Haoqiang
  */
 public class LsTool extends ATool implements ILsTool {
 
-	public LsTool() {
-		super(null);
-	}
+	private final List<String> argList;
+	private final List<String> inputList;
 
 	public LsTool(String[] arguments) {
 		super(arguments);
+		setStatusCode(1);
+		argList = new ArrayList<String>();
+		inputList = new ArrayList<String>();
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
+		// check for argument number
+		if (!(args == null || args.length < 1)) {
 
-		List<File> fileList = getFiles(workingDir);
+			// split arguments and inputs
+			for (String arg : args) {
+				if (arg.startsWith("-")) {
+					argList.add(arg);
+				} else {
+					inputList.add(arg);
+				}
+			}
+
+			if (stdin != null && stdin.trim().length() > 1) {
+				inputList.add(stdin);
+			}
+		}
+
+		List<File> fileList;
+		if (inputList.size() > 0) {
+			String validInput = inputList.get(0);
+			File newDir = new File(validInput);
+			if (newDir != null && newDir.isDirectory() && newDir.exists()) {
+				fileList = getFiles(newDir);
+			} else {
+				return "Error: invalid input: " + validInput;
+			}
+		} else {
+			fileList = getFiles(workingDir);
+		}
+
 		if (fileList != null) {
+			setStatusCode(0);
 			return getStringForFiles(fileList);
 		}
-		return null;
+		return "Error: retrieve file list error";
 	}
 
 	@Override
 	public List<File> getFiles(File directory) {
-
 		// Error Handling
 		if (directory == null || !directory.exists() || !directory.isDirectory()) {
-			setStatusCode(1);
 			return null;
 		}
 
-		int option = 0;
-		if (args != null && args.length > 0) {
-			if (args[0].equals("-a")) {
-				option = 1;
-			}
-		}
 		File[] files = directory.listFiles();
 
 		List<File> fileList = new ArrayList<File>();
 		for (File f : files) {
-			switch (option) {
-				case 0:
-					if (!f.isHidden()) {
-						fileList.add(f);
-					}
-					break;
-				case 1:
-					fileList.add(f);
-					break;
+			if (argList.contains("-a")) {
+				fileList.add(f);
+			} else if (!f.isHidden()) {
+				fileList.add(f);
+			} else {
+				continue;
+			}
+			if (argList.contains("-R") && f.isDirectory()) {
+				fileList.addAll(getFiles(f));
 			}
 		}
 		// Processing
@@ -66,23 +91,14 @@ public class LsTool extends ATool implements ILsTool {
 
 	@Override
 	public String getStringForFiles(List<File> files) {
-
 		String result = "";
-
-		int option = 0;
-		if (args != null && args.length > 0) {
-			if (args[0].equals("-l")) {
-				option = 1;
-			}
-		}
 		for (int i = 0; i < files.size(); i++) {
-			switch (option) {
-				case 0:
-					result += files.get(i).getName();
-					break;
-				case 1:
-					result += files.get(i).getName() + " " + files.get(i).getUsableSpace();
-					break;
+			if (argList.contains("-l")) {
+				result += files.get(i).getName() + " " + files.get(i).getUsableSpace();
+			} else if (argList.contains("-R")) {
+				result += files.get(i).getAbsolutePath();
+			} else {
+				result += files.get(i).getName();
 			}
 			if (i != files.size() - 1) {
 				result += "\n";

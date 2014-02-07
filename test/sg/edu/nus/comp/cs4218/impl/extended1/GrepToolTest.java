@@ -19,6 +19,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * @author Phuoc Truong Hoang
+ */
 public class GrepToolTest {
 
 	private static File file1;
@@ -35,44 +38,12 @@ public class GrepToolTest {
 		writeToFile(file1, content);
 		String content2 = readFile("file2.txt", gtt);
 		writeToFile(file2, content2);
-
-	}
-
-	private static void writeToFile(File file, String content) {
-		try {
-			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
-			out.println(content);
-			out.close();
-		} catch (IOException e) {
-			// exception handling left as an exercise for the reader
-		}
-	}
-
-	private static String readFile(String file, GrepToolTest gtt) throws FileNotFoundException {
-		String path = gtt.getClass().getClassLoader().getResource(file).getPath();
-		BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
-		String line = null;
-		String content = "";
-		try {
-			// content += "Reading file: " + toRead.getName() + ": ";
-			while ((line = reader.readLine()) != null) {
-				content += line + "\n";
-			}
-			reader.close();
-			return content;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "";
 	}
 
 	@AfterClass
 	public static void after() throws IOException {
-		// catTool = null;
 		file1.delete();
 		file2.delete();
-
 	}
 
 	@Test
@@ -129,7 +100,7 @@ public class GrepToolTest {
 
 	@Test
 	public void testRegexPattern() {
-		String input = "grep \"\\^A\" file1.txt";
+		String input = "grep \"\\^A\" file2.txt";
 
 		String[] tokens = input.split(" ");
 		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
@@ -157,5 +128,33 @@ public class GrepToolTest {
 		String result = gt.execute(new File(System.getProperty("user.dir")), "");
 		String expected = "4";
 		assertEquals(expected, result);
+	}
+
+	private static void writeToFile(File file, String content) {
+		try {
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+			out.println(content);
+			out.close();
+		} catch (IOException e) {
+			// exception handling left as an exercise for the reader
+		}
+	}
+
+	private static String readFile(String file, GrepToolTest gtt) throws FileNotFoundException {
+		String path = gtt.getClass().getClassLoader().getResource(file).getPath();
+		BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
+		String line = null;
+		String content = "";
+		try {
+			// content += "Reading file: " + toRead.getName() + ": ";
+			while ((line = reader.readLine()) != null) {
+				content += line + "\n";
+			}
+			reader.close();
+			return content;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

@@ -9,6 +9,7 @@ public class PWDTool extends ATool implements IPwdTool {
 
 	public PWDTool() {
 		super(null);
+		setStatusCode(1);
 	}
 
 	@Override
@@ -25,6 +26,7 @@ public class PWDTool extends ATool implements IPwdTool {
 			return "Error: Cannot find working directory";
 		}
 		// Processing
+		setStatusCode(0);
 		return directory.getAbsolutePath();
 	}
 
