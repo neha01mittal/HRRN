@@ -37,11 +37,29 @@ public class PipingTool extends ATool implements IPipingTool {
 	@Override
 	public String execute(File workingDir, String stdin) {
 		this.workingDir = workingDir;
-		if (args.length == 2) {
-			ITool from = parse(args[0]);
-			ITool to = parse(args[1]);
 
-			return pipe(from, to);
+		if (args != null && args.length > 1) {
+
+			String result;
+			ITool from;
+			ITool to;
+			from = parse(args[0]);
+			to = parse(args[1]);
+			result = pipe(from, to);
+
+			if (from.getStatusCode() == 0) {
+				for (int i = 1; i < args.length; i++) {
+					to = parse(args[i]);
+					result = pipe(result, to);
+					if (to.getStatusCode() != 0) {
+						break;
+					}
+				}
+			}
+			if (to.getStatusCode() == 0) {
+				setStatusCode(0);
+				return result;
+			}
 		}
 		return null;
 	}
@@ -50,27 +68,20 @@ public class PipingTool extends ATool implements IPipingTool {
 	public String pipe(ITool from, ITool to) {
 		// execute command 1
 		String returnedValue = from.execute(workingDir, null);
-		if (from.getStatusCode() != 0) {
-			setStatusCode(1);
-			return "Error executing first tool.";
-		}
-		return pipe(returnedValue, to);
+		return returnedValue;
 	}
 
 	@Override
 	public String pipe(String stdout, ITool to) {
 		// execute command 2
 		String returnedValue = to.execute(workingDir, stdout);
-		if (to.getStatusCode() != 0) {
-			setStatusCode(1);
-			return "Error executing second tool.";
-		}
+		System.out.println(">>>" + returnedValue + "<<<<");
 		return returnedValue;
 	}
 
 	public ITool parse(String commandline) {
 		if (commandline.contains("|")) {
-			return new PipingTool(commandline.split("|", 2));
+			return new PipingTool(commandline.split("\\|"));
 		} else {
 			String trimmed = commandline.trim();
 			String[] cmdSplit = trimmed.split("\\s+");

@@ -41,6 +41,9 @@ public class Shell implements IShell {
 
 	public static String[] getArgsArray(String commandline) {
 
+		// Step 0. remove all escape space
+		commandline = commandline.replaceAll("\\\\\\s", dilimiter2);
+
 		// Step 1. find the escape space between quotes
 		Pattern regex = Pattern.compile("[^'\"]*\"([^\"]*)\"[^'\"]*|[^'\"]*'([^']*)'[^'\"]*");
 		Matcher regexMatcher = regex.matcher(commandline);
@@ -136,6 +139,9 @@ public class Shell implements IShell {
 					}
 				}
 				executorService.shutdownNow();
+				if (itool.getStatusCode() != 0) {
+					System.out.println("[" + itool.getStatusCode() + "]+  Stopped                 " + itool.getClass().getSimpleName());
+				}
 			} else {
 				System.out.println("   cmd: " + input + " not recognized.");
 			}
@@ -152,7 +158,7 @@ public class Shell implements IShell {
 	@Override
 	public ITool parse(String commandline) {
 		if (commandline.contains("|")) {
-			return new PipingTool(commandline.split("|", 2));
+			return new PipingTool(commandline.split("\\|"));
 		} else {
 			commandline = commandline.trim();
 			String[] cmdSplit = commandline.split("\\s+");
@@ -204,6 +210,8 @@ public class Shell implements IShell {
 				// print if has output
 				if (returnedValue != null && returnedValue.trim().length() > 0) {
 					System.out.println(returnedValue);
+				} else {
+					System.out.println();
 				}
 			}
 		};
