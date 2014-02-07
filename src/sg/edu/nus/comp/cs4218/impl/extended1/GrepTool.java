@@ -44,7 +44,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		// String[] tokens = stdin.split(" ");
 		// assert tokens[0].toLowerCase().compareTo("grep") == 0;
 
-		// get the pattern
+		// get the pattern and parse the input
 		Map<String, ArrayList<String>> parsed = parse();
 		String pattern = getPatternFromInput();
 
@@ -114,12 +114,13 @@ public class GrepTool extends ATool implements IGrepTool {
 		for (int i = 0; i < stdin.size(); i++) {
 			try {
 				String filePath;
-				if (stdin.get(i).startsWith("~/") || (stdin.get(i).contains(":\\")))
+				File f = new File(stdin.get(i));
+				if (f.isAbsolute())
 					filePath = stdin.get(i);
 				else
-					filePath = System.getProperty("user.dir") + "\\" + stdin.get(i);
-				File f = new File(filePath);
-				if (!f.isFile())
+					filePath = System.getProperty("user.dir") + File.separator + stdin.get(i);
+				File targetFile = new File(filePath);
+				if (!targetFile.isFile())
 					continue;
 
 				FileInputStream fis = new FileInputStream(filePath);
@@ -132,6 +133,7 @@ public class GrepTool extends ATool implements IGrepTool {
 				br.close();
 				in.close();
 				fis.close();
+				setStatusCode(0);
 			} catch (IOException e) {
 				setStatusCode(1);
 			}
