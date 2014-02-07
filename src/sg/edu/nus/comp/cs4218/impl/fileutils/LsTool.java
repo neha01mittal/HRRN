@@ -43,12 +43,24 @@ public class LsTool extends ATool implements ILsTool {
 			}
 		}
 
-		List<File> fileList = getFiles(workingDir);
+		List<File> fileList;
+		if (inputList.size() > 0) {
+			String validInput = inputList.get(0);
+			File newDir = new File(validInput);
+			if (newDir != null && newDir.isDirectory() && newDir.exists()) {
+				fileList = getFiles(newDir);
+			} else {
+				return "Error: invalid input: " + validInput;
+			}
+		} else {
+			fileList = getFiles(workingDir);
+		}
+
 		if (fileList != null) {
 			setStatusCode(0);
 			return getStringForFiles(fileList);
 		}
-		return null;
+		return "Error: retrieve file list error";
 	}
 
 	@Override
@@ -62,10 +74,12 @@ public class LsTool extends ATool implements ILsTool {
 
 		List<File> fileList = new ArrayList<File>();
 		for (File f : files) {
-			if (argList.contains("-a") && !f.isHidden()) {
+			if (argList.contains("-a")) {
+				fileList.add(f);
+			} else if (!f.isHidden()) {
 				fileList.add(f);
 			} else {
-				fileList.add(f);
+				continue;
 			}
 			if (argList.contains("-R") && f.isDirectory()) {
 				fileList.addAll(getFiles(f));

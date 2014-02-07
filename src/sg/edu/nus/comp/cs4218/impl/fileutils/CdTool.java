@@ -57,7 +57,6 @@ public class CdTool extends ATool implements ICdTool {
 
 		File newdir;
 		File file = new File(validInput);
-		System.out.println(file.getAbsolutePath());
 		if (file.isAbsolute()) {
 			newdir = changeDirectory(validInput);
 		} else {
