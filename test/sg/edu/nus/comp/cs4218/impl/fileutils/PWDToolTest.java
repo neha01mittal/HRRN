@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
-
 /**
  * Show the current directory
  * 
