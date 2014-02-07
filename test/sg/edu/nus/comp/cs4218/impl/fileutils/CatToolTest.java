@@ -36,7 +36,7 @@ public class CatToolTest {
 	private static List<String> testFileListAbsoluteString;
 	private static File root;
 	private static List<File> testDirectories;
-	private static final String[] extensions = { ".txt", ".doc" };
+	private static final String[] EXTENSIONS = { ".txt", ".doc" };
 
 	@BeforeClass
 	public static void before() throws IOException {
@@ -59,7 +59,7 @@ public class CatToolTest {
 
 				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + "/" + dirPath);
 				Files.createDirectory(temp);
-				File f = new File(temp + File.separator + "test" + i + extensions[i]);
+				File f = new File(temp + File.separator + "test" + i + EXTENSIONS[i]);
 				f.createNewFile();
 				try {
 					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(f, true)));
@@ -69,7 +69,7 @@ public class CatToolTest {
 					// exception handling left as an exercise for the reader
 				}
 				testDirectories.add(temp.toFile());
-				testFileListRelativeString.add(dirPath + File.separator + "test" + i + extensions[i]);
+				testFileListRelativeString.add(dirPath + File.separator + "test" + i + EXTENSIONS[i]);
 				testFileListAbsoluteString.add(f.getAbsolutePath());
 			} catch (IOException e) {
 				e.printStackTrace();

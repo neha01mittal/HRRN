@@ -436,17 +436,9 @@ public class CopyToolTest {
 			return false;
 		}
 
-		System.out.println();
-
-		System.out.println(s3);
-
 		if (s3.equals(s1)) {
-
-			System.out.println("Content of both files are same");
 			return true;
 		} else {
-
-			System.out.println("Content of both files are not same");
 			return false;
 		}
 
