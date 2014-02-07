@@ -60,7 +60,7 @@ public class Shell implements IShell {
 				commandline = commandline.replace("'" + temp + "'", "'" + replaced + "'");
 			}
 		}
-		System.out.println(commandline);
+		// System.out.println(commandline);
 
 		// Step 2. remove all escape space
 		commandline = commandline.replaceAll("\\\\\\s", dilimiter2);
