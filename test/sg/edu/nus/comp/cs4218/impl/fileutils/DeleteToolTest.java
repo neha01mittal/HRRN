@@ -18,6 +18,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
+/**
+* Delete a file or folder
+* @usage	delete [path]
+* @options
+* delete file1  - Deletes file1
+* delete relativepath1  - Converts relativepath to absolutepath and deletes file1
+* delete /../file1  - Deletes file1
+* delete "file1"  - Deletes file1
+* delete newfile - Does nothing
+* delete folder1 - Deletes folder and all its contents
+* @note
+* @success
+* @exceptions
+* 
+ */
 
 public class DeleteToolTest {
 	private DeleteTool deleteTool;
