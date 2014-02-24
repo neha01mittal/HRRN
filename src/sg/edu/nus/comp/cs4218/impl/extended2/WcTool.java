@@ -37,6 +37,12 @@ public class WcTool extends ATool implements IWcTool {
 	public String getCharacterCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
+		String content = "";
+//		try {
+//			content = readFile(input, Charset.forName("UTF-8"));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		int result = input.length();
 		setStatusCode(0);
 		return Integer.toString(result);
@@ -46,6 +52,13 @@ public class WcTool extends ATool implements IWcTool {
 	public String getWordCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
+		// String content = "";
+//		try {
+//			content = readFile(input, Charset.forName("UTF-8"));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+
 		String[] words = input.split("[ \\n]");
 		int result = words.length;
 		setStatusCode(0);
@@ -56,8 +69,14 @@ public class WcTool extends ATool implements IWcTool {
 	public String getNewLineCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
-		String[] lines = input.split("\n");
-		int result = lines.length;
+		//String content = "";
+//		try {
+//			content = readFile(input, Charset.forName("UTF-8"));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+
+		int result = input.length() - input.replaceAll("\n", "").length();
 		setStatusCode(0);
 		return Integer.toString(result);
 	}
