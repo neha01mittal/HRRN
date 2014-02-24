@@ -304,6 +304,8 @@ public class GrepTool extends ATool implements IGrepTool {
 		// print NUM lines after the matching lines
 		String result = "";
 		String[] lines = input.split("\n");
+		if (mark == null)
+			mark = new int[lines.length];
 		for (int j = 0; j < mark.length; j++) {
 			String line = lines[j]; // if j-th line hits, print lines j + 1 -> j
 									// + option_A - 1
@@ -317,7 +319,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		}
 		for (int i = 0; i < mark.length; i++) {
 			if (mark[i] == 1)
-				result += mark[i];
+				result += lines[i] + "\n";
 		}
 
 		return result;
@@ -327,6 +329,8 @@ public class GrepTool extends ATool implements IGrepTool {
 	public String getMatchingLinesWithLeadingContext(int optionB, String pattern, String input) {
 		String result = "";
 		String[] lines = input.split("\n");
+		if (mark == null)
+			mark = new int[lines.length];
 		for (int j = 0; j < mark.length; j++) {
 			String line = lines[j];
 			if (match(line, pattern)) {
@@ -351,6 +355,8 @@ public class GrepTool extends ATool implements IGrepTool {
 	public String getMatchingLinesWithOutputContext(int optionC, String pattern, String input) {
 		String result = "";
 		String[] lines = input.split("\n");
+		if (mark == null)
+			mark = new int[lines.length];
 		for (int j = 0; j < mark.length; j++) {
 			String line = lines[j]; // if j-th line hits, print lines j + 1 -> j
 									// + option_A - 1
@@ -402,12 +408,14 @@ public class GrepTool extends ATool implements IGrepTool {
 	public String getMatchingLinesOnlyMatchingPart(String pattern, String input) {
 		String result = "";
 
-		String[] lines = input.split(" ");
+		String[] lines = input.split("\n");
+		if (mark == null)
+			mark = new int[lines.length];
 		for (int j = 0; j < mark.length; j++) {
 			String line = lines[j];
 			// if (line.matches(pattern))
 			if (match(line, pattern)) {
-				result = getMatchedGroups(pattern, line);
+				result += getMatchedGroups(pattern, line) + "\n";
 			}
 		}
 		return result;
@@ -417,10 +425,16 @@ public class GrepTool extends ATool implements IGrepTool {
 	public String getNonMatchingLines(String pattern, String input) {
 		String result = "";
 		String[] lines = input.split("\n");
+		if (mark == null)
+			mark = new int[lines.length];
 		for (int i = 0; i < mark.length; i++) {
 			String line = lines[i];
-			// if (!match(line, pattern))
-			mark[i] = 1 - mark[i];
+			if (!match(line, pattern)) {
+				mark[i] = 1;
+				result += line + "\n";
+			} else
+				mark[i] = 0;
+			// mark[i] = 1 - mark[i];
 		}
 
 		return result;
@@ -474,11 +488,13 @@ public class GrepTool extends ATool implements IGrepTool {
 		String result = "";
 		Pattern p = Pattern.compile(pattern);
 		Matcher m = p.matcher(line);
+		m.matches();
 		if (m.find()) {
-			int hits = m.groupCount();
-			for (int i = 0; i < hits; i++) {
-				result += m.group(i) + "\n";
-			}
+			int i = 0;
+			do {
+				result += m.group(i);
+				i++;
+			} while (i < m.groupCount());
 		}
 		return result;
 	}

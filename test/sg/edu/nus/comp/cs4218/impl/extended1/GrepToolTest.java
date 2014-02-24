@@ -273,6 +273,140 @@ public class GrepToolTest {
 	}
 
 	@Test
+	public void testGrepToolOptionA() {
+		File f = new File("file1.txt");
+		String input = "grep -A 2 \"reserve\" " + f.getAbsolutePath();
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[2] = "reserve";
+
+		GrepTool gt = new GrepTool(args);
+		String fileContent = "";
+		try {
+			fileContent = readFile("file1.txt", this);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		String result = gt.getMatchingLinesWithTrailingContext(2, "reserve", fileContent);
+		String expected = "#Alignment:#  Alignment of cells is attempted to be preserved.\n" + "\n" + "BORDER\n"
+				+ "A. I would like to be able to preserve lettered lists, that is:\n"
+				+ "   a) recognise that they are letters and not numbers (which it already\n" + "      does)\n"
+				+ "   b) display the correct OL properties with CSS so as to preserve\n" + "      that information.\n" + "\n";
+		System.out.println("TEST A: " + result);
+		System.out.println("TEST A expected: " + expected);
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testOptionB() {
+		File f = new File("file1.txt");
+		String input = "grep -B 2 \"reserve\" " + f.getAbsolutePath();
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[2] = "reserve";
+
+		GrepTool gt = new GrepTool(args);
+		String fileContent = "";
+		try {
+			fileContent = readFile("file1.txt", this);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		String result = gt.getMatchingLinesWithLeadingContext(2, "reserve", fileContent);
+		String expected = "#Cell Size:#  If you have more than one line (as just above) then\n"
+				+ "              you will simply get empty cells where the other column is empty.\n"
+				+ "#Alignment:#  Alignment of cells is attempted to be preserved.\n" + "I would like to implement.\n" + "\n"
+				+ "A. I would like to be able to preserve lettered lists, that is:\n"
+				+ "   a) recognise that they are letters and not numbers (which it already\n" + "      does)\n"
+				+ "   b) display the correct OL properties with CSS so as to preserve\n";
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testOptionC() {
+		File f = new File("file1.txt");
+		String input = "grep -B 2 \"reserve\" " + f.getAbsolutePath();
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		assert args != null;
+		args[2] = "reserve";
+
+		GrepTool gt = new GrepTool(args);
+		assert gt != null;
+		String fileContent = "";
+		try {
+			fileContent = readFile("file1.txt", this);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		String result = gt.getMatchingLinesWithLeadingContext(2, "reserve", fileContent);
+		String expected = "#Cell Size:#  If you have more than one line (as just above) then\n"
+				+ "              you will simply get empty cells where the other column is empty.\n"
+				+ "#Alignment:#  Alignment of cells is attempted to be preserved.\n" + "I would like to implement.\n" + "\n"
+				+ "A. I would like to be able to preserve lettered lists, that is:\n"
+				+ "   a) recognise that they are letters and not numbers (which it already\n" + "      does)\n"
+				+ "   b) display the correct OL properties with CSS so as to preserve\n";
+
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testCountOption() {
+		File f = new File("file2.txt");
+		String input = "grep -v \"A\" " + f.getAbsolutePath();
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		assert args != null;
+		args[1] = "A";
+
+		GrepTool gt = new GrepTool(args);
+		assert gt != null;
+		String fileContent = "";
+		try {
+			fileContent = readFile("file2.txt", this);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		String result = gt.getNonMatchingLines("A", fileContent);
+		String expected = "\n" + "\n" + "\n" + "C D\n" + "\n" + "B\n" + "\n" + "\n" + "\n" + "\n";
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testGetMatchingPart() {
+		File f = new File("file1.txt");
+		String input = "grep -c \"p.*ve\" " + f.getAbsolutePath();
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		assert args != null;
+		args[1] = "p.*ve";
+
+		GrepTool gt = new GrepTool(args);
+		assert gt != null;
+		String fileContent = "";
+		try {
+			fileContent = readFile("file1.txt", this);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		String result = gt.getMatchingLinesOnlyMatchingPart("p.*ve", fileContent);
+		String expected = "ple Conve\n" + "ptions to conve\n" + "p ve\n" + "people are usually conve\n" + "pretty decent about figuring out which leve\n"
+				+ "ppend a file automatically to all conve\n" + "paragraphs and list items have\n" + "pted to be preserve\n" + "preserve\n"
+				+ "play the correct OL properties with CSS so as to preserve\n";
+		assertEquals(expected, result);
+	}
+
+	@Test
 	public void testPipingWithGrepFullOption() {
 		String input = "cat file1.txt | grep \"A\" file2.txt";
 		String[] tokens = input.split(" ");
