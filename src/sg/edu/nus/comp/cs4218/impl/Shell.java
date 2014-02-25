@@ -166,10 +166,10 @@ public class Shell implements IShell {
 					if (in.ready() && in.readLine().equals("ctrl-z")) {
 						boolean cancellable = future.cancel(true);
 						if (!cancellable) {
-							System.out.println("Cannot stop thread, thus quit!");
+							System.err.println("Cannot stop thread, thus quit!");
 							System.exit(1);
 						} else {
-							System.out.println("[" + itool.getStatusCode()
+							System.err.println("[" + itool.getStatusCode()
 									+ "]+  Stopped                 "
 									+ itool.getClass().getSimpleName());
 						}
@@ -184,7 +184,7 @@ public class Shell implements IShell {
 			}
 			executorService.shutdownNow();
 			if (itool.getStatusCode() != 0) {
-				System.out.println("[" + itool.getStatusCode()
+				System.err.println("[" + itool.getStatusCode()
 						+ "]+  Stopped                 "
 						+ itool.getClass().getSimpleName());
 			}
@@ -212,7 +212,7 @@ public class Shell implements IShell {
 			}
 			executorService.shutdownNow();
 			if (itool.getStatusCode() != 0) {
-				System.out.println("[" + itool.getStatusCode()
+				System.err.println("[" + itool.getStatusCode()
 						+ "]+  Stopped                 "
 						+ itool.getClass().getSimpleName());
 			}
@@ -235,10 +235,10 @@ public class Shell implements IShell {
 	public boolean stopItool(Future<?> future, ITool itool) {
 		boolean cancellable = future.cancel(true);
 		if (!cancellable) {
-			System.out.println("Cannot stop thread, thus quit!");
+			System.err.println("Cannot stop thread, thus quit!");
 			System.exit(1);
 		} else {
-			System.out.println("[" + itool.getStatusCode()
+			System.err.println("[" + itool.getStatusCode()
 					+ "]+  Stopped                 "
 					+ itool.getClass().getSimpleName());
 			return true;

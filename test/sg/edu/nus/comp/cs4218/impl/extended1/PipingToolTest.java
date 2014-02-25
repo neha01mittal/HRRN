@@ -25,9 +25,9 @@ import org.junit.Test;
  */
 public class PipingToolTest {
 
-	private PipingTool pipingTool;
-	private static Path rootDirectory;
-	private static String rootDirectoryString;
+	private PipingTool		pipingTool;
+	private static Path		rootDirectory;
+	private static String	rootDirectoryString;
 
 	@BeforeClass
 	public static void before() throws IOException {
@@ -85,7 +85,7 @@ public class PipingToolTest {
 
 		pipingTool.execute(new File(rootDirectoryString), null);
 
-		assertNotEquals(0, pipingTool.getStatusCode());
+		assertNotEquals(1, pipingTool.getStatusCode());
 	}
 
 	@Test
@@ -95,7 +95,7 @@ public class PipingToolTest {
 
 		pipingTool.execute(new File(rootDirectoryString), null);
 
-		assertNotEquals(0, pipingTool.getStatusCode());
+		assertNotEquals(1, pipingTool.getStatusCode());
 	}
 
 	@Test
@@ -116,7 +116,7 @@ public class PipingToolTest {
 
 		pipingTool.execute(new File(rootDirectoryString), null);
 
-		assertNotEquals(0, pipingTool.getStatusCode());
+		assertNotEquals(1, pipingTool.getStatusCode());
 	}
 
 }

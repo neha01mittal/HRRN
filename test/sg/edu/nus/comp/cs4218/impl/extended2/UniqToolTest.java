@@ -13,7 +13,7 @@ import org.junit.Test;
 
 public class UniqToolTest {
 
-	private UniqTool uniqTool;
+	private UniqTool	uniqTool;
 
 	@Before
 	public void before() {
@@ -67,7 +67,6 @@ public class UniqToolTest {
 		File f = new File(workingDir);
 		assertEquals(uniqTool.execute(f, null), output);
 		assertEquals(uniqTool.getStatusCode(), 0);
-
 	}
 
 	@Test
