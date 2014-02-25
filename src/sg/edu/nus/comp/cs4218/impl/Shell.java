@@ -29,45 +29,47 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.MoveTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
 
 /**
-* The Shell is used to interpret and execute user's commands. Following
-* sequence explains how a basic shell can be implemented in Java
-
-* DIFFERENT OPTIONS
-* commands
-* $ invalid command - prints error message
-* $ NOTE: 
-* @usage
-* @options
-* $: ls - lists current directory
-* $: copy path1 path2 		- copies contents of file/folder from path1 to path2
-* $: move path1 path2 		- moves file/folder from path1 to path2
-* $: delete path1 		- deletes file/folder 
-* $: pwd 			- displays present working directory
-* $: echo input 			- displays input
-* $: cat file 			- prints contents of file/standard input
-* $: grep options “pattern” file 	- searches for a pattern in file(s)
-* $: p1 | p2			- send stdout of p1 to p2 to execute
-* @note
-* The input arguments or path can be relative or absolute, in quotes or without quotes, with backslash or front slash, with escaped space. But other escaped like \” or \’ characters are not yet handled. But you can still escape “ by surrounding it with ‘, vise versa. The termination function is either ctrl-z to terminate a running tool, the char has to be input with enter key hit. The shell will try it’s best to stop the running thread, if it’s really not able to stop the thread, the program will stop for safety. User are not allowed to use ‘~’ to denote home directory.
-* @success
-* It will print the returning string, or nothing if returned null, or a blank line if returned empty string.
-* @exceptions
-* IOException for reading user input
-* Tool returned status code not 0, if so shell will print out the error code.
-* 
-*/
+ * The Shell is used to interpret and execute user's commands. Following
+ * sequence explains how a basic shell can be implemented in Java
+ * 
+ * DIFFERENT OPTIONS commands $ invalid command - prints error message $ NOTE:
+ * 
+ * @usage
+ * @options $: ls - lists current directory $: copy path1 path2 - copies
+ *          contents of file/folder from path1 to path2 $: move path1 path2 -
+ *          moves file/folder from path1 to path2 $: delete path1 - deletes
+ *          file/folder $: pwd - displays present working directory $: echo
+ *          input - displays input $: cat file - prints contents of
+ *          file/standard input $: grep options “pattern” file - searches for a
+ *          pattern in file(s) $: p1 | p2 - send stdout of p1 to p2 to execute
+ * @note The input arguments or path can be relative or absolute, in quotes or
+ *       without quotes, with backslash or front slash, with escaped space. But
+ *       other escaped like \” or \’ characters are not yet handled. But you can
+ *       still escape “ by surrounding it with ‘, vise versa. The termination
+ *       function is either ctrl-z to terminate a running tool, the char has to
+ *       be input with enter key hit. The shell will try it’s best to stop the
+ *       running thread, if it’s really not able to stop the thread, the program
+ *       will stop for safety. User are not allowed to use ‘~’ to denote home
+ *       directory.
+ * @success It will print the returning string, or nothing if returned null, or
+ *          a blank line if returned empty string.
+ * @exceptions IOException for reading user input Tool returned status code not
+ *             0, if so shell will print out the error code.
+ * 
+ */
 public class Shell implements IShell {
 
-	private static String dilimiter1 = "::escape-space::";
-	private static String dilimiter2 = "::space::";
-	private BufferedReader in;
-	private Scanner scanner;
-	private ExecutorService backExecutorService;
+	private static String	dilimiter1	= "::escape-space::";
+	private static String	dilimiter2	= "::space::";
+	private BufferedReader	in;
+	private Scanner			scanner;
+	private ExecutorService	backExecutorService;
 
 	public static String[] getArgsArray(String c) {
 		String commandline = c;
 		// Step 1. find the escape space between quotes
-		Pattern regex = Pattern.compile("[^'\"]*\"([^\"]*)\"[^'\"]*|[^'\"]*'([^']*)'[^'\"]*");
+		Pattern regex = Pattern
+				.compile("[^'\"]*\"([^\"]*)\"[^'\"]*|[^'\"]*'([^']*)'[^'\"]*");
 		Matcher regexMatcher = regex.matcher(commandline);
 		while (regexMatcher.find()) {
 			if (regexMatcher.group(1) != null) {
@@ -75,14 +77,16 @@ public class Shell implements IShell {
 				// System.out.println("group1: " + temp);
 				String replaced = temp.replaceAll("\\s", dilimiter1);
 				// System.out.println("group1: " + replaced);
-				commandline = commandline.replace("\"" + temp + "\"", "\"" + replaced + "\"");
+				commandline = commandline.replace("\"" + temp + "\"", "\""
+						+ replaced + "\"");
 			}
 			if (regexMatcher.group(2) != null) {
 				String temp = regexMatcher.group(2);
 				// System.out.println("group2: " + temp);
 				String replaced = temp.replaceAll("\\s", dilimiter1);
 				// System.out.println("group2: " + replaced);
-				commandline = commandline.replace("'" + temp + "'", "'" + replaced + "'");
+				commandline = commandline.replace("'" + temp + "'", "'"
+						+ replaced + "'");
 			}
 		}
 		// System.out.println(commandline);
@@ -92,27 +96,34 @@ public class Shell implements IShell {
 		// System.out.println(commandline);
 
 		// Step 3. remove the first one and switch back delimiter
-		List<String> argList = new ArrayList<String>(Arrays.asList(commandline.split("\\s+")));
+		List<String> argList = new ArrayList<String>(Arrays.asList(commandline
+				.split("\\s+")));
 		for (int i = 0; i < argList.size(); i++) {
 			String newArg = argList.get(i);
 			// Step 4. remove all the surround quotes
-			regex = Pattern.compile("[^'\"]*(\"[^\"]*\")[^'\"]*|[^'\"]*('[^']*')[^'\"]*");
+			regex = Pattern
+					.compile("[^'\"]*(\"[^\"]*\")[^'\"]*|[^'\"]*('[^']*')[^'\"]*");
 			regexMatcher = regex.matcher(newArg);
 			while (regexMatcher.find()) {
 				if (regexMatcher.group(1) != null) {
 					String temp = regexMatcher.group(1);
 					// System.out.println("group1: " + temp);
-					newArg = newArg.replace(temp, temp.substring(1, temp.length() - 1));
+					newArg = newArg.replace(temp,
+							temp.substring(1, temp.length() - 1));
 					// System.out.println("group1: " + newArg);
 				}
 				if (regexMatcher.group(2) != null) {
 					String temp = regexMatcher.group(2);
 					// System.out.println("group2: " + temp);
-					newArg = newArg.replace(temp, temp.substring(1, temp.length() - 1));
+					newArg = newArg.replace(temp,
+							temp.substring(1, temp.length() - 1));
 					// System.out.println("group2: " + newArg);
 				}
 			}
-			argList.set(i, newArg.replaceAll(dilimiter1, " ").replaceAll(dilimiter2, " "));
+			argList.set(
+					i,
+					newArg.replaceAll(dilimiter1, " ").replaceAll(dilimiter2,
+							" "));
 		}
 
 		if (argList.size() > 0) {
@@ -132,40 +143,82 @@ public class Shell implements IShell {
 			System.out.print(System.getProperty("user.dir") + " $: ");
 			// 2. Parse the user input
 			String input = scanner.nextLine();
-			ITool itool = parse(input);
-			if (itool != null) {
-				// 3. Create a new thread to execute the command
-				ExecutorService executorService = Executors.newSingleThreadExecutor();
-				Runnable toolExecution = execute(itool);
-				// 4. Execute the command on the newly created thread.
-				Future<?> future = executorService.submit(toolExecution);
-				// 5. In the shell, wait for the thread to complete
-				while (true) {
-					try {
-						if (in.ready() && (in.readLine().equals("ctrl-z") | in.readLine().equals("c"))) {
-							boolean cancellable = future.cancel(true);
-							if (!cancellable) {
-								System.out.println("Cannot stop thread, thus quit!");
-								System.exit(1);
-							} else {
-								System.out.println("[" + itool.getStatusCode() + "]+  Stopped                 " + itool.getClass().getSimpleName());
-							}
-						}
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-
-					if (future.isCancelled() || future.isDone()) {
-						break;
-					}
-				}
-				executorService.shutdownNow();
-				if (itool.getStatusCode() != 0) {
-					System.out.println("[" + itool.getStatusCode() + "]+  Stopped                 " + itool.getClass().getSimpleName());
-				}
-			} else {
-				System.out.println("   cmd: " + input + " not recognized.");
+			String msg = executeInput(input);
+			if (msg != null) {
+				System.out.println(msg);
 			}
+		}
+	}
+
+	// returm error message or null
+	public String executeInput(String input) {
+		ITool itool = parse(input);
+		if (itool != null) {
+			// 3. Create a new thread to execute the command
+			ExecutorService executorService = Executors
+					.newSingleThreadExecutor();
+			Runnable toolExecution = execute(itool);
+			// 4. Execute the command on the newly created thread.
+			Future<?> future = executorService.submit(toolExecution);
+			// 5. In the shell, wait for the thread to complete
+			while (true) {
+				try {
+					if (in.ready() && in.readLine().equals("ctrl-z")) {
+						boolean cancellable = future.cancel(true);
+						if (!cancellable) {
+							System.out.println("Cannot stop thread, thus quit!");
+							System.exit(1);
+						} else {
+							System.out.println("[" + itool.getStatusCode()
+									+ "]+  Stopped                 "
+									+ itool.getClass().getSimpleName());
+						}
+					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+
+				if (future.isCancelled() || future.isDone()) {
+					break;
+				}
+			}
+			executorService.shutdownNow();
+			if (itool.getStatusCode() != 0) {
+				System.out.println("[" + itool.getStatusCode()
+						+ "]+  Stopped                 "
+						+ itool.getClass().getSimpleName());
+			}
+			return null;
+		} else {
+			return "   cmd: " + input + " not recognized.";
+		}
+	}
+
+	// returm error message or null
+	public String executeInputOnce(String input) {
+		ITool itool = parse(input);
+		if (itool != null) {
+			// 3. Create a new thread to execute the command
+			ExecutorService executorService = Executors
+					.newSingleThreadExecutor();
+			Runnable toolExecution = execute(itool);
+			// 4. Execute the command on the newly created thread.
+			Future<?> future = executorService.submit(toolExecution);
+			// 5. In the shell, wait for the thread to complete
+			while (true) {
+				if (future.isCancelled() || future.isDone()) {
+					break;
+				}
+			}
+			executorService.shutdownNow();
+			if (itool.getStatusCode() != 0) {
+				System.out.println("[" + itool.getStatusCode()
+						+ "]+  Stopped                 "
+						+ itool.getClass().getSimpleName());
+			}
+			return null;
+		} else {
+			return "   cmd: " + input + " not recognized.";
 		}
 	}
 
@@ -185,7 +238,9 @@ public class Shell implements IShell {
 			System.out.println("Cannot stop thread, thus quit!");
 			System.exit(1);
 		} else {
-			System.out.println("[" + itool.getStatusCode() + "]+  Stopped                 " + itool.getClass().getSimpleName());
+			System.out.println("[" + itool.getStatusCode()
+					+ "]+  Stopped                 "
+					+ itool.getClass().getSimpleName());
 			return true;
 		}
 		return false;
@@ -207,34 +262,41 @@ public class Shell implements IShell {
 			commandline = commandline.trim();
 			String[] cmdSplit = commandline.split("\\s+");
 			if (commandline.length() > 0 && cmdSplit.length > 0) {
-
-				String cmd = cmdSplit[0].toLowerCase(); // This guarantee valid
+				// This guarantee valid
+				String cmd = cmdSplit[0].toLowerCase();
 				// Now we need to construct arguments
 				String[] args = getArgsArray(commandline);
-				// for (String t : args) {
-				// System.out.println("-------------" + t);
-				// }
-
-				if (cmd.equals("cat")) {
-					return new CatTool(args);
-				} else if (cmd.equals("cd")) {
-					return new CdTool(args);
-				} else if (cmd.equals("copy")) {
-					return new CopyTool(args);
-				} else if (cmd.equals("delete")) {
-					return new DeleteTool(args);
-				} else if (cmd.equals("echo")) {
-					return new EchoTool(args);
-				} else if (cmd.equals("ls")) {
-					return new LsTool(args);
-				} else if (cmd.equals("move")) {
-					return new MoveTool(args);
-				} else if (cmd.equals("pwd")) {
-					return new PWDTool();
-				} else if (cmd.equals("grep")) {
-					return new GrepTool(args);
-				} else if (cmd.equals("long")) {
-					return new LongCmd(args);
+				switch (cmd) {
+					case "cat":
+						return new CatTool(args);
+					case "cd":
+						return new CdTool(args);
+					case "copy":
+						return new CopyTool(args);
+					case "delete":
+						return new DeleteTool(args);
+					case "echo":
+						return new EchoTool(args);
+					case "ls":
+						return new LsTool(args);
+					case "move":
+						return new MoveTool(args);
+					case "pwd":
+						return new PWDTool();
+					case "grep":
+						return new GrepTool(args);
+					case "comm":
+						return new LongCmd(args);
+					case "cut":
+						return new LongCmd(args);
+					case "sort":
+						return new LongCmd(args);
+					case "paste":
+						return new LongCmd(args);
+					case "uniq":
+						return new LongCmd(args);
+					case "wc":
+						return new LongCmd(args);
 				}
 			}
 		}

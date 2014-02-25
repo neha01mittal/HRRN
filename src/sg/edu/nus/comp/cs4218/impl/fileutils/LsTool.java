@@ -12,13 +12,13 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  * class
  * 
  * @usage ls [-a | -R] [path]
- * @options ls : Lists all files in current directory. 
- * ls [path] : Lists all files in the given path. 
- * ls -a : Lists all files including hidden files in current directory. 
- * ls -a [path] : Lists all files including hidden files in the given path 
- * ls -R : Lists all the files (absolute path) in the current directory and subdirectories 
- * ls -R [path] : Lists all the files (absolute path) in the given path. 
- * ls -a -R : Combination of functions above ls file : Prints file path if it
+ * @options ls : Lists all files in current directory. ls [path] : Lists all
+ *          files in the given path. ls -a : Lists all files including hidden
+ *          files in current directory. ls -a [path] : Lists all files including
+ *          hidden files in the given path ls -R : Lists all the files (absolute
+ *          path) in the current directory and subdirectories ls -R [path] :
+ *          Lists all the files (absolute path) in the given path. ls -a -R :
+ *          Combination of functions above ls file : Prints file path if it
  *          exists in the file system.
  * @note [path] could be either an absolute file or a relative path. If multiple
  *       path is given as arguments, only the first argument will be
@@ -31,8 +31,8 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class LsTool extends ATool implements ILsTool {
 
-	private final List<String> argList;
-	private final List<String> inputList;
+	private final List<String>	argList;
+	private final List<String>	inputList;
 
 	public LsTool(String[] arguments) {
 		super(arguments);
@@ -63,21 +63,15 @@ public class LsTool extends ATool implements ILsTool {
 
 			if (!newDir.isAbsolute()) {
 				newDir = new File(workingDir.getAbsolutePath() + File.separator + validInput);
-				System.out.println(workingDir.getAbsolutePath() + File.separator + validInput);
 			}
 
 			if (newDir != null && newDir.isDirectory() && newDir.exists()) {
 				fileList = getFiles(newDir);
 			} else if (newDir != null && newDir.isFile() && newDir.exists()) {
-				if (argList.contains("-a")) {
-					setStatusCode(0);
-					return validInput;
-				} else if (!newDir.isHidden()) {
-					setStatusCode(0);
-					return validInput;
-				}
+				setStatusCode(0);
+				return validInput;
 			} else {
-				return "Error: invalid input: " + validInput;
+				return "ls: " + validInput + ": No such file or directory";
 			}
 		} else {
 			fileList = getFiles(workingDir);
@@ -90,7 +84,7 @@ public class LsTool extends ATool implements ILsTool {
 			}
 			return getStringForFiles(fileList);
 		}
-		return "Error: retrieve file list error";
+		return "ls: Error: retrieve file list error";
 	}
 
 	@Override
@@ -115,7 +109,6 @@ public class LsTool extends ATool implements ILsTool {
 				fileList.addAll(getFiles(f));
 			}
 		}
-		// Processing
 		return fileList;
 	}
 

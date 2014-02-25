@@ -11,6 +11,7 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.CdTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CopyTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.DeleteTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.EchoTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.LongCmd;
 import sg.edu.nus.comp.cs4218.impl.fileutils.LsTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.MoveTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
@@ -26,8 +27,7 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
  * 
  */
 public class PipingTool extends ATool implements IPipingTool {
-
-	File workingDir;
+	File	workingDir;
 
 	public PipingTool(String[] arguments) {
 		super(arguments);
@@ -47,21 +47,13 @@ public class PipingTool extends ATool implements IPipingTool {
 			to = parse(args[1]);
 			result = pipe(from, to);
 
-			if (from.getStatusCode() == 0) {
-				for (int i = 1; i < args.length; i++) {
-					to = parse(args[i]);
-					result = pipe(result, to);
-					if (to.getStatusCode() != 0) {
-						break;
-					}
-				}
-			} else {
-				return result;
+			for (int i = 1; i < args.length; i++) {
+				to = parse(args[i]);
+				result = pipe(result, to);
 			}
-			if (to.getStatusCode() == 0) {
-				setStatusCode(0);
-				return result;
-			}
+
+			setStatusCode(0);
+			return result;
 		}
 		return null;
 	}
@@ -69,7 +61,12 @@ public class PipingTool extends ATool implements IPipingTool {
 	@Override
 	public String pipe(ITool from, ITool to) {
 		// execute command 1
-		String returnedValue = from.execute(workingDir, null);
+		String returnedValue = from.execute(workingDir, null);// print if has
+																// output
+		if (from.getStatusCode() != 0 && returnedValue != null) {
+			System.out.println(returnedValue);
+			return "";
+		}
 		return returnedValue;
 	}
 
@@ -77,37 +74,57 @@ public class PipingTool extends ATool implements IPipingTool {
 	public String pipe(String stdout, ITool to) {
 		// execute command 2
 		String returnedValue = to.execute(workingDir, stdout);
+		// print if has output
+		if (to.getStatusCode() != 0 && returnedValue != null) {
+			System.out.println(returnedValue);
+			return "";
+		}
 		return returnedValue;
 	}
 
-	public ITool parse(String commandline) {
+	public ITool parse(String c) {
+		String commandline = c;
 		if (commandline.contains("|")) {
 			return new PipingTool(commandline.split("\\|"));
 		} else {
-			String trimmed = commandline.trim();
-			String[] cmdSplit = trimmed.split("\\s+");
-			if (trimmed.length() > 0 && cmdSplit.length > 0) {
+			commandline = commandline.trim();
+			String[] cmdSplit = commandline.split("\\s+");
+			if (commandline.length() > 0 && cmdSplit.length > 0) {
+				// This guarantee valid
 				String cmd = cmdSplit[0].toLowerCase();
-				String[] args = Shell.getArgsArray(trimmed);
-
-				if (cmd.equalsIgnoreCase("cat")) {
-					return new CatTool(args);
-				} else if (cmd.equalsIgnoreCase("cd")) {
-					return new CdTool(args);
-				} else if (cmd.equalsIgnoreCase("copy")) {
-					return new CopyTool(args);
-				} else if (cmd.equalsIgnoreCase("delete")) {
-					return new DeleteTool(args);
-				} else if (cmd.equalsIgnoreCase("echo")) {
-					return new EchoTool(args);
-				} else if (cmd.equalsIgnoreCase("ls")) {
-					return new LsTool(args);
-				} else if (cmd.equalsIgnoreCase("move")) {
-					return new MoveTool(args);
-				} else if (cmd.equalsIgnoreCase("pwd")) {
-					return new PWDTool();
-				} else if (cmd.equalsIgnoreCase("grep")) {
-					return new GrepTool(args);
+				// Now we need to construct arguments
+				String[] args = Shell.getArgsArray(commandline);
+				switch (cmd) {
+					case "cat":
+						return new CatTool(args);
+					case "cd":
+						return new CdTool(args);
+					case "copy":
+						return new CopyTool(args);
+					case "delete":
+						return new DeleteTool(args);
+					case "echo":
+						return new EchoTool(args);
+					case "ls":
+						return new LsTool(args);
+					case "move":
+						return new MoveTool(args);
+					case "pwd":
+						return new PWDTool();
+					case "grep":
+						return new GrepTool(args);
+					case "comm":
+						return new LongCmd(args);
+					case "cut":
+						return new LongCmd(args);
+					case "sort":
+						return new LongCmd(args);
+					case "paste":
+						return new LongCmd(args);
+					case "uniq":
+						return new LongCmd(args);
+					case "wc":
+						return new LongCmd(args);
 				}
 			}
 		}
