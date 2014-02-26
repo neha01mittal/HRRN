@@ -26,11 +26,11 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class CommTool extends ATool implements ICommTool {
 
-	private static final String INVALID_COMMAND = "Invalid command";
-	private static final String NOT_SORTED = "Not Sorted!";
-	private boolean sortFlag = false;
-	String currentLine1 = "";
-	String currentLine2 = "";
+	private static final String	INVALID_COMMAND	= "Invalid command";
+	private static final String	NOT_SORTED		= "Not Sorted!";
+	private boolean				sortFlag		= false;
+	String						currentLine1	= "";
+	String						currentLine2	= "";
 
 	// check this ^^^
 	public CommTool(String[] arguments) {
@@ -96,10 +96,10 @@ public class CommTool extends ATool implements ICommTool {
 		// TODO Auto-generated method stub
 		String file1 = "";
 		String file2 = "";
-		String operation= parse();
-		if(operation.equals(INVALID_COMMAND))
+		String operation = parse();
+		if (operation.equals(INVALID_COMMAND))
 			return INVALID_COMMAND;
-		
+
 		if (args != null && args.length > 0) {
 			if (operation.equalsIgnoreCase("help")) {
 				return getHelp();
@@ -122,9 +122,9 @@ public class CommTool extends ATool implements ICommTool {
 			List<String> file1Data = readFile(f1);
 			List<String> file2Data = readFile(f2);
 
-			if(file1Data==null||file2Data==null)
+			if (file1Data == null || file2Data == null)
 				return INVALID_COMMAND;
-			
+
 			String line1 = "";
 			String line2 = "";
 			String expectedOutput = "";
@@ -186,7 +186,7 @@ public class CommTool extends ATool implements ICommTool {
 						expectedOutput.length() - 1);
 
 			setStatusCode(0);
-			System.out.println(expectedOutput);
+			// System.out.println(expectedOutput);
 			return expectedOutput;
 
 		}
@@ -195,7 +195,7 @@ public class CommTool extends ATool implements ICommTool {
 
 	public String parse() {
 		String parsed = "";
-		int count=0;
+		int count = 0;
 		int i = args.length - 1;
 		while (i >= 0) {
 			if (args[i].startsWith("-")) {
@@ -209,8 +209,8 @@ public class CommTool extends ATool implements ICommTool {
 				count++;
 				parsed = option;
 			}
-			
-			if(count>1) {
+
+			if (count > 1) {
 				return INVALID_COMMAND;
 			}
 			i--;
