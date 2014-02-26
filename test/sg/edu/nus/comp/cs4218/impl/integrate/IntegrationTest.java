@@ -104,6 +104,6 @@ public class IntegrationTest {
 		for (int i = 0; i < testDirFileList.size(); i++) {
 			expected += testDirFileList.get(i).getName() + "\n";
 		}
-		assertEquals(expected, outContent.toString());
+		assertEquals(expected, outContent.toString().replaceAll("\r", ""));
 	}
 }

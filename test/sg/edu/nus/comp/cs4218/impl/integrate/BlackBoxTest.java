@@ -94,6 +94,6 @@ public class BlackBoxTest {
 		for (int i = 0; i < testDirFileList.size(); i++) {
 			expected += testDirFileList.get(i).getName() + "\n";
 		}
-		assertTrue(outContent.toString().toLowerCase().contains(expected.toLowerCase()));
+		assertTrue(outContent.toString().replaceAll("\r", "").toLowerCase().contains(expected.toLowerCase()));
 	}
 }

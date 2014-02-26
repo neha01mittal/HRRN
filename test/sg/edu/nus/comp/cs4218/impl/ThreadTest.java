@@ -74,7 +74,7 @@ public class ThreadTest {
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
-						return "process interrupted!";
+						return null;
 					}
 				}
 				statusCode = 0;
