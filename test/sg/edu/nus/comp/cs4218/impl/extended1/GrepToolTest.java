@@ -51,8 +51,8 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
  */
 public class GrepToolTest {
 
-	private static File file1;
-	private static File file2;
+	private static File	file1;
+	private static File	file2;
 
 	@BeforeClass
 	public static void before() throws IOException {
@@ -294,8 +294,8 @@ public class GrepToolTest {
 				+ "A. I would like to be able to preserve lettered lists, that is:\n"
 				+ "   a) recognise that they are letters and not numbers (which it already\n" + "      does)\n"
 				+ "   b) display the correct OL properties with CSS so as to preserve\n" + "      that information.\n" + "\n";
-		System.out.println("TEST A: " + result);
-		System.out.println("TEST A expected: " + expected);
+		// System.out.println("TEST A: " + result);
+		// System.out.println("TEST A expected: " + expected);
 		assertEquals(expected, result);
 	}
 

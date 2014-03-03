@@ -1,7 +1,8 @@
 package sg.edu.nus.comp.cs4218.impl.integrate;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -18,18 +19,19 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.Shell;
 
-public class IntegrationTest {
+public class BlackBoxTest {
 
 	private final ByteArrayOutputStream	outContent	= new ByteArrayOutputStream();
 	private final ByteArrayOutputStream	errContent	= new ByteArrayOutputStream();
 	private static String				originalDirString;
 	private static String				testDirString;
 	private static List<File>			testDirFileList;
-	private Shell						shell;
+	private static Shell				shell;
 	private static InputStream			stdin;
 
 	@BeforeClass
 	public static void beforeClass() {
+		stdin = System.in;
 		// create new dir and files inside
 		originalDirString = System.getProperty("user.dir");
 		testDirString = originalDirString + File.separator + "data" + File.separator + "integrationTest";
@@ -47,63 +49,51 @@ public class IntegrationTest {
 			}
 		};
 		testDirFileList = Arrays.asList(new File(testDirString).listFiles(fileNameFilter));
-
-		stdin = System.in;
 		System.setProperty("user.dir", testDirString);
 	}
 
 	@AfterClass
 	public static void afterClass() {
-		// remove shell and set back system
 		System.setProperty("user.dir", originalDirString);
 	}
 
 	@Before
 	public void before() {
 		// seize the std content
-		System.setOut(new PrintStream(outContent));
-		System.setErr(new PrintStream(errContent));
 		shell = new Shell();
 	}
 
 	@After
 	public void after() {
+		shell.executionFlag = false;
+
 		// release std and clean the buffer
 		System.setIn(stdin);
 		System.setOut(null);
 		System.setErr(null);
-		shell = null;
-	}
 
-	//
-	// Step 1: Test shell against each single tool
-	//
-
-	@Test
-	public void testSimpleEmpty() {
-		String input = "";
-		shell.executeInput(input, false);
-
-		assertEquals("", outContent.toString());
-	}
-
-	@Test
-	public void testSimpleInvalid() {
-		String input = "invalid";
-		shell.executeInput(input, false);
-
-		assertEquals("", outContent.toString());
+		// remove shell and set back system
+		// shell = null;
 	}
 
 	@Test
 	public void testSimpleLs() {
-		String input = "ls";
-		shell.executeInput(input, false);
+		String input = "ls\r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		System.setOut(new PrintStream(outContent));
+		System.setErr(new PrintStream(errContent));
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
 
 		String expected = "";
 		for (int i = 0; i < testDirFileList.size(); i++) {
 			expected += testDirFileList.get(i).getName() + "\n";
 		}
-		assertEquals(expected, outContent.toString().replaceAll("\r", ""));
+		assertTrue(outContent.toString().replaceAll("\r", "").toLowerCase().contains(expected.toLowerCase()));
 	}
 }
