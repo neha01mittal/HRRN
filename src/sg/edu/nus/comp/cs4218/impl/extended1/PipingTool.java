@@ -6,6 +6,11 @@ import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.Shell;
+import sg.edu.nus.comp.cs4218.impl.extended2.CommTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.CutTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.PasteTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.SortTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CdTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CopyTool;
@@ -110,15 +115,15 @@ public class PipingTool extends ATool implements IPipingTool {
 				case "grep":
 					return new GrepTool(args);
 				case "comm":
-					return new LongCmd(args);
+					return new CommTool(args);
 				case "cut":
-					return new LongCmd(args);
+					return new CutTool(args);
 				case "sort":
-					return new LongCmd(args);
+					return new SortTool(args);
 				case "paste":
-					return new LongCmd(args);
+					return new PasteTool(args);
 				case "uniq":
-					return new LongCmd(args);
+					return new UniqTool(args);
 				case "wc":
 					return new LongCmd(args);
 			}
