@@ -38,12 +38,12 @@ public class WcTool extends ATool implements IWcTool {
 		if (input == null || readStatus == 1)
 			return "0";
 		String content = "";
-//		try {
-//			content = readFile(input, Charset.forName("UTF-8"));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		int result = input.length();
+		try {
+			content = readFile(input, Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			return "word count: open failed: " + input + ": No such file or directory.";
+		}
+		int result = content.length();
 		setStatusCode(0);
 		return Integer.toString(result);
 	}
@@ -52,14 +52,14 @@ public class WcTool extends ATool implements IWcTool {
 	public String getWordCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
-		// String content = "";
-//		try {
-//			content = readFile(input, Charset.forName("UTF-8"));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		String content = "";
+		try {
+			content = readFile(input, Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			return "word count: open failed: " + input + ": No such file or directory.";		
+		}
 
-		String[] words = input.split("[ \\n]");
+		String[] words = content.split("[ \\n]");
 		int result = words.length;
 		setStatusCode(0);
 		return Integer.toString(result);
@@ -69,14 +69,14 @@ public class WcTool extends ATool implements IWcTool {
 	public String getNewLineCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
-		//String content = "";
-//		try {
-//			content = readFile(input, Charset.forName("UTF-8"));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		String content = "";
+		try {
+			content = readFile(input, Charset.forName("UTF-8"));
+		} catch (IOException e) {
+			return "word count: open failed: " + input + ": No such file or directory.";
+		}
 
-		int result = input.length() - input.replaceAll("\n", "").length();
+		int result = content.length() - content.replaceAll("\n", "").length();
 		setStatusCode(0);
 		return Integer.toString(result);
 	}
@@ -101,7 +101,8 @@ public class WcTool extends ATool implements IWcTool {
 
 		String content = null;
 		if (stdin != null && stdin.compareTo("") != 0)
-			content = stdin;
+			//content = stdin;
+			args = stdin.split(" ");
 
 		if (args[0] != null && args[0].compareTo("-m") == 0) {
 			try {
@@ -139,7 +140,7 @@ public class WcTool extends ATool implements IWcTool {
 			for (int i = 1; i < args.length; i++) {
 				content = readFile(args[i], std);
 				if (readStatus != 1)
-					result.append(getNewLineCount(content) + " " + args[i]);
+					result.append(getNewLineCount(args[i]));
 				else
 					result.append(content);
 			}
@@ -151,9 +152,9 @@ public class WcTool extends ATool implements IWcTool {
 			result.append(getWordCount(content));
 		else
 			for (int i = 1; i < args.length; i++) {
-				content = readFile(args[i], std);
+				//content = readFile(args[i], std);
 				if (readStatus != 1)
-					result.append(getWordCount(content) + " " + args[i]);
+					result.append(getWordCount(args[i]));
 				else
 					result.append(content);
 			}
@@ -166,9 +167,9 @@ public class WcTool extends ATool implements IWcTool {
 			result.append(getCharacterCount(content));
 		else
 			for (int i = 1; i < args.length; i++) {
-				content = readFile(args[i], std);
+				//content = readFile(args[i], std);
 				if (readStatus != 1)
-					result.append(getCharacterCount(content) + " " + args[i]);
+					result.append(getCharacterCount(args[i]));
 				else
 					result.append(content);
 			}
@@ -206,20 +207,15 @@ public class WcTool extends ATool implements IWcTool {
 	}
 
 	public String readFile(String fileName, Charset encoding) throws IOException {
-		try {
-			String filePath;
-			readStatus = -1;
-			File f = new File(fileName);
-			if (f.isAbsolute())
-				filePath = fileName;
-			else
-				filePath = System.getProperty("user.dir") + File.separator + fileName;
+		String filePath;
+		readStatus = -1;
+		File f = new File(fileName);
+		if (f.isAbsolute())
+			filePath = fileName;
+		else
+			filePath = System.getProperty("user.dir") + File.separator + fileName;
 
-			byte[] encoded = Files.readAllBytes(Paths.get(filePath));
-			return encoding.decode(ByteBuffer.wrap(encoded)).toString();
-		} catch (Exception e) {
-			readStatus = 1;
-			return "word count: open failed: " + fileName + ": No such file or directory.";
-		}
+		byte[] encoded = Files.readAllBytes(Paths.get(filePath));
+		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
 	}
 }
