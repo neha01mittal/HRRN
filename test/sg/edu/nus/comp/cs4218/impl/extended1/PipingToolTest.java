@@ -1,7 +1,6 @@
 package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,12 +26,15 @@ public class PipingToolTest {
 
 	private PipingTool pipingTool;
 	private static Path rootDirectory;
+	private static String rootParent;
 	private static String rootDirectoryString;
 
 	@BeforeClass
 	public static void before() throws IOException {
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + "/test";
+		rootDirectoryString = System.getProperty("user.dir") + File.separator
+				+ "test";
+		rootParent = System.getProperty("user.dir");
 		rootDirectory = Paths.get(rootDirectoryString);
 	}
 
@@ -79,26 +81,6 @@ public class PipingToolTest {
 	}
 
 	@Test
-	public void testHandlePipeErrorAtFirst() {
-		String commandline = "cd | cat | cat | cat ";
-		pipingTool = new PipingTool(commandline.split("\\|"));
-
-		pipingTool.execute(new File(rootDirectoryString), null);
-
-		assertNotEquals(0, pipingTool.getStatusCode());
-	}
-
-	@Test
-	public void testHandlePipeErrorInMiddle() {
-		String commandline = "echo 'print me' | cat | cat a | cat ";
-		pipingTool = new PipingTool(commandline.split("\\|"));
-
-		pipingTool.execute(new File(rootDirectoryString), null);
-
-		assertNotEquals(0, pipingTool.getStatusCode());
-	}
-
-	@Test
 	public void testPipeToInvalidTool() {
 		String commandline = "pwd | echo ";
 		pipingTool = new PipingTool(commandline.split("\\|"));
@@ -109,14 +91,37 @@ public class PipingToolTest {
 	}
 
 	@Test
-	public void testPipeStateWhenFirstPipeFail() {
-		// The error is through before we check for the statestus code for to
-		String commandline = "cd invalid | echo ";
+	public void testPipeCommTool() {
+		String commandline = "cat commTestCase1a.txt | comm - commTestCase1b.txt ";
+		String output = "\t\t\t\taaa" + "\n\t\tbbb" + "\nccc" + "\neee"
+				+ "\n\t\tffff" + "\ngggggg";
 		pipingTool = new PipingTool(commandline.split("\\|"));
 
-		pipingTool.execute(new File(rootDirectoryString), null);
+		String result = pipingTool.execute(new File(rootParent), null);
 
-		assertNotEquals(0, pipingTool.getStatusCode());
+		assertEquals(result, output);
 	}
 
+	@Test
+	public void testPipeCommTool1() {
+		String commandline = "cat commTestCase1a.txt | comm - nofile.txt ";
+		String output = "\t\t\t\taaa" + "\n\t\tbbb" + "\nccc" + "\neee"
+				+ "\n\t\tffff" + "\ngggggg";
+		pipingTool = new PipingTool(commandline.split("\\|"));
+
+		String result = pipingTool.execute(new File(rootParent), null);
+
+		assertEquals(result, "");
+	}
+	
+//	@Test
+//	public void testPipeStateWhenFirstPipeFail() {
+//		// The error is through before we check for the statestus code for to
+//		String commandline = "cd invalid | echo ";
+//		pipingTool = new PipingTool(commandline.split("\\|"));
+//
+//		pipingTool.execute(new File(rootDirectoryString), null);
+//
+//		assertNotEquals(1, pipingTool.getStatusCode());
+//	}
 }

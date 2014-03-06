@@ -8,51 +8,52 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.ITool;
 
 /**
-* The Shell is used to interpret and execute user's commands. Following
-* sequence explains how a basic shell can be implemented in Java
+ * The Shell is used to interpret and execute user's commands. Following
+ * sequence explains how a basic shell can be implemented in Java
+ * 
+ * DIFFERENT OPTIONS commands $ invalid command - prints error message $ NOTE:
+ * 
+ * @usage
+ * @options $: ls - lists current directory $: copy path1 path2 - copies
+ *          contents of file/folder from path1 to path2 $: move path1 path2 -
+ *          moves file/folder from path1 to path2 $: delete path1 - deletes
+ *          file/folder $: pwd - displays present working directory $: echo
+ *          input - displays input $: cat file - prints contents of
+ *          file/standard input $: grep options “pattern” file - searches for a
+ *          pattern in file(s) $: p1 | p2 - send stdout of p1 to p2 to execute
+ * @note The input arguments or path can be relative or absolute, in quotes or
+ *       without quotes, with backslash or front slash, with escaped space. But
+ *       other escaped like \” or \’ characters are not yet handled. But you can
+ *       still escape “ by surrounding it with ‘, vise versa. The termination
+ *       function is either ctrl-z to terminate a running tool, the char has to
+ *       be input with enter key hit. The shell will try it’s best to stop the
+ *       running thread, if it’s really not able to stop the thread, the program
+ *       will stop for safety. User are not allowed to use ‘~’ to denote home
+ *       directory.
+ * @success It will print the returning string, or nothing if returned null, or
+ *          a blank line if returned empty string.
+ * @exceptions IOException for reading user input Tool returned status code not
+ *             0, if so shell will print out the error code.
+ * 
+ */
+public class ParserTest {
 
-* DIFFERENT OPTIONS
-* commands
-* $ invalid command - prints error message
-* $ NOTE: 
-* @usage
-* @options
-* $: ls - lists current directory
-* $: copy path1 path2 		- copies contents of file/folder from path1 to path2
-* $: move path1 path2 		- moves file/folder from path1 to path2
-* $: delete path1 		- deletes file/folder 
-* $: pwd 			- displays present working directory
-* $: echo input 			- displays input
-* $: cat file 			- prints contents of file/standard input
-* $: grep options “pattern” file 	- searches for a pattern in file(s)
-* $: p1 | p2			- send stdout of p1 to p2 to execute
-* @note
-* The input arguments or path can be relative or absolute, in quotes or without quotes, with backslash or front slash, with escaped space. But other escaped like \” or \’ characters are not yet handled. But you can still escape “ by surrounding it with ‘, vise versa. The termination function is either ctrl-z to terminate a running tool, the char has to be input with enter key hit. The shell will try it’s best to stop the running thread, if it’s really not able to stop the thread, the program will stop for safety. User are not allowed to use ‘~’ to denote home directory.
-* @success
-* It will print the returning string, or nothing if returned null, or a blank line if returned empty string.
-* @exceptions
-* IOException for reading user input
-* Tool returned status code not 0, if so shell will print out the error code.
-* 
-*/
-public class ShellTest {
+	private static Shell	shell;
 
-	private Shell shell;
-
-	@Before
-	public void before() {
+	@BeforeClass
+	public static void before() {
 		shell = new Shell();
 	}
 
-	@After
-	public void after() {
+	@AfterClass
+	public static void after() {
 		shell = null;
 	}
 
@@ -145,7 +146,7 @@ public class ShellTest {
 	}
 
 	@Test
-	public void testParseCommandMoveGrep() {
+	public void testParseCommandGrep() {
 		String cmd = "grep test testfile.txt";
 		ITool resultTool = shell.parse(cmd);
 
@@ -154,12 +155,66 @@ public class ShellTest {
 	}
 
 	@Test
-	public void testParseCommandMovePiping() {
+	public void testParseCommandPiping() {
 		String cmd = "cmd-1 | cmd-2";
 		ITool resultTool = shell.parse(cmd);
 
 		assertNotNull(resultTool);
 		assertEquals("PipingTool", resultTool.getClass().getSimpleName());
+	}
+
+	@Test
+	public void testParseCommandComm() {
+		String cmd = "comm test testfile.txt";
+		ITool resultTool = shell.parse(cmd);
+
+		assertNotNull(resultTool);
+		assertEquals("CommTool", resultTool.getClass().getSimpleName());
+	}
+
+	@Test
+	public void testParseCommandCut() {
+		String cmd = "cut testfile.txt";
+		ITool resultTool = shell.parse(cmd);
+
+		assertNotNull(resultTool);
+		assertEquals("CutTool", resultTool.getClass().getSimpleName());
+	}
+
+	@Test
+	public void testParseCommandPaste() {
+		String cmd = "paste testfile.txt";
+		ITool resultTool = shell.parse(cmd);
+
+		assertNotNull(resultTool);
+		assertEquals("PasteTool", resultTool.getClass().getSimpleName());
+	}
+
+	@Test
+	public void testParseCommandSort() {
+		String cmd = "sort testfile.txt";
+		ITool resultTool = shell.parse(cmd);
+
+		assertNotNull(resultTool);
+		assertEquals("SortTool", resultTool.getClass().getSimpleName());
+	}
+
+	@Test
+	public void testParseCommandUniq() {
+		String cmd = "uniq testfile.txt";
+		ITool resultTool = shell.parse(cmd);
+
+		assertNotNull(resultTool);
+		assertEquals("UniqTool", resultTool.getClass().getSimpleName());
+	}
+
+	@Test
+	public void testParseCommandWc() {
+		String cmd = "wc testfile.txt";
+		ITool resultTool = shell.parse(cmd);
+
+		assertNotNull(resultTool);
+		assertEquals("WcTool", resultTool.getClass().getSimpleName());
 	}
 
 	@Test
@@ -282,8 +337,8 @@ public class ShellTest {
 
 	@Test
 	public void testParseCommandWithMixedQuotesandEscapedSpaceandDuplicateMatch() throws IllegalArgumentException, IllegalAccessException {
-		String cmd = "echo \"normal\" as\"as'\\ r'w e\"d's d's dd\\ sa";
-		String[] expected = { "normal", "asas'\\ r'w eds ds", "dd sa" };
+		String cmd = "echo \"normal\" as\"as'\\ r\\$'w\\ e\"d's d's dd\\ sa\\$";
+		String[] expected = { "normal", "asas'\\ r$'w\\ eds ds", "dd sa$" };
 		ITool resultTool = shell.parse(cmd);
 
 		assertNotNull(resultTool);
@@ -301,10 +356,22 @@ public class ShellTest {
 	}
 
 	@Test
-	public void testExecutionReturned() {
-		String cmd = "pwd";
-		Runnable resultTool = shell.execute(shell.parse(cmd));
+	public void testParseCommandWithSingleQuotesandEscapedSpaceandDuplicateMatch() throws IllegalArgumentException, IllegalAccessException {
+		String cmd = "echo \"normal\" asas'\\ r'wed'sd's dd\\ sa";
+		String[] expected = { "normal", "asas\\ rwedsds", "dd sa" };
+		ITool resultTool = shell.parse(cmd);
 
 		assertNotNull(resultTool);
+
+		Field fields[] = resultTool.getClass().getSuperclass().getDeclaredFields();
+		for (Field field : fields) {
+			if (field.getName().equals("args")) {
+				field.setAccessible(true);
+				List<String> args = Arrays.asList((String[]) field.get(resultTool));
+				for (int i = 0; i < expected.length; i++) {
+					assertEquals(expected[i], args.get(i));
+				}
+			}
+		}
 	}
 }

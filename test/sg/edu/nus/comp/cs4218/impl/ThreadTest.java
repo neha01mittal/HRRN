@@ -6,49 +6,37 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.Future;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.ITool;
-import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
-public class MyShellTest {
+public class ThreadTest {
 
-	private static Shell shell;
-	private static Path rootDirectory;
-	private static String rootDirectoryString;
+	private Shell	shell;
 
-	@BeforeClass
-	public static void before() throws IOException {
-		rootDirectoryString = System.getProperty("user.dir") + File.separator + "myShellTest";
-
-		rootDirectory = Paths.get(rootDirectoryString);
-		Files.createDirectory(rootDirectory);
-
+	@Before
+	public void before() throws IOException {
 		shell = new Shell();
 	}
 
-	@AfterClass
-	public static void after() throws IOException {
-		TestUtils.delete(new File(rootDirectoryString));
+	@After
+	public void after() throws IOException {
 		shell = null;
 	}
 
 	@Test
 	public void testRunningPWD() {
 		ITool itool = shell.parse("pwd");
-		Future<?> future = shell.runItool(itool);
+		Future<?> future = shell.executeTest(itool);
 
 		while (!(future.isDone() || future.isCancelled())) {
 			// just wait.
 		}
-
+		shell.stopTest(future, itool);
 		assertEquals(0, itool.getStatusCode());
 	}
 
@@ -78,15 +66,15 @@ public class MyShellTest {
 		//
 		//
 		ITool itool = new ITool() {
-			private int statusCode = 1;
+			private int	statusCode	= 1;
 
 			@Override
 			public String execute(File workingDir, String stdin) {
-				for (int i = 0; i < 10; i++) {
+				for (int i = 0; i < 1000; i++) {
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
-						return "process interrupted!";
+						return null;
 					}
 				}
 				statusCode = 0;
@@ -99,7 +87,7 @@ public class MyShellTest {
 			}
 		};
 
-		Future<?> future = shell.runItool(itool);
+		Future<?> future = shell.executeTest(itool);
 		boolean result = false;
 		// generally wait for a while
 		try {
@@ -108,7 +96,7 @@ public class MyShellTest {
 			e.printStackTrace();
 		}
 		while (!(future.isDone() || future.isCancelled())) {
-			result = shell.stopItool(future, itool);
+			result = shell.stopTest(future, itool);
 		}
 
 		assertTrue(result);
@@ -124,12 +112,14 @@ public class MyShellTest {
 		//
 		//
 		ITool itool = new ITool() {
-			private int statusCode = 1;
+			private int	statusCode	= 1;
 
 			@Override
 			public String execute(File workingDir, String stdin) {
-				for (double i = 1; i < 1000000; i += 0.1) {
-					System.out.println("" + i + "");
+				@SuppressWarnings("unused")
+				double a = 0;
+				for (double i = 1; i < 1000000000; i += 0.000000001) {
+					a += i;
 				}
 				statusCode = 0;
 				return "finished!";
@@ -141,7 +131,7 @@ public class MyShellTest {
 			}
 		};
 
-		Future<?> future = shell.runItool(itool);
+		Future<?> future = shell.executeTest(itool);
 		boolean result = false;
 		// generally wait for a while
 		try {
@@ -150,7 +140,7 @@ public class MyShellTest {
 			e.printStackTrace();
 		}
 		while (!(future.isDone() || future.isCancelled())) {
-			result = shell.stopItool(future, itool);
+			result = shell.stopTest(future, itool);
 		}
 
 		assertTrue(result);

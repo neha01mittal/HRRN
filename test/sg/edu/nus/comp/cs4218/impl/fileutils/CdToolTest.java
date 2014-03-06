@@ -23,14 +23,13 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
  * Changes directory to a given location
  * 
  * @usage cd [path]
- * @options cd Changes to the home directory. 
- * cd [path] : Changes current path to the new path. 
- * cd [.. | .] : Changes to parent directory or stay at current directory.
+ * @options cd Changes to the home directory. cd [path] : Changes current path
+ *          to the new path. cd [.. | .] : Changes to parent directory or stay
+ *          at current directory.
  * @note [path] could be either an absolute file or a relative path. If multiple
  *       path is given as arguments, only the first argument will be
- *       entertained. 
- *       Cd does not allow std, thus can not be pipe to. 
- *       Cd tool will always try to return the Canonical Path of the new directory which
+ *       entertained. Cd does not allow std, thus can not be pipe to. Cd tool
+ *       will always try to return the Canonical Path of the new directory which
  *       is the most simplified and recognizable. It does not allow user to use
  *       ‘~’ to denote home directory.
  * @success returns an empty string, but will not create a new line in the
@@ -39,14 +38,14 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
  */
 public class CdToolTest {
 
-	private static Path rootDirectory;
-	private static String rootDirectoryString;
-	private static List<Path> testDirectoryList;
-	private static List<String> tdRelativeString;
-	private static List<String> tdAbsoluteString;
-	private static String originalPath;
-	private static File testFile;
-	private CdTool cdTool;
+	private static Path			rootDirectory;
+	private static String		rootDirectoryString;
+	private static List<Path>	testDirectoryList;
+	private static List<String>	tdRelativeString;
+	private static List<String>	tdAbsoluteString;
+	private static String		originalPath;
+	private static File			testFile;
+	private CdTool				cdTool;
 
 	@BeforeClass
 	public static void before() throws IOException {

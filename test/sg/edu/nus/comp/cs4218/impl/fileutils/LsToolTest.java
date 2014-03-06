@@ -18,18 +18,19 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
+
 /**
  * Lists all the files and subdirectories in the current directory or provided
  * class
  * 
  * @usage ls [-a | -R] [path]
- * @options ls : Lists all files in current directory. 
- * ls [path] : Lists all files in the given path. 
- * ls -a : Lists all files including hidden files in current directory. 
- * ls -a [path] : Lists all files including hidden files in the given path 
- * ls -R : Lists all the files (absolute path) in the current directory and subdirectories 
- * ls -R [path] : Lists all the files (absolute path) in the given path. 
- * ls -a -R : Combination of functions above ls file : Prints file path if it
+ * @options ls : Lists all files in current directory. ls [path] : Lists all
+ *          files in the given path. ls -a : Lists all files including hidden
+ *          files in current directory. ls -a [path] : Lists all files including
+ *          hidden files in the given path ls -R : Lists all the files (absolute
+ *          path) in the current directory and subdirectories ls -R [path] :
+ *          Lists all the files (absolute path) in the given path. ls -a -R :
+ *          Combination of functions above ls file : Prints file path if it
  *          exists in the file system.
  * @note [path] could be either an absolute file or a relative path. If multiple
  *       path is given as arguments, only the first argument will be
@@ -41,17 +42,17 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
  */
 public class LsToolTest {
 
-	private static Path rootDirectory;
-	private static Path emptyFolder;
-	private static String rootDirectoryString;
-	private static List<Path> testFileList;
-	private static List<Path> testFileListAll;
-	private static List<Path> testFileListLevel0;
-	private static List<Path> testFileListLevel0All;
-	private static int nestedLevel;
-	private static int totalVisibleFile;
-	private static int totalInvisibleFile;
-	private LsTool lsTool;
+	private static Path			rootDirectory;
+	private static Path			emptyFolder;
+	private static String		rootDirectoryString;
+	private static List<Path>	testFileList;
+	private static List<Path>	testFileListAll;
+	private static List<Path>	testFileListLevel0;
+	private static List<Path>	testFileListLevel0All;
+	private static int			nestedLevel;
+	private static int			totalVisibleFile;
+	private static int			totalInvisibleFile;
+	private LsTool				lsTool;
 
 	@BeforeClass
 	public static void before() throws IOException {
@@ -179,7 +180,7 @@ public class LsToolTest {
 		lsTool = new LsTool(args);
 
 		String result = lsTool.execute(new File(System.getProperty("user.dir")), null);
-		String expected = "Error: invalid input: lalal";
+		String expected = "ls: lalal: No such file or directory";
 		assertEquals(expected, result);
 	}
 
