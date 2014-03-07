@@ -227,7 +227,7 @@ public class CdToolIntegrationTest {
 
 	@Test
 	public void testPaste2() {
-		String commandline = "paste " + file1 + "| cd "+f3.getAbsolutePath();
+		String commandline = "paste " + file1 + " | cd "+f3.getAbsolutePath();
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f3.getAbsolutePath();
