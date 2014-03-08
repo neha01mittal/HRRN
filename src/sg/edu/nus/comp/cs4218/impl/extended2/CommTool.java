@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import sg.edu.nus.comp.cs4218.extended2.ICommTool;
@@ -26,11 +27,11 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class CommTool extends ATool implements ICommTool {
 
-	private static final String	INVALID_COMMAND	= "Invalid command";
-	private static final String	NOT_SORTED		= "Not Sorted!";
-	private boolean				sortFlag		= false;
-	String						currentLine1	= "";
-	String						currentLine2	= "";
+	private static final String INVALID_COMMAND = "Invalid command";
+	private static final String NOT_SORTED = "Not Sorted!";
+	private boolean sortFlag = false;
+	String currentLine1 = "";
+	String currentLine2 = "";
 
 	// check this ^^^
 	public CommTool(String[] arguments) {
@@ -96,33 +97,54 @@ public class CommTool extends ATool implements ICommTool {
 		// TODO Auto-generated method stub
 		String file1 = "";
 		String file2 = "";
+		boolean flag = false;
 		String operation = parse();
 		if (operation.equals(INVALID_COMMAND))
 			return INVALID_COMMAND;
 
-		if (args != null && args.length > 0) {
+		
+		 if (args != null && args.length > 0) {
 			if (operation.equalsIgnoreCase("help")) {
 				return getHelp();
-			} else if (operation.equalsIgnoreCase("d") && args.length > 2) {
+			}
+			else if (operation.equals("stdin") && stdin!=null && !stdin.equals("") && args.length == 2) {
+				flag = true;
+				file2 = args[1];
+			}
+			else if (operation.equalsIgnoreCase("d") && args.length == 3) {
 				// do not care about sorting
-				file1 = workingDir + File.separator + args[args.length - 2];
-				file2 = workingDir + File.separator + args[args.length - 1];
+				file1 = args[args.length - 2];
+				file2 = args[args.length - 1];
 			} else if (operation.equalsIgnoreCase("c") && args.length > 2) {
 				sortFlag = true;
-				file1 = workingDir + File.separator + args[args.length - 2];
-				file2 = workingDir + File.separator + args[args.length - 1];
+				file1 = args[args.length - 2];
+				file2 = args[args.length - 1];
 			} else if (args.length == 2 && operation.equals("")) {
 				sortFlag = false;
-				file1 = workingDir + File.separator + args[0];
-				file2 = workingDir + File.separator + args[1];
+				file1 = args[0];
+				file2 = args[1];
 			}
 
 			File f1 = new File(file1);
 			File f2 = new File(file2);
-			List<String> file1Data = readFile(f1);
+
+			if (!f1.isAbsolute()) {
+				f1 = new File(workingDir, file1);
+			}
+
+			if (!f2.isAbsolute()) {
+				f2 = new File(workingDir, file2);
+			}
+
+			List<String> file1Data = new ArrayList<String>();
+			if (flag) {
+				file1Data = Arrays.asList(stdin.split("\\r?\\n"));
+			} else {
+				file1Data = readFile(f1);
+			}
 			List<String> file2Data = readFile(f2);
 
-			if (file1Data == null || file2Data == null)
+			if (file1Data == null || file1Data.size()==0|| file2Data == null||file2Data.size()==0)
 				return INVALID_COMMAND;
 
 			String line1 = "";
@@ -186,7 +208,6 @@ public class CommTool extends ATool implements ICommTool {
 						expectedOutput.length() - 1);
 
 			setStatusCode(0);
-			// System.out.println(expectedOutput);
 			return expectedOutput;
 
 		}
@@ -197,6 +218,8 @@ public class CommTool extends ATool implements ICommTool {
 		String parsed = "";
 		int count = 0;
 		int i = args.length - 1;
+		if (args.length!=0&&args[0].equals("-"))
+			return "stdin";
 		while (i >= 0) {
 			if (args[i].startsWith("-")) {
 				// help gets priority // if not help, the first one gets
@@ -218,7 +241,7 @@ public class CommTool extends ATool implements ICommTool {
 		return parsed;
 	}
 
-	private List<String> readFile(File f) {
+	public List<String> readFile(File f) {
 		List<String> expectedOutput = new ArrayList<String>();
 		if (f.isFile() && f.canRead()) {
 			try {
