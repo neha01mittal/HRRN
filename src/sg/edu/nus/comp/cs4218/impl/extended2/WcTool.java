@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import sg.edu.nus.comp.cs4218.extended2.IWcTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
@@ -37,13 +38,14 @@ public class WcTool extends ATool implements IWcTool {
 	public String getCharacterCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
-		String content = "";
-		try {
-			content = readFile(input, Charset.forName("UTF-8"));
-		} catch (IOException e) {
-			return "word count: open failed: " + input + ": No such file or directory.";
-		}
-		int result = content.length();
+		// String content = "";
+		// try {
+		// content = readFile(input, Charset.forName("UTF-8"));
+		// } catch (IOException e) {
+		// return "word count: open failed: " + input +
+		// ": No such file or directory.";
+		// }
+		int result = input.length();
 		setStatusCode(0);
 		return Integer.toString(result);
 	}
@@ -52,14 +54,15 @@ public class WcTool extends ATool implements IWcTool {
 	public String getWordCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
-		String content = "";
-		try {
-			content = readFile(input, Charset.forName("UTF-8"));
-		} catch (IOException e) {
-			return "word count: open failed: " + input + ": No such file or directory.";		
-		}
+		// String content = "";
+		// try {
+		// content = readFile(input, Charset.forName("UTF-8"));
+		// } catch (IOException e) {
+		// return "word count: open failed: " + input +
+		// ": No such file or directory.";
+		// }
 
-		String[] words = content.split("[ \\n]");
+		String[] words = input.split("[ \\n]");
 		int result = words.length;
 		setStatusCode(0);
 		return Integer.toString(result);
@@ -69,21 +72,24 @@ public class WcTool extends ATool implements IWcTool {
 	public String getNewLineCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
-		String content = "";
-		try {
-			content = readFile(input, Charset.forName("UTF-8"));
-		} catch (IOException e) {
-			return "word count: open failed: " + input + ": No such file or directory.";
-		}
+		// String content = "";
+		// try {
+		// content = readFile(input, Charset.forName("UTF-8"));
+		// } catch (IOException e) {
+		// return "word count: open failed: " + input +
+		// ": No such file or directory.";
+		// }
 
-		int result = content.length() - content.replaceAll("\n", "").length();
+		int result = input.length() - input.replaceAll("\n", "").length();
 		setStatusCode(0);
 		return Integer.toString(result);
 	}
 
 	@Override
 	public String getHelp() {
-		String help = "-m : Print only the character counts\t" + " -w : Print only the word counts\t" + " -l : Print only the newline counts\t"
+		String help = "-m : Print only the character counts\t"
+				+ " -w : Print only the word counts\t"
+				+ " -l : Print only the newline counts\t"
 				+ " -help : Brief information about supported options";
 		setStatusCode(0);
 		// System.out.println(help);
@@ -100,26 +106,44 @@ public class WcTool extends ATool implements IWcTool {
 		}
 
 		String content = null;
-		if (stdin != null && stdin.compareTo("") != 0)
-			//content = stdin;
-			args = stdin.split(" ");
+		if (stdin != null && stdin.compareTo("") != 0) {
+			// content = stdin;
+
+			if (args == null) {
+				args = stdin.split(" ");
+			} else {
+				if (args != null && args.length > 0)
+					content = stdin;
+				String[] second = stdin.split(" ");
+				String[] temp = Arrays
+						.copyOf(args, args.length + second.length);
+				System.arraycopy(second, 0, temp, args.length, second.length);
+				args = temp;
+			}
+		}
 
 		if (args[0] != null && args[0].compareTo("-m") == 0) {
 			try {
 				characterCount(result, content);
 			} catch (IOException e) {
+				result.append("word count: open failed: " + e.getMessage()
+						+ ": No such file or directory.");
 				readStatus = 1;
 			}
 		} else if (args[0] != null && args[0].compareTo("-w") == 0) {
 			try {
 				wordCount(result, content);
 			} catch (IOException e) {
+				result.append("word count: open failed: " + e.getMessage()
+						+ ": No such file or directory.");
 				readStatus = 1;
 			}
 		} else if (args[0] != null && args[0].compareTo("-l") == 0) {
 			try {
 				lineCount(result, content);
 			} catch (IOException e) {
+				result.append("word count: open failed: " + e.getMessage()
+						+ ": No such file or directory.");
 				readStatus = 1;
 			}
 		} else if (args[0] != null && args[0].compareTo("-help") == 0) {
@@ -131,45 +155,51 @@ public class WcTool extends ATool implements IWcTool {
 		return result.toString();
 	}
 
-	private void lineCount(StringBuilder result, String content) throws IOException {
+	private void lineCount(StringBuilder result, String content)
+			throws IOException {
 		Charset std = Charset.forName("UTF-8");
 
-		if (content != null)
-			result.append(getNewLineCount(content));
-		else
-			for (int i = 1; i < args.length; i++) {
-				content = readFile(args[i], std);
-				if (readStatus != 1)
-					result.append(getNewLineCount(args[i]));
-				else
-					result.append(content);
-			}
+		try {
+			if (content != null)
+				result.append(getNewLineCount(content));
+			else
+				for (int i = 1; i < args.length; i++) {
+					content = readFile(args[i], std);
+					if (readStatus != 1)
+						result.append(getNewLineCount(content));
+					else
+						result.append(content);
+				}
+		} catch (IOException e) {
+			throw new IOException(e.getMessage());
+		}
 	}
 
-	private void wordCount(StringBuilder result, String content) throws IOException {
+	private void wordCount(StringBuilder result, String content)
+			throws IOException {
 		Charset std = Charset.forName("UTF-8");
 		if (content != null)
 			result.append(getWordCount(content));
 		else
 			for (int i = 1; i < args.length; i++) {
-				//content = readFile(args[i], std);
+				content = readFile(args[i], std);
 				if (readStatus != 1)
-					result.append(getWordCount(args[i]));
+					result.append(getWordCount(content));
 				else
 					result.append(content);
 			}
 	}
 
-	private void characterCount(StringBuilder result, String content) throws IOException {
+	private void characterCount(StringBuilder result, String content)
+			throws IOException {
 		Charset std = Charset.forName("UTF-8");
-
 		if (content != null)
 			result.append(getCharacterCount(content));
 		else
 			for (int i = 1; i < args.length; i++) {
-				//content = readFile(args[i], std);
+				content = readFile(args[i], std);
 				if (readStatus != 1)
-					result.append(getCharacterCount(args[i]));
+					result.append(getCharacterCount(content));
 				else
 					result.append(content);
 			}
@@ -185,11 +215,13 @@ public class WcTool extends ATool implements IWcTool {
 		if (f.isAbsolute())
 			filePath = fileName;
 		else
-			filePath = System.getProperty("user.dir") + File.separator + fileName;
+			filePath = System.getProperty("user.dir") + File.separator
+					+ fileName;
 
 		StringBuilder sb = new StringBuilder();
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(new File(filePath)));
+			BufferedReader br = new BufferedReader(new FileReader(new File(
+					filePath)));
 
 			String line = "";
 			while ((line = br.readLine()) != null) {
@@ -199,23 +231,30 @@ public class WcTool extends ATool implements IWcTool {
 			readStatus = 0;
 			return sb.toString();
 		} catch (Exception e) {
-			sb.append("word count: open failed: " + fileName + ": No such file or directory.");
+			sb.append("word count: open failed: " + fileName
+					+ ": No such file or directory.");
 			readStatus = 1;
 			setStatusCode(1);
 		}
 		return sb.toString();
 	}
 
-	public String readFile(String fileName, Charset encoding) throws IOException {
-		String filePath;
-		readStatus = -1;
-		File f = new File(fileName);
-		if (f.isAbsolute())
-			filePath = fileName;
-		else
-			filePath = System.getProperty("user.dir") + File.separator + fileName;
+	public String readFile(String fileName, Charset encoding)
+			throws IOException {
+		try {
+			String filePath;
+			readStatus = -1;
+			File f = new File(fileName);
+			if (f.isAbsolute())
+				filePath = fileName;
+			else
+				filePath = System.getProperty("user.dir") + File.separator
+						+ fileName;
 
-		byte[] encoded = Files.readAllBytes(Paths.get(filePath));
-		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+			byte[] encoded = Files.readAllBytes(Paths.get(filePath));
+			return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+		} catch (IOException e) {
+			throw new IOException(fileName);
+		}
 	}
 }

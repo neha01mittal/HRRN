@@ -3,6 +3,11 @@ package sg.edu.nus.comp.cs4218.impl.extended2;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +21,7 @@ public class WcToolTest {
 	private WcTool wctool4;
 	private WcTool wctool5;
 	private final File f = new File(System.getProperty("user.dir"));
+	Charset std = Charset.forName("UTF-8");
 
 	@Before
 	public void before() {
@@ -30,12 +36,12 @@ public class WcToolTest {
 	// test the functionality of getCharacterCount to count the number of
 	// characters in a file and the execute to call the method
 	@Test
-	public void getCharacterCountTest() {
-		assertEquals(wctool.getCharacterCount("testCase_1.txt"), "50");
-		assertEquals(wctool.getCharacterCount("testCase_2.txt"), "33");
-		assertEquals(wctool.getCharacterCount("testCase_3.txt"), "16");
-		assertEquals(wctool.getCharacterCount("testCase_4.txt"), "38");
-		assertEquals(wctool.getCharacterCount("testCase_5.txt"), "31");
+	public void getCharacterCountTest() throws IOException {
+		assertEquals(wctool.getCharacterCount(readFile("testCase_1.txt", std)), "50");
+		assertEquals(wctool.getCharacterCount(readFile("testCase_2.txt", std)), "33");
+		assertEquals(wctool.getCharacterCount(readFile("testCase_3.txt", std)), "16");
+		assertEquals(wctool.getCharacterCount(readFile("testCase_4.txt", std)), "38");
+		assertEquals(wctool.getCharacterCount(readFile("testCase_5.txt", std)), "31");
 
 		String[] args2 = { "-m", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
@@ -54,18 +60,19 @@ public class WcToolTest {
 
 		assertEquals(wctool.execute(f, "-m testCase_4.txt"), "38");
 
-		assertEquals(wctool.execute(f, "-m testCase_5.txt"), "31");
+		wctool5 = new WcTool(null);
+		assertEquals(wctool5.execute(f, "-m testCase_5.txt"), "31");
 	}
 
 	// test the functionality of getWordCount to count the number of words in a
 	// file and the execute to call the method
 	@Test
-	public void getWordCountTest() {
-		assertEquals(wctool.getWordCount("testCase_1.txt"), "10");
-		assertEquals(wctool.getWordCount("testCase_2.txt"), "4");
-		assertEquals(wctool.getWordCount("testCase_3.txt"), "6");
-		assertEquals(wctool.getWordCount("testCase_4.txt"), "6");
-		assertEquals(wctool.getWordCount("testCase_5.txt"), "5");
+	public void getWordCountTest() throws IOException {
+		assertEquals(wctool.getWordCount(readFile("testCase_1.txt", std)), "10");
+		assertEquals(wctool.getWordCount(readFile("testCase_2.txt", std)), "4");
+		assertEquals(wctool.getWordCount(readFile("testCase_3.txt", std)), "6");
+		assertEquals(wctool.getWordCount(readFile("testCase_4.txt", std)), "6");
+		assertEquals(wctool.getWordCount(readFile("testCase_5.txt", std)), "5");
 
 		String[] args2 = { "-w", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
@@ -84,17 +91,18 @@ public class WcToolTest {
 
 		assertEquals(wctool.execute(f, "-w testCase_4.txt"), "6");
 
-		assertEquals(wctool.execute(f, "-w testCase_5.txt"), "5");
+		wctool5 = new WcTool(null);
+		assertEquals(wctool5.execute(f, "-w testCase_5.txt"), "5");
 	}
 
 	// test the functionality of getNewLineCount to count the number of lines in
 	// a file and the execute to call the method
-	public void getNewLineCountTest() {
-		assertEquals(wctool.getNewLineCount("testCase_1.txt"), "5");
-		assertEquals(wctool.getNewLineCount("testCase_2.txt"), "4");
-		assertEquals(wctool.getNewLineCount("testCase_3.txt"), "6");
-		assertEquals(wctool.getNewLineCount("testCase_4.txt"), "6");
-		assertEquals(wctool.getNewLineCount("testCase_5.txt"), "5");
+	public void getNewLineCountTest() throws IOException {
+		assertEquals(wctool.getNewLineCount(readFile("testCase_1.txt", std)), "5");
+		assertEquals(wctool.getNewLineCount(readFile("testCase_2.txt", std)), "4");
+		assertEquals(wctool.getNewLineCount(readFile("testCase_3.txt", std)), "6");
+		assertEquals(wctool.getNewLineCount(readFile("testCase_4.txt", std)), "6");
+		assertEquals(wctool.getNewLineCount(readFile("testCase_5.txt", std)), "5");
 
 		String[] args2 = { "-l", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
@@ -157,5 +165,21 @@ public class WcToolTest {
 		wctool5 = null;
 
 		assertEquals(wctool.execute(null, null), "No arguments and no standard input.");
+	}
+	
+	public String readFile(String fileName, Charset encoding) throws IOException {
+		try {
+			String filePath;
+			File f = new File(fileName);
+			if (f.isAbsolute())
+				filePath = fileName;
+			else
+				filePath = System.getProperty("user.dir") + File.separator + fileName;
+	
+			byte[] encoded = Files.readAllBytes(Paths.get(filePath));
+			return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+		} catch (IOException e) {
+			throw new IOException(fileName);
+		}
 	}
 }
