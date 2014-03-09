@@ -53,7 +53,7 @@ public class WcToolIntegrationTest {
 		String commandline = "ls | wc -l";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "25";
+		String expectedOutput = "24";
 		assertEquals(expectedOutput, output);		
 	}
 

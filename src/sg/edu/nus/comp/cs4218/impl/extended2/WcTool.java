@@ -114,11 +114,12 @@ public class WcTool extends ATool implements IWcTool {
 			} else {
 				if (args != null && args.length > 0)
 					content = stdin;
-				String[] second = stdin.split(" ");
-				String[] temp = Arrays
-						.copyOf(args, args.length + second.length);
-				System.arraycopy(second, 0, temp, args.length, second.length);
-				args = temp;
+				// String[] second = stdin.split(" ");
+				// String[] temp = Arrays
+				// .copyOf(args, args.length + second.length);
+				// System.arraycopy(second, 0, temp, args.length,
+				// second.length);
+				// args = temp;
 			}
 		}
 
