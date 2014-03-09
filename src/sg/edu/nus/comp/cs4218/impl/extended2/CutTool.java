@@ -160,7 +160,7 @@ public class CutTool extends ATool implements ICutTool {
 						command = command + args[a] + " ";
 					}
 					command = command + stdin;
-					List<String> ar = Arrays.asList(stdin.split(" "));
+					List<String> ar = Arrays.asList(command.split(" "));
 					args = new String[ar.size()];
 					for (int a = 0; a < ar.size(); a++) {
 						args[a] = ar.get(a);
