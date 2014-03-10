@@ -24,26 +24,25 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  * @options grep -A NUM filename: Print NUM lines of trailing context after
  *          matching lines grep -B NUM filename: Print NUM lines of leading
  *          context before matching lines grep -C NUM filename: Print NUM lines
- *          of output context grep -c ‚Äúpattern‚Äù filename : Print a count of
- *          matching lines with pattern grep -c ‚Äò‚Äúpattern‚Äù‚Äô filename : Print a
- *          count of matching lines with ‚Äúpattern‚Äù(pattern surrounded by double
- *          quotes) grep -c ‚Äúpattern‚Äù file1 file2 : Print a count of matching
- *          lines containing pattern for both files grep -o ‚Äúpattern‚Äù filename:
+ *          of output context grep -c ìpatternî filename : Print a count of
+ *          matching lines with pattern grep -c ëìpatternîí filename : Print a
+ *          count of matching lines with ìpatternî(pattern surrounded by double
+ *          quotes) grep -c ìpatternî file1 file2 : Print a count of matching
+ *          lines containing pattern for both files grep -o ìpatternî filename:
  *          Show only the part of a matching line that matches PATTERN grep -v
- *          ‚Äúpattern‚Äù filename: Select non-matching (instead of matching) lines
+ *          ìpatternî filename: Select non-matching (instead of matching) lines
  *          grep -help : Brief information about supported options grep -o -v
- *          ‚Äúpattern filename: Provides the conjunction of results from both
- *          options grep -<any option> ‚Äòpattern‚Äô filename: Provides the same
+ *          ìpattern filename: Provides the conjunction of results from both
+ *          options grep -<any option> ëpatterní filename: Provides the same
  *          output as compared to pattern surrounded by double quotes grep -<any
  *          option> <pattern with one word> filename: Provides the same output
  *          even without surrounding quotes if the pattern consists of one word
- *          grep -<any option> ‚Äúpattern‚Äù file1 file2: Provides the output after
+ *          grep -<any option> ìpatternî file1 file2: Provides the output after
  *          executing the command on both files grep filename: Prints the
  *          command since no option was provided
  * @note
  * @success
  * @exceptions
- * 
  */
 public class GrepTool extends ATool implements IGrepTool {
 	private int statusCode;
@@ -53,16 +52,6 @@ public class GrepTool extends ATool implements IGrepTool {
 	private int[] fileLength;
 	private Vector<String> fileList;
 
-	// private final String[] allOptions = {"A", "B", "C", "c", "o", "v",
-	// "help"};
-
-	// input: content of the processing string/file
-	// check not directory and file readable
-	// check empty file path
-	// check empty string
-	// check double quotes, single quotes
-	//
-
 	public GrepTool(String[] arguments) {
 		super(arguments);
 		// TODO Auto-generated constructor stub
@@ -71,18 +60,15 @@ public class GrepTool extends ATool implements IGrepTool {
 	@Override
 	public String execute(File workingDir, String stdin) {
 		String result = "";
-		// String[] tokens = stdin.split(" ");
-		// assert tokens[0].toLowerCase().compareTo("grep") == 0;
 
-		// get the pattern and parse the input
 		Map<String, ArrayList<String>> parsed = parse();
 		String pattern = getPatternFromInput();
 		fileList = getFileListFromInput();
 		fileLength = new int[fileList.size()];
 
-		// get the input
 		String fileContent;
-		if (stdin != null && stdin.compareTo("") != 0 && getFileListFromInput().size() == 0)
+		if (stdin != null && stdin.compareTo("") != 0
+				&& getFileListFromInput().size() == 0)
 			fileContent = stdin;
 		else
 			fileContent = getFileContentFromInput(getFileListFromInput());
@@ -92,33 +78,27 @@ public class GrepTool extends ATool implements IGrepTool {
 		if (parsed.containsKey("h") || parsed.containsKey("help")) {
 			result = getHelp();
 		}
-
 		if (parsed.containsKey("C")) {
 			int optionC = Integer.parseInt(parsed.get("C").get(0));
 			getMatchingLinesWithOutputContext(optionC, pattern, fileContent);
 		}
-
 		if (parsed.containsKey("A")) {
 			int optionA = Integer.parseInt(parsed.get("A").get(0));
 			getMatchingLinesWithTrailingContext(optionA, pattern, fileContent);
 		}
-
 		if (parsed.containsKey("B")) {
 			int optionB = Integer.parseInt(parsed.get("B").get(0));
 			getMatchingLinesWithLeadingContext(optionB, pattern, fileContent);
 		}
-		// result = getResultForMultipleOptions(mark, fileContent);
 
 		getOnlyMatchingLines(pattern, fileContent);
 
 		if (parsed.containsKey("o")) {
 			result = getMatchingLinesOnlyMatchingPart(pattern, fileContent);
 		}
-
 		if (parsed.containsKey("v")) {
 			getNonMatchingLines(pattern, fileContent);
 		}
-
 		if (parsed.containsKey("c")) {
 			result = getFinalResultInt();
 		} else
@@ -146,7 +126,8 @@ public class GrepTool extends ATool implements IGrepTool {
 					matchCount++;
 			}
 			begin = fileLength[i];
-			result += fileList.get(i) + ": " + Integer.toString(matchCount) + "\n";
+			result += fileList.get(i) + ": " + Integer.toString(matchCount)
+					+ "\n";
 		}
 
 		return result;
@@ -167,14 +148,16 @@ public class GrepTool extends ATool implements IGrepTool {
 				if (f.isAbsolute())
 					filePath = stdin.get(i);
 				else
-					filePath = System.getProperty("user.dir") + File.separator + stdin.get(i);
+					filePath = System.getProperty("user.dir") + File.separator
+							+ stdin.get(i);
 				File targetFile = new File(filePath);
 				if (!targetFile.isFile())
 					continue;
 
 				FileInputStream fis = new FileInputStream(filePath);
 				DataInputStream in = new DataInputStream(fis);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				BufferedReader br = new BufferedReader(
+						new InputStreamReader(in));
 				String strLine = "";
 				while ((strLine = br.readLine()) != null) {
 					result += strLine + "\n";
@@ -197,7 +180,6 @@ public class GrepTool extends ATool implements IGrepTool {
 	/*
 	 * Get list of files to read from input args
 	 */
-
 	public Vector<String> getFileListFromInput() {
 		Vector<String> result = new Vector<String>();
 
@@ -216,8 +198,6 @@ public class GrepTool extends ATool implements IGrepTool {
 	 */
 	public String getPatternFromInput() {
 		String result = "";
-		// String[] tokens = stdin.trim().replace(" +", " ").split(" ");
-
 		if (lastOpt + 1 < args.length)
 			result = args[lastOpt + 1];
 		return result;
@@ -285,7 +265,9 @@ public class GrepTool extends ATool implements IGrepTool {
 					ArrayList<String> newArrayList = new ArrayList<String>();
 					parsed.put(option, newArrayList);
 					i++;
-					if ((option.compareTo("A") != 0) && (option.compareTo("B") != 0) && (option.compareTo("C") != 0))
+					if ((option.compareTo("A") != 0)
+							&& (option.compareTo("B") != 0)
+							&& (option.compareTo("C") != 0))
 						continue;
 					if (i < args.length) {
 						assert (args[i].matches("-?\\d+"));
@@ -300,7 +282,8 @@ public class GrepTool extends ATool implements IGrepTool {
 	}
 
 	@Override
-	public String getMatchingLinesWithTrailingContext(int optionA, String pattern, String input) {
+	public String getMatchingLinesWithTrailingContext(int optionA,
+			String pattern, String input) {
 		// print NUM lines after the matching lines
 		String result = "";
 		String[] lines = input.split("\n");
@@ -312,13 +295,13 @@ public class GrepTool extends ATool implements IGrepTool {
 			if (match(line, pattern)) {
 				int i = 0;
 				while (i + j < mark.length && i <= optionA) {
-					mark[i + j] = 1;
+					mark[i + j] = 2;
 					i++;
 				}
 			}
 		}
 		for (int i = 0; i < mark.length; i++) {
-			if (mark[i] == 1)
+			if (mark[i] != 0)
 				result += lines[i] + "\n";
 		}
 
@@ -326,7 +309,8 @@ public class GrepTool extends ATool implements IGrepTool {
 	}
 
 	@Override
-	public String getMatchingLinesWithLeadingContext(int optionB, String pattern, String input) {
+	public String getMatchingLinesWithLeadingContext(int optionB,
+			String pattern, String input) {
 		String result = "";
 		String[] lines = input.split("\n");
 		if (mark == null)
@@ -337,14 +321,14 @@ public class GrepTool extends ATool implements IGrepTool {
 				int i = 0;
 				while (i < j && i <= optionB) {
 					// result += lines[j - i];
-					mark[j - i] = 1;
+					mark[j - i] = 2;
 					i++;
 				}
 			}
 		}
 
 		for (int i = 0; i < mark.length; i++) {
-			if (mark[i] == 1)
+			if (mark[i] != 0)
 				result += lines[i] + "\n";
 		}
 
@@ -352,20 +336,19 @@ public class GrepTool extends ATool implements IGrepTool {
 	}
 
 	@Override
-	public String getMatchingLinesWithOutputContext(int optionC, String pattern, String input) {
+	public String getMatchingLinesWithOutputContext(int optionC,
+			String pattern, String input) {
 		String result = "";
 		String[] lines = input.split("\n");
 		if (mark == null)
 			mark = new int[lines.length];
 		for (int j = 0; j < mark.length; j++) {
-			String line = lines[j]; // if j-th line hits, print lines j + 1 -> j
-									// + option_A - 1
+			String line = lines[j]; // if j-th line hits, print lines j + 1 -> j + option_A - 1
 			// if (line.matches(pattern))
 			if (match(line, pattern)) {
 				int i = 0;
 				while (i + j < mark.length && i < optionC) {
-					// result += lines[i];
-					mark[i + j] = 1;
+					mark[i + j] = 2;
 					i++;
 				}
 			}
@@ -377,13 +360,13 @@ public class GrepTool extends ATool implements IGrepTool {
 				int i = 0;
 				while (i < j && i < optionC) {
 					// result += lines[j - i];
-					mark[j - i] = 1;
+					mark[j - i] = 2;
 					i++;
 				}
 			}
 		}
 		for (int i = 0; i < mark.length; i++) {
-			if (mark[i] == 1)
+			if (mark[i] != 0)
 				result += lines[i];
 		}
 		return result;
@@ -434,7 +417,6 @@ public class GrepTool extends ATool implements IGrepTool {
 				result += line + "\n";
 			} else
 				mark[i] = 0;
-			// mark[i] = 1 - mark[i];
 		}
 
 		return result;
@@ -442,23 +424,29 @@ public class GrepTool extends ATool implements IGrepTool {
 
 	@Override
 	public String getHelp() {
-		String helpString = "The grep command searches one or more input files \n" + "for lines containing a match to a specified pattern. \n"
-				+ "The grep tool must work on all characters in UTF-8 encoding.\n" + "Command Format - grep [OPTIONS] PATTERN [FILE]\n"
+		String helpString = "The grep command searches one or more input files \n"
+				+ "for lines containing a match to a specified pattern. \n"
+				+ "The grep tool must work on all characters in UTF-8 encoding.\n"
+				+ "Command Format - grep [OPTIONS] PATTERN [FILE]\n"
 				+ "PATTERN - This specifies a regular expression pattern that describes a set of strings\n"
-				+ "FILE - Name of the file, when no file is present (denoted by \"-\") use standard input\n" + "OPTIONS\n"
-				+ "-A NUM : Print NUM lines of trailing context after matching lines\n" + "-B NUM : Print NUM lines of leading context before matching lines\n"
-				+ "-C NUM : Print NUM lines of output context\n" + "-c : Suppress normal output. Instead print a count of matching lines for each input file\n"
-				+ "-o : Show only the part of a matching line that matches PATTERN\n" + "-v : Select non-matching (instead of matching) lines\n"
+				+ "FILE - Name of the file, when no file is present (denoted by \"-\") use standard input\n"
+				+ "OPTIONS\n"
+				+ "-A NUM : Print NUM lines of trailing context after matching lines\n"
+				+ "-B NUM : Print NUM lines of leading context before matching lines\n"
+				+ "-C NUM : Print NUM lines of output context\n"
+				+ "-c : Suppress normal output. Instead print a count of matching lines for each input file\n"
+				+ "-o : Show only the part of a matching line that matches PATTERN\n"
+				+ "-v : Select non-matching (instead of matching) lines\n"
 				+ "-help : Brief information about supported options";
 		return helpString;
 	}
 
-	/*
-	 * If PATTERN has special character: take it as a regex else: check if
+	/* If PATTERN has special character: take it as a regex else: check if
 	 * source contains pattern as a substring
 	 */
 	public static boolean match(String source, String pattern) {
-		Pattern p = Pattern.compile("[\\[\\]\\+\\|\\*\\\\^\\$]", java.util.regex.Pattern.CASE_INSENSITIVE);
+		Pattern p = Pattern.compile("[\\[\\]\\+\\|\\*\\\\^\\$]",
+				java.util.regex.Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(pattern);
 
 		if (m.find()) // if pattern contains characters [,],\,$,*,+
@@ -503,7 +491,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		StringBuilder result = new StringBuilder();
 		if (fileList.size() < 2) {
 			for (int i = 0; i < mark.length; i++)
-				if (mark[i] == 1)
+				if (mark[i] != 0)
 					result.append(lines[i] + "\n");
 			return result.toString();
 		}
@@ -511,7 +499,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		int begin = 0;
 		for (int i = 0; i < fileList.size(); i++) {
 			for (int j = begin; j < fileLength[i]; j++) {
-				if (mark[j] == 1)
+				if (mark[j] != 0)
 					result.append(fileList.get(i) + ": " + lines[j] + "\n");
 			}
 			begin = fileLength[i];

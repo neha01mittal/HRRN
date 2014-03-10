@@ -38,13 +38,6 @@ public class WcTool extends ATool implements IWcTool {
 	public String getCharacterCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
-		// String content = "";
-		// try {
-		// content = readFile(input, Charset.forName("UTF-8"));
-		// } catch (IOException e) {
-		// return "word count: open failed: " + input +
-		// ": No such file or directory.";
-		// }
 		int result = input.length();
 		setStatusCode(0);
 		return Integer.toString(result);
@@ -54,13 +47,6 @@ public class WcTool extends ATool implements IWcTool {
 	public String getWordCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
-		// String content = "";
-		// try {
-		// content = readFile(input, Charset.forName("UTF-8"));
-		// } catch (IOException e) {
-		// return "word count: open failed: " + input +
-		// ": No such file or directory.";
-		// }
 
 		String[] words = input.split("[ \\n]");
 		int result = words.length;
@@ -72,13 +58,6 @@ public class WcTool extends ATool implements IWcTool {
 	public String getNewLineCount(String input) {
 		if (input == null || readStatus == 1)
 			return "0";
-		// String content = "";
-		// try {
-		// content = readFile(input, Charset.forName("UTF-8"));
-		// } catch (IOException e) {
-		// return "word count: open failed: " + input +
-		// ": No such file or directory.";
-		// }
 
 		int result = input.length() - input.replaceAll("\n", "").length();
 		setStatusCode(0);
@@ -92,7 +71,6 @@ public class WcTool extends ATool implements IWcTool {
 				+ " -l : Print only the newline counts\t"
 				+ " -help : Brief information about supported options";
 		setStatusCode(0);
-		// System.out.println(help);
 		return help;
 	}
 
@@ -114,12 +92,6 @@ public class WcTool extends ATool implements IWcTool {
 			} else {
 				if (args != null && args.length > 0)
 					content = stdin;
-				// String[] second = stdin.split(" ");
-				// String[] temp = Arrays
-				// .copyOf(args, args.length + second.length);
-				// System.arraycopy(second, 0, temp, args.length,
-				// second.length);
-				// args = temp;
 			}
 		}
 
