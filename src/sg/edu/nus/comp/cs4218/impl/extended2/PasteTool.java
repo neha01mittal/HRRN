@@ -33,36 +33,44 @@ public class PasteTool extends ATool implements IPasteTool {
 		String content = "";
 		String[] listOfFileContents = new String[input.length];
 		int numFiles = 0;
-
-		for (numFiles = 0; numFiles < input.length; numFiles++) {
-			File file = new File(input[numFiles]);
-			if (!file.isAbsolute()) {
-				if (directory == null)
-					directory = new File(System.getProperty("user.dir"));
-				file = new File(directory, input[numFiles]);
+		try{
+			for (numFiles = 0; numFiles < input.length; numFiles++) {
+				File file = new File(input[numFiles]);
+				if (!file.isAbsolute()) {
+					if (directory == null)
+						directory = new File(System.getProperty("user.dir"));
+					file = new File(directory, input[numFiles]);
+				}
+				if (file.exists() & file.canRead()) {
+					listOfFileContents[numFiles] = getStringForFile(file);
+				}
+				else{
+					setStatusCode(1);
+					return "Error: No such file or directory\n";
+				}
 			}
-			if (file.exists() & file.canRead()) {
-				listOfFileContents[numFiles] = getStringForFile(file);
+			for (String f : listOfFileContents) {
+				List<String> inputLineList = Arrays.asList(f.split("\n"));
+				for (int a = 0; a < inputLineList.size(); a++) {
+					content = content + inputLineList.get(a);
+					if (a < (inputLineList.size() - 1))
+						content = content + "\t";
+				}
+				if (content.endsWith("\t")) {
+					int size = content.length();
+					content = content.substring(0, size - 1);
+				}
+				content = content + "\n";
 			}
-		}
-		for (String f : listOfFileContents) {
-			List<String> inputLineList = Arrays.asList(f.split("\n"));
-			for (int a = 0; a < inputLineList.size(); a++) {
-				content = content + inputLineList.get(a);
-				if (a < (inputLineList.size() - 1))
-					content = content + "\t";
-			}
-			if (content.endsWith("\t")) {
+			if (content.endsWith("\n")) {
 				int size = content.length();
 				content = content.substring(0, size - 1);
 			}
-			content = content + "\n";
+			return content;
+		}catch(Exception e){
+			setStatusCode(1);
+			return "Wrong command";
 		}
-		if (content.endsWith("\n")) {
-			int size = content.length();
-			content = content.substring(0, size - 1);
-		}
-		return content;
 	}
 
 	@Override
@@ -72,52 +80,62 @@ public class PasteTool extends ATool implements IPasteTool {
 		int highest = 0;
 		int numFiles = 0;
 		String[] listOfFileContents = new String[input.length];
-		for (numFiles = 0; numFiles < input.length; numFiles++) {
-			File file = new File(input[numFiles]);
-			if (!file.isAbsolute()) {
-				file = new File(directory, input[numFiles]);
-			}
-			if (file.exists() & file.canRead()) {
-				listOfFileContents[numFiles] = getStringForFile(file);
-			}
-		}
-
-		String[][] matrix = new String[numFiles][];
-		int x = 0;
-		int y = 0;
-		for (String f : listOfFileContents) {
-			List<String> inputLineList = Arrays.asList(f.split("\n"));
-			matrix[x] = new String[inputLineList.size()];
-			for (String fileLine : inputLineList) {
-				matrix[x][y] = fileLine;
-				y++;
-			}
-			x++;
-			if (y > highest)
-				highest = y;
-			y = 0;
-		}
-		for (y = 0; y < highest; y++) {
-			for (x = 0; x < numFiles; x++) {
-				if (y < matrix[x].length) {
-					content = content + matrix[x][y];
-					if ((x + 1) < numFiles)
-						content = content + delim;
+		try{
+			
+			for (numFiles = 0; numFiles < input.length; numFiles++) {
+				File file = new File(input[numFiles]);
+				if (!file.isAbsolute()) {
+					file = new File(directory, input[numFiles]);
 				}
-
+				if (file.exists() & file.canRead()) {
+					listOfFileContents[numFiles] = getStringForFile(file);
+				}
+				else{
+					setStatusCode(1);
+					return "Error: No such file or directory\n";
+				}
 			}
-			if (content.endsWith(delim)) {
+	
+			String[][] matrix = new String[numFiles][];
+			int x = 0;
+			int y = 0;
+			for (String f : listOfFileContents) {
+				List<String> inputLineList = Arrays.asList(f.split("\n"));
+				matrix[x] = new String[inputLineList.size()];
+				for (String fileLine : inputLineList) {
+					matrix[x][y] = fileLine;
+					y++;
+				}
+				x++;
+				if (y > highest)
+					highest = y;
+				y = 0;
+			}
+			for (y = 0; y < highest; y++) {
+				for (x = 0; x < numFiles; x++) {
+					if (y < matrix[x].length) {
+						content = content + matrix[x][y];
+						if ((x + 1) < numFiles)
+							content = content + delim;
+					}
+	
+				}
+				if (content.endsWith(delim)) {
+					int size = content.length();
+					int sizeDelim = delim.length();
+					content = content.substring(0, size - sizeDelim);
+				}
+				content = content + "\n";
+			}
+			if (content.endsWith("\n")) {
 				int size = content.length();
-				int sizeDelim = delim.length();
-				content = content.substring(0, size - sizeDelim);
+				content = content.substring(0, size - 1);
 			}
-			content = content + "\n";
+			return content;
+		}catch(Exception e){
+			setStatusCode(1);
+			return "Wrong command";
 		}
-		if (content.endsWith("\n")) {
-			int size = content.length();
-			content = content.substring(0, size - 1);
-		}
-		return content;
 	}
 
 	@Override
@@ -154,7 +172,7 @@ public class PasteTool extends ATool implements IPasteTool {
 						command = command + args[a] + " ";
 					}
 					command = command + stdin;
-					List<String> ar = Arrays.asList(stdin.split(" "));
+					List<String> ar = Arrays.asList(command.split(" "));
 					args = new String[ar.size()];
 					for (int a = 0; a < ar.size(); a++) {
 						args[a] = ar.get(a);
