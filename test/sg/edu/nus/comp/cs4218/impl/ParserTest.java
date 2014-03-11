@@ -164,11 +164,29 @@ public class ParserTest {
 	}
 
 	@Test
-	public void testParseCommandWithEscapedPipe() throws IllegalArgumentException, IllegalAccessException {
+	public void testParseCommandWithEscapedPipe1() throws IllegalArgumentException, IllegalAccessException {
 		String cmd = "echo \"one | \" two' | 'three four\\|";
 		ITool resultTool = shell.parse(cmd);
 
 		String[] expected = { "one |", "two | three", "four|" };
+		Field fields[] = resultTool.getClass().getSuperclass().getDeclaredFields();
+		for (Field field : fields) {
+			if (field.getName().equals("args")) {
+				field.setAccessible(true);
+				List<String> args = Arrays.asList((String[]) field.get(resultTool));
+				for (int i = 0; i < expected.length; i++) {
+					assertEquals(expected[i], args.get(i));
+				}
+			}
+		}
+	}
+
+	@Test
+	public void testParseCommandWithEscapedPipe2() throws IllegalArgumentException, IllegalAccessException {
+		String cmd = "cat testCase_3.txt | grep [a|b]";
+		ITool resultTool = shell.parse(cmd);
+
+		String[] expected = { "cat testCase_3.txt", "grep [a", "b]" };
 		Field fields[] = resultTool.getClass().getSuperclass().getDeclaredFields();
 		for (Field field : fields) {
 			if (field.getName().equals("args")) {
@@ -376,66 +394,66 @@ public class ParserTest {
 	@Test
 	public void testGetCmdWithQuotes() throws IllegalArgumentException, IllegalAccessException {
 		String cmd = "ls \"normal\" 'test's";
-		String[] expected = { "normal", "tests" }; 
-		
-		String[] results = Shell.getArgsArray(cmd); 
+		String[] expected = { "normal", "tests" };
+
+		String[] results = Shell.getArgsArray(cmd);
 		for (int i = 0; i < expected.length; i++) {
 			assertEquals(expected[i], results[i]);
-		} 
+		}
 	}
 
 	@Test
 	public void testGetCmdWithQuotesComplex() throws IllegalArgumentException, IllegalAccessException {
 		String cmd = "echo \"normal\" as\"as'r'we\"d'sd's ddsa";
 		String[] expected = { "normal", "asas'r'wedsds", "ddsa" };
-		
-		String[] results = Shell.getArgsArray(cmd); 
+
+		String[] results = Shell.getArgsArray(cmd);
 		for (int i = 0; i < expected.length; i++) {
 			assertEquals(expected[i], results[i]);
-		} 
+		}
 	}
 
 	@Test
 	public void testGetCmdWithQuotesWithSpaceInside() throws IllegalArgumentException, IllegalAccessException {
 		String cmd = "echo \"normal\" as\"as'r'  we\"d'sd 's ddsa";
 		String[] expected = { "normal", "asas'r'  wedsd s", "ddsa" };
-		
-		String[] results = Shell.getArgsArray(cmd); 
+
+		String[] results = Shell.getArgsArray(cmd);
 		for (int i = 0; i < expected.length; i++) {
 			assertEquals(expected[i], results[i]);
-		} 
+		}
 	}
 
 	@Test
 	public void testGetCmdWithEscapedSpace() throws IllegalArgumentException, IllegalAccessException {
 		String cmd = "echo  normal\\ text no\\ space";
-		String[] expected = { "normal text", "no space" }; 
-		
-		String[] results = Shell.getArgsArray(cmd); 
+		String[] expected = { "normal text", "no space" };
+
+		String[] results = Shell.getArgsArray(cmd);
 		for (int i = 0; i < expected.length; i++) {
 			assertEquals(expected[i], results[i]);
-		} 
+		}
 	}
 
 	@Test
 	public void testGetCmdWithMixedQuotesandEscapedSpace() throws IllegalArgumentException, IllegalAccessException {
 		String cmd = "echo \"normal\" as\"as'\\ r 'w e\"ds dd\\ sa";
-		String[] expected = { "normal", "asas'\\ r 'w eds", "dd sa" }; 
-		
-		String[] results = Shell.getArgsArray(cmd); 
+		String[] expected = { "normal", "asas'\\ r 'w eds", "dd sa" };
+
+		String[] results = Shell.getArgsArray(cmd);
 		for (int i = 0; i < expected.length; i++) {
 			assertEquals(expected[i], results[i]);
-		} 
+		}
 	}
 
 	@Test
 	public void testGetCmdWithMixedQuotesandEscapedSpaceandDuplicateMatch() throws IllegalArgumentException, IllegalAccessException {
 		String cmd = "echo \"normal\" as\"as'\\ r\\$'w\\ e\"d's d's dd\\ sa\\$";
-		String[] expected = { "normal", "asas'\\ r$'w\\ eds ds", "dd sa$" }; 
-		
-		String[] results = Shell.getArgsArray(cmd); 
+		String[] expected = { "normal", "asas'\\ r$'w\\ eds ds", "dd sa$" };
+
+		String[] results = Shell.getArgsArray(cmd);
 		for (int i = 0; i < expected.length; i++) {
 			assertEquals(expected[i], results[i]);
-		} 
+		}
 	}
 }

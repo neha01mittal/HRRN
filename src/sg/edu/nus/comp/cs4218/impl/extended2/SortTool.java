@@ -26,9 +26,8 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class SortTool extends ATool implements ISortTool {
 
-	private int inputFlag = 0; // 1 for file, 2 for string
-	private final List<String> argList;
-	private final List<String> inputList;
+	private final List<String>	argList;
+	private final List<String>	inputList;
 
 	public SortTool(String[] arguments) {
 		super(arguments);
@@ -49,10 +48,11 @@ public class SortTool extends ATool implements ISortTool {
 			if (args[i].startsWith("-") && args[i].length() > 1) {
 				argList.add(args[i]);
 			} else if (args[i].equals("-")) {
-				inputFlag = (inputFlag == 1) ? 1 : 2;
+				if (stdin == null)
+					return "Invalid stdin";
+				inputList.add("-");
 			} else if (args[i].trim().length() > 0) {
 				inputList.add(args[i]);
-				inputFlag = 1;
 			}
 		}
 
@@ -62,17 +62,19 @@ public class SortTool extends ATool implements ISortTool {
 		}
 
 		// note for flags
-		String input;
-		if (inputFlag == 1 && inputList.size() > 0) {
-			if ((input = readFile(workingDir, inputList.get(0))) == null) {
-				return "sort: open failed: notExist.txt: No such file or directory.";
+		int inputFlag = 0;
+		String input = "";
+		for (int i = 0; i < inputList.size(); i++) {
+			if (inputList.get(i).equals("-") && inputFlag == 0) {
+				input += stdin;
+				inputFlag++;
+			} else {
+				String tempInput = readFile(workingDir, inputList.get(i));
+				if (tempInput == null) {
+					return "sort: open failed: " + inputList.get(0) + ": No such file or directory.";
+				}
+				input += tempInput;
 			}
-		} else if (inputFlag == 2) {
-			if (stdin == null)
-				return "Invalid command";
-			input = stdin;
-		} else {
-			return "Invalid command";
 		}
 
 		if (argList.contains("-c")) {

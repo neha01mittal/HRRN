@@ -28,12 +28,12 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class UniqTool extends ATool implements IUniqTool {
 
-	public String currentLine = "";
-	private int inputFlag = 0; // 1 for file, 2 for string
-	private int skipNum = 0; // 1 for file, 2 for string
-	private final List<String> argList;
-	private final List<String> inputList;
-	private final List<String> uniqueList;
+	public String				currentLine	= "";
+	private int					inputFlag	= 0;	// 1 for file, 2 for string
+	private int					skipNum		= 0;	// 1 for file, 2 for string
+	private final List<String>	argList;
+	private final List<String>	inputList;
+	private final List<String>	uniqueList;
 
 	public UniqTool(String[] arguments) {
 		super(arguments);
@@ -79,7 +79,7 @@ public class UniqTool extends ATool implements IUniqTool {
 			if (readAndProcessFile(workingDir, inputList.get(0)) == null) {
 				return "Invalid command";
 			}
-		} else if (inputFlag == 2) {
+		} else if (inputFlag == 2 || inputList.size() == 0) {
 			if (stdin == null)
 				return "Invalid command";
 			readAndProcessString(stdin);

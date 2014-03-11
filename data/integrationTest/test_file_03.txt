@@ -1,6 +1,11 @@
-a
-b
-b
-c
-c
-c
+sausage
+blubber
+pencil
+cloud
+moon
+water
+computer
+school
+network
+hammer
+walking

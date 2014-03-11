@@ -129,7 +129,11 @@ public class Shell implements IShell {
 				String returnedValue = tool.execute(f, null);
 				// print if has output
 				if (returnedValue != null && returnedValue.trim().length() > 0) {
-					System.out.println(returnedValue);
+					if (tool.getStatusCode() == 0) {
+						System.out.println(returnedValue);
+					} else {
+						System.err.println(returnedValue);
+					}
 				} else if (returnedValue != null) {
 					System.out.println();
 				}

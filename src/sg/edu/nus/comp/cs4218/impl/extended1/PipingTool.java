@@ -13,6 +13,7 @@ import sg.edu.nus.comp.cs4218.impl.extended2.SortTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.CdTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CopyTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.DeleteTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.EchoTool;
@@ -35,10 +36,11 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
  * execute anything
  */
 public class PipingTool extends ATool implements IPipingTool {
-	File workingDir;
+	File	workingDir;
 
 	public PipingTool(String[] arguments) {
 		super(arguments);
+		setStatusCode(1);
 	}
 
 	@Override
@@ -51,16 +53,25 @@ public class PipingTool extends ATool implements IPipingTool {
 			ITool to;
 			from = parse(args[0]);
 			to = parse(args[1]);
-			result = pipe(from, to);
 
+			if (from == null) {
+				return "-bash: " + args[0] + ": command not found";
+			} else if (to == null) {
+				return "-bash: " + args[1] + ": command not found";
+			}
+			result = pipe(from, to);
 			for (int i = 1; i < args.length; i++) {
 				to = parse(args[i]);
+				if (to == null) {
+					return "-bash: " + args[i] + ": command not found";
+				}
 				result = pipe(result, to);
 			}
 
+			setStatusCode(0);
 			return result;
 		}
-		return null;
+		return "Invalid arguments";
 	}
 
 	@Override
@@ -94,36 +105,36 @@ public class PipingTool extends ATool implements IPipingTool {
 			// Now we need to construct arguments
 			String[] args = Shell.getArgsArray(commandline);
 			switch (cmd) {
-			case "cat":
-				return new CatTool(args);
-			case "cd":
-				return null; //cd tool not allowed in piping
-			case "copy":
-				return new CopyTool(args);
-			case "delete":
-				return new DeleteTool(args);
-			case "echo":
-				return new EchoTool(args);
-			case "ls":
-				return new LsTool(args);
-			case "move":
-				return new MoveTool(args);
-			case "pwd":
-				return new PWDTool();
-			case "grep":
-				return new GrepTool(args);
-			case "comm":
-				return new CommTool(args);
-			case "cut":
-				return new CutTool(args);
-			case "sort":
-				return new SortTool(args);
-			case "paste":
-				return new PasteTool(args);
-			case "uniq":
-				return new UniqTool(args);
-			case "wc":
-				return new WcTool(args);
+				case "cat":
+					return new CatTool(args);
+				case "cd":
+					return new CdTool(args);
+				case "copy":
+					return new CopyTool(args);
+				case "delete":
+					return new DeleteTool(args);
+				case "echo":
+					return new EchoTool(args);
+				case "ls":
+					return new LsTool(args);
+				case "move":
+					return new MoveTool(args);
+				case "pwd":
+					return new PWDTool();
+				case "grep":
+					return new GrepTool(args);
+				case "comm":
+					return new CommTool(args);
+				case "cut":
+					return new CutTool(args);
+				case "sort":
+					return new SortTool(args);
+				case "paste":
+					return new PasteTool(args);
+				case "uniq":
+					return new UniqTool(args);
+				case "wc":
+					return new WcTool(args);
 			}
 		}
 		return null;

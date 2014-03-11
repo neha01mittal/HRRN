@@ -1,5 +1,4 @@
-1. IBM
-2. Symantec
-3. Palantir
-10. hp
-11. ihis
+sausage
+blubber
+pencil 
+cloud 
