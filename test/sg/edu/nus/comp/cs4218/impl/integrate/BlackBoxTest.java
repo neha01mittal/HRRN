@@ -113,7 +113,7 @@ public class BlackBoxTest {
 	@Test
 	public void testChains1() {
 
-		String input = "ls | grep test | grep 01 \r\n ";
+		String input = "ls | grep test | grep 01 | cat - \r\n ";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
 		String header = System.getProperty("user.dir") + " $: ";
 
