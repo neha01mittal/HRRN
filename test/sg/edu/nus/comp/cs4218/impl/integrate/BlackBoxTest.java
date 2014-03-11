@@ -1,6 +1,6 @@
 package sg.edu.nus.comp.cs4218.impl.integrate;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,13 +27,19 @@ public class BlackBoxTest {
 	private static String				testDirString;
 	private static List<File>			testDirFileList;
 	private static Shell				shell;
-	private static InputStream			stdin;
+	private static InputStream			originalStdin;
+	private static PrintStream			originalStdout;
+	private static PrintStream			originalStderr;
 
 	@BeforeClass
 	public static void beforeClass() {
-		stdin = System.in;
-		// create new dir and files inside
+		// cache system variables.
 		originalDirString = System.getProperty("user.dir");
+		originalStdin = System.in;
+		originalStdout = System.out;
+		originalStderr = System.err;
+
+		// create new dir and files inside
 		testDirString = originalDirString + File.separator + "data" + File.separator + "integrationTest";
 		FilenameFilter fileNameFilter = new FilenameFilter() {
 			@Override
@@ -49,17 +55,18 @@ public class BlackBoxTest {
 			}
 		};
 		testDirFileList = Arrays.asList(new File(testDirString).listFiles(fileNameFilter));
-		System.setProperty("user.dir", testDirString);
 	}
 
 	@AfterClass
 	public static void afterClass() {
-		System.setProperty("user.dir", originalDirString);
 	}
 
 	@Before
 	public void before() {
-		// seize the std content
+		System.setProperty("user.dir", testDirString);
+		System.setOut(new PrintStream(outContent));
+		System.setErr(new PrintStream(errContent));
+
 		shell = new Shell();
 	}
 
@@ -68,20 +75,22 @@ public class BlackBoxTest {
 		shell.executionFlag = false;
 
 		// release std and clean the buffer
-		System.setIn(stdin);
-		System.setOut(null);
-		System.setErr(null);
+		System.setIn(originalStdin);
+		System.setOut(originalStdout);
+		System.setErr(originalStderr);
+		System.setProperty("user.dir", originalDirString);
 
 		// remove shell and set back system
-		// shell = null;
+		shell = null;
 	}
 
 	@Test
-	public void testSimpleLs() {
+	public void testSimple() {
+
 		String input = "ls\r\n ";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
-		System.setOut(new PrintStream(outContent));
-		System.setErr(new PrintStream(errContent));
+		String header = System.getProperty("user.dir") + " $: ";
+
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -90,10 +99,37 @@ public class BlackBoxTest {
 		});
 		t.run();
 
+		// generate expected string
 		String expected = "";
 		for (int i = 0; i < testDirFileList.size(); i++) {
 			expected += testDirFileList.get(i).getName() + "\n";
 		}
-		assertTrue(outContent.toString().replaceAll("\r", "").toLowerCase().contains(expected.toLowerCase()));
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains1() {
+
+		String input = "ls | grep test | grep 01 \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+
+		// generate expected string
+		String expected = "test_file_01.txt\n\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
 	}
 }

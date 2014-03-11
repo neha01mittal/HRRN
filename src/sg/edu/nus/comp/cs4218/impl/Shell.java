@@ -75,12 +75,13 @@ public class Shell implements IShell {
 		// Input scanner
 		in = new BufferedReader(new InputStreamReader(System.in));
 		scanner = new Scanner(in);
+		// 1. Wait for a user input
+		System.out.print(System.getProperty("user.dir") + " $: ");
 		while (executionFlag && scanner.hasNext()) {
-			// 1. Wait for a user input
-			System.out.print(System.getProperty("user.dir") + " $: ");
 			// 2. Parse the user input
 			String input = scanner.nextLine();
 			executeInput(input, true);
+			System.out.print(System.getProperty("user.dir") + " $: ");
 		}
 	}
 
@@ -165,13 +166,7 @@ public class Shell implements IShell {
 				// get current path
 				File f = new File(System.getProperty("user.dir"));
 				// execute command
-				String returnedValue = tool.execute(f, null);
-				// print if has output
-				if (returnedValue != null && returnedValue.trim().length() > 0) {
-					System.out.println(returnedValue);
-				} else if (returnedValue != null) {
-					System.out.println();
-				}
+				tool.execute(f, null);
 			}
 		};
 
@@ -183,13 +178,7 @@ public class Shell implements IShell {
 		if (!(future.isDone() || future.isCancelled())) {
 			boolean cancellable = future.cancel(true);
 			if (!cancellable) {
-				// System.err.println("[" + currentTool.getStatusCode() +
-				// "]+  Cannot stop thread, thus quit!");
 				System.exit(1);
-			} else {
-				// System.err.println("[" + currentTool.getStatusCode() +
-				// "]+  Stopped                 " +
-				// currentTool.getClass().getSimpleName());
 			}
 			executorService.shutdownNow();
 		}
