@@ -226,6 +226,10 @@ public class CommTool extends ATool implements ICommTool {
 	public String parse() {
 		String parsed = "";
 		int count = 0;
+		
+		if(args.length>3||args.length<2)
+			return INVALID_COMMAND;
+		
 		int i = args.length - 1;
 		// if (args.length!=0&&args[0].equals("-"))
 		// return "stdin";
@@ -256,7 +260,6 @@ public class CommTool extends ATool implements ICommTool {
 		}
 
 		if (count > 1) { // cannot have comm - - or comm - -c -----
-			setStatusCode(1);
 			return INVALID_COMMAND;
 		}
 

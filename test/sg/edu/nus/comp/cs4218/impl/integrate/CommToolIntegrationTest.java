@@ -253,7 +253,7 @@ public class CommToolIntegrationTest {
 		String commandline = "sort | cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(new File(rootParent), null);
-		String expectedOutput = "";
+		String expectedOutput = "\n";
 		assertEquals(expectedOutput, output);
 	}
 	
