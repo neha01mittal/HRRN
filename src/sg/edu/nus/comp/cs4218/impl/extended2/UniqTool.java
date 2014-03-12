@@ -45,10 +45,6 @@ public class UniqTool extends ATool implements IUniqTool {
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// check for argument number
-		if (args == null || args.length < 1) {
-			return "No arguments or input recieved!";
-		}
 
 		// split arguments and inputs
 		for (int i = 0; i < args.length; i++) {

@@ -40,7 +40,9 @@ public class SortTool extends ATool implements ISortTool {
 	public String execute(File workingDir, String stdin) {
 		// check for argument number
 		if (args == null || args.length < 1) {
-			return "No arguments and no standard input.";
+			if (stdin == null)
+				return "Invalid: No arguments and no standard input.";
+			inputList.add("-");
 		}
 
 		// split arguments and inputs
@@ -49,7 +51,7 @@ public class SortTool extends ATool implements ISortTool {
 				argList.add(args[i]);
 			} else if (args[i].equals("-")) {
 				if (stdin == null)
-					return "Invalid stdin";
+					return "Invalid: no stdin";
 				inputList.add("-");
 			} else if (args[i].trim().length() > 0) {
 				inputList.add(args[i]);
@@ -66,16 +68,17 @@ public class SortTool extends ATool implements ISortTool {
 		String input = "";
 		for (int i = 0; i < inputList.size(); i++) {
 			if (inputList.get(i).equals("-") && inputFlag == 0) {
-				input += stdin;
+				input += stdin + "\n";
 				inputFlag++;
 			} else {
 				String tempInput = readFile(workingDir, inputList.get(i));
 				if (tempInput == null) {
 					return "sort: open failed: " + inputList.get(0) + ": No such file or directory.";
 				}
-				input += tempInput;
+				input += tempInput + "\n";
 			}
 		}
+		input = (input.length() > 1) ? input.substring(0, input.length() - 1) : input;
 
 		if (argList.contains("-c")) {
 			return checkIfSorted(input);
@@ -134,10 +137,11 @@ public class SortTool extends ATool implements ISortTool {
 			while ((sCurrentLine = br.readLine()) != null) {
 				fullText += sCurrentLine + "\n";
 			}
+
+			fullText = (fullText.length() > 1) ? fullText.substring(0, fullText.length() - 1) : fullText;
 		} catch (IOException e) {
 			return null;
 		}
-		fullText = (fullText.length() > 1) ? fullText.substring(0, fullText.length() - 1) : fullText;
 		return fullText;
 	}
 }

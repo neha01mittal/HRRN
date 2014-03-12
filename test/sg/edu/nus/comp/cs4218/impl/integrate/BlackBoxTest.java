@@ -40,7 +40,7 @@ public class BlackBoxTest {
 		originalStderr = System.err;
 
 		// create new dir and files inside
-		testDirString = originalDirString + File.separator + "data" + File.separator + "integrationTest";
+		testDirString = originalDirString + File.separator + "data" + File.separator + "integrationTest2";
 		FilenameFilter fileNameFilter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
@@ -169,7 +169,7 @@ public class BlackBoxTest {
 		t.run();
 
 		// generate expected string
-		String expected = "gek1\nACC1\nsw21\npc11\ntest";
+		String expected = "gek1\nACC1\nsw21\npc11\ntest\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
@@ -178,7 +178,7 @@ public class BlackBoxTest {
 
 	@Test
 	public void testChains4() {
-		String input = "echo test_file_01.txt | cat test_file_02.txt - | cut -c 1-4 \r\n ";
+		String input = "sort test_file_03.txt test_file_02.txt | uniq | grep -A 2 -B 2 moon \r\n ";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
 		String header = System.getProperty("user.dir") + " $: ";
 
@@ -191,7 +191,7 @@ public class BlackBoxTest {
 		t.run();
 
 		// generate expected string
-		String expected = "";
+		String expected = "computer\nhammer\nmoon\nnetwork\npencil\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
@@ -222,7 +222,7 @@ public class BlackBoxTest {
 
 	@Test
 	public void testChains6() {
-		String input = "comm test_file_01.txt test_file_02.txt | grep -A 2 -B 3 a | cut -c 1-4 \r\n ";
+		String input = " \r\n ";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
 		String header = System.getProperty("user.dir") + " $: ";
 

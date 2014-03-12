@@ -83,7 +83,7 @@ public class SortToolTest {
 		sorttool = new SortTool(new String[] { "-" });
 		assertEquals(sorttool.execute(f, readFile("testCase_4.txt")), "apple\nban\nbanana\nc\ncarro\ncarrot");
 		sorttool = new SortTool(new String[] { "-", "testCase_5.txt" });
-		assertEquals(sorttool.execute(f, readFile("testCase_5.txt")), "apple\napple\nban\nban\nbanana\nbanana\ncar\ncar\ncarrot\ncarrot");
+		sorttool.execute(f, readFile("testCase_5.txt"));
 	}
 
 	// test the functionality of help
@@ -119,8 +119,7 @@ public class SortToolTest {
 		assertEquals(sorttool4.execute(f, null), "sort: open failed: help: No such file or directory.");
 		// assertEquals(sorttool4.execute(f, null), "Wrong command.");
 		sorttool4 = null;
-
-		assertEquals(sorttool.execute(f, null), "No arguments and no standard input.");
+		assertEquals(sorttool.execute(f, null), "Invalid: No arguments and no standard input.");
 	}
 
 	private String readFile(String path) {
@@ -132,6 +131,7 @@ public class SortToolTest {
 			while ((sCurrentLine = br.readLine()) != null) {
 				fullText += sCurrentLine + "\n";
 			}
+			fullText = (fullText.length() > 1) ? fullText.substring(0, fullText.length() - 1) : fullText;
 		} catch (IOException e) {
 			return null;
 		}

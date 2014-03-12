@@ -1,4 +1,4 @@
 sausage
 blubber
-pencil 
-cloud 
+pencil
+cloud
