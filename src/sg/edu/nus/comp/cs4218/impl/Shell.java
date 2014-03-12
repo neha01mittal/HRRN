@@ -129,7 +129,11 @@ public class Shell implements IShell {
 				String returnedValue = tool.execute(f, null);
 				// print if has output
 				if (returnedValue != null && returnedValue.trim().length() > 0) {
-					System.out.println(returnedValue);
+					if (tool.getStatusCode() == 0) {
+						System.out.println(returnedValue);
+					} else {
+						System.err.println(returnedValue);
+					}
 				} else if (returnedValue != null) {
 					System.out.println();
 				}
@@ -246,7 +250,6 @@ public class Shell implements IShell {
 				if (regexMatcher.group(2) != null) {
 					String quoteText = regexMatcher.group(2);
 					// System.out.println("group2: " + quoteText);
-
 					newArg = newArg.replace(quoteText, "::quote-" + quoteList.size());
 					quoteList.add(quoteText.substring(1, quoteText.length() - 1));
 				}
@@ -270,7 +273,7 @@ public class Shell implements IShell {
 			for (int j = 0; j < quoteList.size(); j++) {
 				newArg = newArg.replace("::quote-" + j, quoteList.get(j));
 			}
-			newArg = newArg.trim().replaceAll(dilimiter1, " ").replaceAll(dilimiter2, " ");
+			newArg = newArg.trim().replace(dilimiter1, " ").replace(dilimiter2, " ");
 			argList.set(i, newArg);
 		}
 
@@ -280,10 +283,40 @@ public class Shell implements IShell {
 	}
 
 	@Override
-	public ITool parse(String c) {
-		String commandline = c;
+	public ITool parse(String commandline) {
+		String dilimiter1 = "::surrounded-pipe::";
+		String dilimiter2 = "::escaped-pipe::";
+
+		// Step 1. find the escape pipe between quotes
+		Pattern regex = Pattern.compile("[^'\"]*[^\\\\]\"([^\"]*)\"|[^'\"]*[^\\\\]'([^\']*)\'");
+		Matcher regexMatcher = regex.matcher(commandline);
+		while (regexMatcher.find()) {
+			if (regexMatcher.group(1) != null) {
+				String temp = regexMatcher.group(1);
+				// System.out.println("group1: " + temp);
+				String replaced = temp.replaceAll("\\|", dilimiter1);
+				// System.out.println("group1: " + replaced);
+				commandline = commandline.replace("\"" + temp + "\"", "\"" + replaced + "\"");
+			}
+			if (regexMatcher.group(2) != null) {
+				String temp = regexMatcher.group(2);
+				// System.out.println("group2: " + temp);
+				String replaced = temp.replaceAll("\\|", dilimiter1);
+				// System.out.println("group2: " + replaced);
+				commandline = commandline.replace("'" + temp + "'", "'" + replaced + "'");
+			}
+		}
+
+		// Step 2. remove all escape pipe
+		commandline = commandline.replaceAll("\\\\\\|", dilimiter2);
+		// System.out.println(commandline);
+
 		if (commandline.contains("|")) {
-			return new PipingTool(commandline.split("\\|"));
+			String[] args = commandline.split("\\|");
+			for (int i = 0; i < args.length; i++) {
+				args[i] = args[i].trim().replace(dilimiter1, "|").replace(dilimiter2, "|");
+			}
+			return new PipingTool(args);
 		} else {
 			commandline = commandline.trim();
 			String[] cmdSplit = commandline.split("\\s+");
@@ -292,6 +325,9 @@ public class Shell implements IShell {
 				String cmd = cmdSplit[0].toLowerCase();
 				// Now we need to construct arguments
 				String[] args = getArgsArray(commandline);
+				for (int i = 0; i < args.length; i++) {
+					args[i] = args[i].trim().replace(dilimiter1, "|").replace(dilimiter2, "|");
+				}
 				switch (cmd) {
 					case "cat":
 						return new CatTool(args);

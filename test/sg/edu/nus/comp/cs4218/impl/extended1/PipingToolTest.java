@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -24,23 +23,17 @@ import org.junit.Test;
  */
 public class PipingToolTest {
 
-	private PipingTool pipingTool;
-	private static Path rootDirectory;
-	private static String rootParent;
-	private static String rootDirectoryString;
+	private PipingTool		pipingTool;
+	private static Path		rootDirectory;
+	private static String	rootParent;
+	private static String	rootDirectoryString;
 
 	@BeforeClass
 	public static void before() throws IOException {
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + File.separator
-				+ "test";
+		rootDirectoryString = System.getProperty("user.dir") + File.separator + "test";
 		rootParent = System.getProperty("user.dir");
 		rootDirectory = Paths.get(rootDirectoryString);
-	}
-
-	@AfterClass
-	public static void afterClass() throws IOException {
-		// TestUtils.delete(new File(rootDirectoryString));
 	}
 
 	@After
@@ -49,9 +42,53 @@ public class PipingToolTest {
 	}
 
 	@Test
+	public void testPipeToNothing() {
+		String commandline = "|";
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
+
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
+
+		assertEquals(1, pipingTool.getStatusCode());
+		assertEquals("Invalid arguments", result);
+	}
+
+	@Test
+	public void testPipeToInvalid() {
+		String commandline = "ls | a";
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
+
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
+
+		assertEquals(1, pipingTool.getStatusCode());
+		assertEquals("-bash: a: command not found", result);
+	}
+
+	@Test
+	public void testInvalidPipeTo() {
+		String commandline = "ls | b";
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
+
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
+
+		assertEquals(1, pipingTool.getStatusCode());
+		assertEquals("-bash: b: command not found", result);
+	}
+
+	@Test
+	public void testPipeWithInvalidInMiddle() {
+		String commandline = "ls | ls | c | cat";
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
+
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
+
+		assertEquals(1, pipingTool.getStatusCode());
+		assertEquals("-bash: c: command not found", result);
+	}
+
+	@Test
 	public void testLsPipeToGrep() {
 		String commandline = "ls | grep .";
-		pipingTool = new PipingTool(commandline.split("\\|"));
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
 		String result = pipingTool.execute(new File(rootDirectoryString), null);
 		String[] results = result.split("\n");
@@ -63,7 +100,7 @@ public class PipingToolTest {
 	@Test
 	public void testEchoPipeToCat() {
 		String commandline = "echo 'print me' | cat ";
-		pipingTool = new PipingTool(commandline.split("\\|"));
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
 		String result = pipingTool.execute(new File(rootDirectoryString), null);
 
@@ -73,7 +110,7 @@ public class PipingToolTest {
 	@Test
 	public void tesPipeChaining() {
 		String commandline = "echo 'print me' | cat | cat | cat ";
-		pipingTool = new PipingTool(commandline.split("\\|"));
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
 		String result = pipingTool.execute(new File(rootDirectoryString), null);
 
@@ -83,7 +120,7 @@ public class PipingToolTest {
 	@Test
 	public void testPipeToInvalidTool() {
 		String commandline = "pwd | echo ";
-		pipingTool = new PipingTool(commandline.split("\\|"));
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
 		String result = pipingTool.execute(new File(rootDirectoryString), null);
 
@@ -95,7 +132,7 @@ public class PipingToolTest {
 		String commandline = "cat commTestCase1a.txt | comm - commTestCase1b.txt ";
 		String output = "\t\t\t\taaa" + "\n\t\tbbb" + "\nccc" + "\neee"
 				+ "\n\t\tffff" + "\ngggggg";
-		pipingTool = new PipingTool(commandline.split("\\|"));
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
 		String result = pipingTool.execute(new File(rootParent), null);
 
@@ -107,21 +144,10 @@ public class PipingToolTest {
 		String commandline = "cat commTestCase1a.txt | comm - nofile.txt ";
 		String output = "\t\t\t\taaa" + "\n\t\tbbb" + "\nccc" + "\neee"
 				+ "\n\t\tffff" + "\ngggggg";
-		pipingTool = new PipingTool(commandline.split("\\|"));
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
 		String result = pipingTool.execute(new File(rootParent), null);
 
 		assertEquals(result, "");
 	}
-	
-//	@Test
-//	public void testPipeStateWhenFirstPipeFail() {
-//		// The error is through before we check for the statestus code for to
-//		String commandline = "cd invalid | echo ";
-//		pipingTool = new PipingTool(commandline.split("\\|"));
-//
-//		pipingTool.execute(new File(rootDirectoryString), null);
-//
-//		assertNotEquals(1, pipingTool.getStatusCode());
-//	}
 }

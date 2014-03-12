@@ -47,8 +47,8 @@ public class WcToolTest {
 		String[] args2 = { "-m", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
 		assertEquals("46\ttestCase_1.txt", wctool2.execute(null, null));
+		
 		wctool2 = null;
-
 		String[] args3 = { "-m", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals("33\ttestCase_2.txt", wctool3.execute(null, null));

@@ -40,6 +40,7 @@ public class PipingTool extends ATool implements IPipingTool {
 
 	public PipingTool(String[] arguments) {
 		super(arguments);
+		setStatusCode(1);
 	}
 
 	@Override
@@ -52,16 +53,25 @@ public class PipingTool extends ATool implements IPipingTool {
 			ITool to;
 			from = parse(args[0]);
 			to = parse(args[1]);
-			result = pipe(from, to);
 
+			if (from == null) {
+				return "-bash: " + args[0] + ": command not found";
+			} else if (to == null) {
+				return "-bash: " + args[1] + ": command not found";
+			}
+			result = pipe(from, to);
 			for (int i = 1; i < args.length; i++) {
 				to = parse(args[i]);
+				if (to == null) {
+					return "-bash: " + args[i] + ": command not found";
+				}
 				result = pipe(result, to);
 			}
 
+			setStatusCode(0);
 			return result;
 		}
-		return null;
+		return "Invalid arguments";
 	}
 
 	@Override
@@ -86,50 +96,45 @@ public class PipingTool extends ATool implements IPipingTool {
 		return returnedValue;
 	}
 
-	public ITool parse(String c) {
-		String commandline = c;
-		if (commandline.contains("|")) {
-			return new PipingTool(commandline.split("\\|"));
-		} else {
-			commandline = commandline.trim();
-			String[] cmdSplit = commandline.split("\\s+");
-			if (commandline.length() > 0) {
-				// This guarantee valid
-				String cmd = cmdSplit[0].toLowerCase();
-				// Now we need to construct arguments
-				String[] args = Shell.getArgsArray(commandline);
-				switch (cmd) {
-					case "cat":
-						return new CatTool(args);
-					case "cd":
-						return new CdTool(args);
-					case "copy":
-						return new CopyTool(args);
-					case "delete":
-						return new DeleteTool(args);
-					case "echo":
-						return new EchoTool(args);
-					case "ls":
-						return new LsTool(args);
-					case "move":
-						return new MoveTool(args);
-					case "pwd":
-						return new PWDTool();
-					case "grep":
-						return new GrepTool(args);
-					case "comm":
-						return new CommTool(args);
-					case "cut":
-						return new CutTool(args);
-					case "sort":
-						return new SortTool(args);
-					case "paste":
-						return new PasteTool(args);
-					case "uniq":
-						return new UniqTool(args);
-					case "wc":
-						return new WcTool(args);
-				}
+	public ITool parse(String commandline) {
+		commandline = commandline.trim();
+		String[] cmdSplit = commandline.split("\\s+");
+		if (commandline.length() > 0) {
+			// This guarantee valid
+			String cmd = cmdSplit[0].toLowerCase();
+			// Now we need to construct arguments
+			String[] args = Shell.getArgsArray(commandline);
+			switch (cmd) {
+				case "cat":
+					return new CatTool(args);
+				case "cd":
+					return new CdTool(args);
+				case "copy":
+					return new CopyTool(args);
+				case "delete":
+					return new DeleteTool(args);
+				case "echo":
+					return new EchoTool(args);
+				case "ls":
+					return new LsTool(args);
+				case "move":
+					return new MoveTool(args);
+				case "pwd":
+					return new PWDTool();
+				case "grep":
+					return new GrepTool(args);
+				case "comm":
+					return new CommTool(args);
+				case "cut":
+					return new CutTool(args);
+				case "sort":
+					return new SortTool(args);
+				case "paste":
+					return new PasteTool(args);
+				case "uniq":
+					return new UniqTool(args);
+				case "wc":
+					return new WcTool(args);
 			}
 		}
 		return null;
