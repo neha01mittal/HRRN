@@ -10,6 +10,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -94,7 +98,7 @@ public class GrepToolTest {
 		String result = gt
 				.execute(new File(System.getProperty("user.dir")), "");
 		String expected = "#Alignment:#  Alignment of cells is attempted to be preserved.\n"
-				+ "\n" + "BORDER\n";
+				+ "\n" + "BORDER";
 		assertEquals(expected, result);
 	}
 
@@ -124,7 +128,7 @@ public class GrepToolTest {
 				+ "file1.txt: #Cell Size:#  If you have more than one line (as just above) then\n"
 				+ "file1.txt:               you will simply get empty cells where the other column is empty.\n"
 				+ "file1.txt: #Alignment:#  Alignment of cells is attempted to be preserved.\n"
-				+ "file1.txt: \n" + "file1.txt: BORDER\n";
+				+ "file1.txt: \n" + "file1.txt: BORDER";
 		assertEquals(expected, result);
 	}
 
@@ -142,7 +146,7 @@ public class GrepToolTest {
 
 		String result = gt
 				.execute(new File(System.getProperty("user.dir")), "");
-		String expected = "^A^A^A\n" + "B^A\n" + "BBB^A\n";
+		String expected = "^A^A^A\n" + "B^A\n" + "BBB^A";
 		assertEquals(expected, result);
 	}
 
@@ -174,7 +178,7 @@ public class GrepToolTest {
 
 		String result = gt
 				.execute(new File(System.getProperty("user.dir")), "");
-		String expected = "file1.txt: 23\n" + "file2.txt: 9\n";
+		String expected = "file1.txt: 23\n" + "file2.txt: 9";
 		// String expected = "32";
 		assertEquals(expected, result);
 	}
@@ -192,7 +196,7 @@ public class GrepToolTest {
 
 		String result = gt
 				.execute(new File(System.getProperty("user.dir")), "");
-		String expected = "file1.txt: 1\n" + "file2.txt: 0\n";
+		String expected = "file1.txt: 1\n" + "file2.txt: 0";
 		// String expected = "1";
 		assertEquals(expected, result);
 	}
@@ -211,7 +215,7 @@ public class GrepToolTest {
 
 		String result = gt
 				.execute(new File(System.getProperty("user.dir")), "");
-		String expected = "file1.txt: 294\n" + "file2.txt: 19\n";
+		String expected = "file1.txt: 294\n" + "file2.txt: 19";
 		// String expected = "313";
 		assertEquals(expected, result);
 	}
@@ -248,7 +252,7 @@ public class GrepToolTest {
 
 		String result = gt.execute(new File(System.getProperty("user.dir")),
 				input);
-		assertEquals("grep file1.txt\n", result);
+		assertEquals("grep file1.txt", result);
 	}
 
 	@Test
@@ -264,7 +268,7 @@ public class GrepToolTest {
 
 		String result = gt.execute(new File(System.getProperty("user.dir")),
 				input);
-		assertEquals("grep\n", result);
+		assertEquals("grep", result);
 	}
 
 	@Test
@@ -310,7 +314,7 @@ public class GrepToolTest {
 				+ "   a) recognise that they are letters and not numbers (which it already\n"
 				+ "      does)\n"
 				+ "   b) display the correct OL properties with CSS so as to preserve\n"
-				+ "      that information.\n" + "\n";
+				+ "      that information.\n";
 		assertEquals(expected, result);
 	}
 
@@ -341,7 +345,7 @@ public class GrepToolTest {
 				+ "A. I would like to be able to preserve lettered lists, that is:\n"
 				+ "   a) recognise that they are letters and not numbers (which it already\n"
 				+ "      does)\n"
-				+ "   b) display the correct OL properties with CSS so as to preserve\n";
+				+ "   b) display the correct OL properties with CSS so as to preserve";
 		assertEquals(expected, result);
 	}
 
@@ -374,7 +378,7 @@ public class GrepToolTest {
 				+ "A. I would like to be able to preserve lettered lists, that is:\n"
 				+ "   a) recognise that they are letters and not numbers (which it already\n"
 				+ "      does)\n"
-				+ "   b) display the correct OL properties with CSS so as to preserve\n";
+				+ "   b) display the correct OL properties with CSS so as to preserve";
 
 		assertEquals(expected, result);
 	}
@@ -431,7 +435,7 @@ public class GrepToolTest {
 				+ "ppend a file automatically to all conve\n"
 				+ "paragraphs and list items have\n" + "pted to be preserve\n"
 				+ "preserve\n"
-				+ "play the correct OL properties with CSS so as to preserve\n";
+				+ "play the correct OL properties with CSS so as to preserve";
 		assertEquals(expected, result);
 	}
 
@@ -453,7 +457,7 @@ public class GrepToolTest {
 		String result = gt.execute(new File(System.getProperty("user.dir")),
 				catToolOutput);
 		String expected = "^A^A^A\n" + "A\n" + "AA\n" + "A B\n" + "A\n"
-				+ "BAA\n" + "BBAA\n" + "B^A\n" + "BBB^A\n";
+				+ "BAA\n" + "BBAA\n" + "B^A\n" + "BBB^A";
 		assertEquals(expected, result);
 	}
 
@@ -472,17 +476,11 @@ public class GrepToolTest {
 			throws FileNotFoundException {
 		String path = gtt.getClass().getClassLoader().getResource(file)
 				.getPath();
-		BufferedReader reader = new BufferedReader(new FileReader(
-				new File(path)));
-		String line = null;
-		StringBuilder content = new StringBuilder();
+		path = path.substring(1);
 		try {
-			// content += "Reading file: " + toRead.getName() + ": ";
-			while ((line = reader.readLine()) != null) {
-				content.append(line + "\n");
-			}
-			reader.close();
-			return content.toString();
+			byte[] encoded = Files.readAllBytes(Paths.get(path));
+			String fileContent = Charset.forName("UTF-8").decode(ByteBuffer.wrap(encoded)).toString();
+			return fileContent.replace("\r", "");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

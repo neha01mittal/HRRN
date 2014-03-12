@@ -5,47 +5,32 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
-import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
 public class WcToolIntegrationTest {
 
-	private static File rootParent;
-	private static File f1;
-	private static File f2;
-	private static File file1;
-	private static File file2;
+	private static File rootParent;	
 
 	@BeforeClass
 	public static void init() {
 		rootParent = new File(System.getProperty("user.dir"));
-//		f1 = new File(rootParent, "testFolder");
-//		f2 = new File(f1, "testFolder2");
-//		file1 = new File(f1, "test1.txt");
-//		file2 = new File(f1, "test2.txt");
-//		f1.mkdir();
-//		f2.mkdir();
-//		file1.mkdir();
-//		file2.mkdir();
 	}
 
 	@AfterClass
-	public static void afterClass() throws IOException {
-		//TestUtils.delete(f1);
+	public static void afterClass() {
 	}
 
 	@Test
 	public void testCat() {
-		String commandline = "cat test1.txt | wc -l";
+		String commandline = "cat testCase_1.txt | wc -l";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "19";
+		String expectedOutput = "5";
+		assertEquals(expectedOutput, output);
 	}
 	
 	@Test
@@ -53,7 +38,7 @@ public class WcToolIntegrationTest {
 		String commandline = "ls | wc -l";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "24";
+		String expectedOutput = "23";
 		assertEquals(expectedOutput, output);		
 	}
 
