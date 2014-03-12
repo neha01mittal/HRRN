@@ -5,14 +5,11 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
-import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
 public class GrepIntegrationTest {
 
@@ -45,7 +42,7 @@ public class GrepIntegrationTest {
 				+ "testCase_5.txt\n"
 				+ "uniqTestCase.txt\n"
 				+ "uniqTestCase1.txt\n"
-				+ "uniqTestCase2.txt\n";
+				+ "uniqTestCase2.txt";
 		assertEquals(expectedOutput, output);
 	}
 	
@@ -54,7 +51,7 @@ public class GrepIntegrationTest {
 		String commandline = "pwd | grep HRRN";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = System.getProperty("user.dir") + "\n";
+		String expectedOutput = System.getProperty("user.dir");
 		assertEquals(expectedOutput, output);
 	}
 	
@@ -63,7 +60,7 @@ public class GrepIntegrationTest {
 		String commandline = "cat testCase_5.txt | grep an";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "ban\n" + "banana\n" ;
+		String expectedOutput = "ban\n" + "banana" ;
 		assertEquals(expectedOutput, output);
 	}
 
@@ -72,7 +69,7 @@ public class GrepIntegrationTest {
 		String commandline = "echo \"abcdef ghijklmn\" | grep ab";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "abcdef ghijklmn\n";
+		String expectedOutput = "abcdef ghijklmn";
 		assertEquals(expectedOutput, output);
 	}
 	
@@ -81,7 +78,7 @@ public class GrepIntegrationTest {
 		String commandline = "cut -c 2 testCase_5.txt | grep a";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "a\n" + "a\n" + "a\n" + "a\n";
+		String expectedOutput = "a\n" + "a\n" + "a\n" + "a";
 		assertEquals(expectedOutput, output);
 		
 	}
@@ -92,7 +89,7 @@ public class GrepIntegrationTest {
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
 		String expectedOutput = "apple\tapple\n" + "ban\tcar\n" +
-							"banana\tcarrot\n" + "carrot\tban\n" + "carro\tbanana\n";
+							"banana\tcarrot\n" + "carrot\tban\n" + "carro\tbanana";
 		assertEquals(expectedOutput, output);
 	}
 	
@@ -101,7 +98,7 @@ public class GrepIntegrationTest {
 		String commandline = "sort testCase_5.txt | grep a";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "apple\n" + "ban\n" + "banana\n" + "car\n" + "carrot\n";
+		String expectedOutput = "apple\n" + "ban\n" + "banana\n" + "car\n" + "carrot";
 		assertEquals(expectedOutput, output);
 	}
 	
@@ -112,5 +109,41 @@ public class GrepIntegrationTest {
 		String output = pipingTool.execute(rootParent, null);
 		String expectedOutput = "";
 		assertEquals(expectedOutput, output);
+	}
+	
+	@Test
+	public void testCatRegex() {
+		String commandline = "cat testCase_5.txt | grep ^banana$";
+		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
+		String output = pipingTool.execute(rootParent, null);
+		String expectedOutput = "banana";
+		assertEquals(expectedOutput, output);
+	}
+	
+	@Test
+	public void testRegex() {
+		String commandline = "cat testCase_5.txt | grep ^banana$";
+		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
+		String output = pipingTool.execute(rootParent, null);
+		String expectedOutput = "banana";
+		assertEquals(expectedOutput, output);
+	}
+	
+	@Test
+	public void testRegex_02() {
+		String commandline = "cat testCase_5.txt | grep ^$";
+		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
+		String output = pipingTool.execute(rootParent, null);
+		String expectedOutput = "";
+		assertEquals(expectedOutput, output);
+	}
+	
+	@Test
+	public void testUniqRegex() {
+		String commandline = "uniq testCase_4.txt | grep ^$";
+		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
+		String output = pipingTool.execute(rootParent, null);
+		String expectedOutput = "";
+		assertEquals(expectedOutput, output); 
 	}
 }
