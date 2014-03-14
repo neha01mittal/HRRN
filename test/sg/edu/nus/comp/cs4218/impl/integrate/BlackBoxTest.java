@@ -19,6 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.Shell;
+import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
 public class BlackBoxTest {
 
@@ -58,12 +59,9 @@ public class BlackBoxTest {
 		FilenameFilter fileNameFilter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				if (name.lastIndexOf('.') > 0) {
-					int lastIndex = name.lastIndexOf('.');
-					String str = name.substring(lastIndex);
-					if (str.equals(".txt")) {
-						return true;
-					}
+				// just ignore the hidden files
+				if (name.lastIndexOf('.') != 0) {
+					return true;
 				}
 				return false;
 			}
@@ -98,362 +96,428 @@ public class BlackBoxTest {
 		shell = null;
 	}
 
-	//
-	// @Test
-	// public void testSimple() {
-	//
-	// String input = "ls\r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "";
-	// for (int i = 0; i < testDirFileList.size(); i++) {
-	// expected += testDirFileList.get(i).getName() + "\n";
-	// }
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChains1() {
-	// String input = "ls | grep test | grep 01 | cat - \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "test_file_01.txt\n\n";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChains2() {
-	// String input =
-	// "echo test_file_01.txt | cat | cat - test_file_01.txt \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "test_file_01.txt\nsausage\nblubber\npencil\ncloud\n";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChains3() {
-	// String input =
-	// "echo test_file_01.txt | cat test_file_02.txt - | cut -c 1-4 \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "gek1\nACC1\nsw21\npc11\ntest\n";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChains4() {
-	// String input =
-	// "sort test_file_03.txt test_file_02.txt | uniq | grep -A 2 -B 2 moon \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "computer\nhammer\nmoon\nnetwork\npencil\n";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChains5() {
-	// String input =
-	// "cat test_file_01.txt test_file_02.txt | grep ^A | grep -c -v a \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChains6() {
-	// String input = " \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChains7() {
-	// String input =
-	// "comm test_file_01.txt test_file_02.txt | grep -A 2 -B 3 a | paste f2.txt \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChains8() {
-	// String input =
-	// "paste -s test_file_01.txt | cat | cat - test_file_02.txt \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChains9() {
-	// String input = "cut - filename | grep | cat - \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChains10() {
-	// String input =
-	// "echo test_file_01.txt | cat test_file_02.txt - | cut -c 1-4 | grep [a\\|b] | grep sa \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "saus";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChainsNegtive1() {
-	// String input = " \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChainsNegtive2() {
-	// String input = " \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChainsNegtive3() {
-	// String input = " \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
-	//
-	// @Test
-	// public void testChainsNegtive4() {
-	// String input = " \r\n ";
-	// System.setIn(new ByteArrayInputStream(input.getBytes()));
-	// String header = System.getProperty("user.dir") + " $: ";
-	//
-	// Thread t = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// shell.start();
-	// }
-	// });
-	// t.run();
-	//
-	// // generate expected string
-	// String expected = "";
-	//
-	// // remove header and windows dependency
-	// String result = outContent.toString().replace(header,
-	// "").replaceAll("\r", "");
-	// assertEquals(expected, result);
-	// }
+	@Test
+	public void testSimple() {
+		String input = "ls\r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "";
+		for (int i = 0; i < testDirFileList.size(); i++) {
+			expected += testDirFileList.get(i).getName() + "\n";
+		}
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains1() {
+		String input = "ls | grep test | grep 01 | cat - \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "testFile_01.txt\n\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains2() {
+		String input = "echo testFile_01.txt | cat | cat - testFile_01.txt \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "testFile_01.txt\nsausage\nblubber\npencil\ncloud\n\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains3() {
+		String input = "echo testFile_01.txt | cat testFile_02.txt - | cut -c 1-4 - | grep o \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "clou\nmoon\ncomp\nscho\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains4() {
+		String input = "sort testFile_03.txt testFile_02.txt | uniq | grep -A 2 -B 2 moon \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "computer\nhammer\nmoon\nnetwork\npencil\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains5() {
+		String input = "cat testFile_05.txt testFile_02.txt | grep ^c | grep -c -v a \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "2\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains6() {
+		String input = "cat testFile_01.txt testFile_03.txt | sort - | uniq - | wc -l - \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "5\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains7() {
+		String input = "comm testFile_01.txt testFile_03.txt | grep sa | paste testFile_01.txt - \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "\t\t\t\tsausage\n\t\tsausage	sausage\nblubber\npencil\ncloud\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains8() {
+		String input = "paste -s testFile_01.txt | cat | cat - testFile_02.txt | grep b \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "sausage\tblubber\tpencil\tcloud\nblubber\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains9() {
+		String input = "cut -c 2-4 testFile_01.txt | sort - | paste -s - | cat - \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "aus\tenc\tlou\tlub\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChains10() {
+		String input = "echo testFile_01.txt | cat testFile_02.txt - | cut -c 1-4 - | grep [a\\|b] | grep sa \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "saus";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChainsNegtive1() {
+		String input = "echo testFile_01.txt | cat | cat - testFile_01.txt | echo - \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "-\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChainsNegtive2() {
+		String input = "cd .. | cd .. | cd .. | pwd \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = System.getProperty("user.dir") + "\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChainsNegtive3() {
+		String input = "cat invalid | cat - testFile_01.txt | grep invalid \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void testChainsNegtive4() {
+		String input = "cat invalid | cat - testFile_01.txt | grep sa \r\n ";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+		String header = System.getProperty("user.dir") + " $: ";
+
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				shell.start();
+			}
+		});
+		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// generate expected string
+		String expected = "sausage\n";
+
+		// remove header and windows dependency
+		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
+		assertEquals(expected, result);
+	}
 
 	@Test
 	public void testStateChange1() {
@@ -469,9 +533,16 @@ public class BlackBoxTest {
 			}
 		});
 		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		// generate expected string
-		String expected = header.replace(" $: ", "") + "\n" + newHeader.replace(" $: ", "") + "\n" + "words_random.txt" + "\n";
+		String expected = header.replace(" $: ", "") + "\n" +
+				newHeader.replace(" $: ", "") + "\n" + "words_random.txt" + "\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replace(newHeader, "").replaceAll("\r", "");
@@ -480,7 +551,9 @@ public class BlackBoxTest {
 
 	@Test
 	public void testStateChange2() {
-		String input = " \r\n ";
+		String input = "ls | grep tempFile_01 \r\n move testFolder" +
+				File.separator + "tempFile_01.txt . \r\n ls | grep tempFile_01 \r\n move tempFile_01.txt testFolder"
+				+ File.separator + " \r\n ls | grep tempFile_01 \r\n";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
 		String header = System.getProperty("user.dir") + " $: ";
 
@@ -491,9 +564,15 @@ public class BlackBoxTest {
 			}
 		});
 		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		// generate expected string
-		String expected = "";
+		String expected = "\ntempFile_01.txt\n\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
@@ -502,7 +581,10 @@ public class BlackBoxTest {
 
 	@Test
 	public void testStateChange3() {
-		String input = " \r\n ";
+		String input = "ls | grep tempFile_01 \r\n copy testFolder" +
+				File.separator + "tempFile_01.txt . \r\n ls | grep tempFile_01 \r\n " +
+				"copy tempFile_01.txt testFolder" + File.separator +
+				" \r\n ls testFolder | grep tempFile_01 \r\n ";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
 		String header = System.getProperty("user.dir") + " $: ";
 
@@ -513,9 +595,17 @@ public class BlackBoxTest {
 			}
 		});
 		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		TestUtils.delete(new File(System.getProperty("user.dir") + File.separator
+				+ "tempFile_01.txt"));
 
 		// generate expected string
-		String expected = "";
+		String expected = "\ntempFile_01.txt\ntempFile_01.txt\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
@@ -524,7 +614,10 @@ public class BlackBoxTest {
 
 	@Test
 	public void testStateChange4() {
-		String input = " \r\n ";
+		String input = "copy testFile_01.txt testFolder" + File.separator +
+				" \r\n "
+				+ File.separator + " \r\n ls testFolder | grep testFile_01 \r\n "
+				+ "cat testFolder" + File.separator + "testFile_01.txt \r\n";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
 		String header = System.getProperty("user.dir") + " $: ";
 
@@ -535,9 +628,17 @@ public class BlackBoxTest {
 			}
 		});
 		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		TestUtils.delete(new File(System.getProperty("user.dir") + File.separator
+				+ "testFolder" + File.separator + "testFile_01.txt"));
 
 		// generate expected string
-		String expected = "";
+		String expected = "testFile_01.txt\nsausage\nblubber\npencil\ncloud\n\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
@@ -546,7 +647,8 @@ public class BlackBoxTest {
 
 	@Test
 	public void testStateChange5() {
-		String input = " \r\n ";
+		String input =
+				"echo lala \r\n copy testFile_01.txt testFile_01_copy.txt \r\n echo mummy \r\n ls | grep testFile_01 \r\n";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
 		String header = System.getProperty("user.dir") + " $: ";
 
@@ -557,9 +659,17 @@ public class BlackBoxTest {
 			}
 		});
 		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		TestUtils.delete(new File(System.getProperty("user.dir") + File.separator
+				+ "testFile_01_copy.txt"));
 
 		// generate expected string
-		String expected = "";
+		String expected = "lala\nmummy\ntestFile_01.txt\ntestFile_01_copy.txt\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
@@ -568,7 +678,7 @@ public class BlackBoxTest {
 
 	@Test
 	public void testStateChangeNegtive1() {
-		String input = " \r\n ";
+		String input = "delete invalid.txt \r\n ls \r\n";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
 		String header = System.getProperty("user.dir") + " $: ";
 
@@ -579,9 +689,18 @@ public class BlackBoxTest {
 			}
 		});
 		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		// generate expected string
 		String expected = "";
+		for (int i = 0; i < testDirFileList.size(); i++) {
+			expected += testDirFileList.get(i).getName() + "\n";
+		}
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
@@ -590,7 +709,7 @@ public class BlackBoxTest {
 
 	@Test
 	public void testStateChangeNegtive2() {
-		String input = " \r\n ";
+		String input = "copy invalid.txt invalid2.txt \r\n ls \r\n";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
 		String header = System.getProperty("user.dir") + " $: ";
 
@@ -601,9 +720,18 @@ public class BlackBoxTest {
 			}
 		});
 		t.run();
+		// generally wait for a while
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		// generate expected string
 		String expected = "";
+		for (int i = 0; i < testDirFileList.size(); i++) {
+			expected += testDirFileList.get(i).getName() + "\n";
+		}
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");

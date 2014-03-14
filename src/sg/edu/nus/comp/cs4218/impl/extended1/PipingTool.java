@@ -76,6 +76,9 @@ public class PipingTool extends ATool implements IPipingTool {
 
 	@Override
 	public String pipe(ITool from, ITool to) {
+		if (from.getClass().getName().contains("CdTool")) {
+			return "";
+		}
 		// execute command 1
 		String returnedValue = from.execute(workingDir, null);
 		if (from.getStatusCode() != 0 && returnedValue != null) {
@@ -87,6 +90,9 @@ public class PipingTool extends ATool implements IPipingTool {
 
 	@Override
 	public String pipe(String stdout, ITool to) {
+		if (to.getClass().getName().contains("CdTool")) {
+			return "";
+		}
 		// execute command 2
 		String returnedValue = to.execute(workingDir, stdout);
 		if (to.getStatusCode() != 0 && returnedValue != null) {

@@ -150,4 +150,15 @@ public class PipingToolTest {
 
 		assertEquals(result, "");
 	}
+
+	@Test
+	public void testPipeCdTool() {
+		String commandline = "cd .. | cd .. ";
+		String output = "";
+		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
+
+		String result = pipingTool.execute(new File(rootParent), null);
+
+		assertEquals(output, result);
+	}
 }

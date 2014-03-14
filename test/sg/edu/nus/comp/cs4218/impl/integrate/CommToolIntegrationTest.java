@@ -180,8 +180,7 @@ public class CommToolIntegrationTest {
 		String commandline = "wc -l testCase_3.txt | comm - testCase_2.txt";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(new File(rootParent), null);
-		System.out.println(output);
-		String expectedOutput = "5 testCase_3.txt"+
+		String expectedOutput = "5\ttestCase_3.txt"+
 		"\n\t\tgek1517" +
 		"\n\t\tACC1002X" +
 		"\n\t\tsw2104" +
@@ -253,7 +252,7 @@ public class CommToolIntegrationTest {
 		String commandline = "sort | cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(new File(rootParent), null);
-		String expectedOutput = "";
+		String expectedOutput = "\n";
 		assertEquals(expectedOutput, output);
 	}
 	

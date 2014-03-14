@@ -42,6 +42,7 @@ public class DeleteTool extends ATool implements IDeleteTool {
 		// check for argument number
 		if (args == null || args.length < 1) {
 			if (stdin == null || stdin.trim().length() < 1) {
+				setStatusCode(1);
 				return "No input received.";
 			}
 		} else {
@@ -91,17 +92,20 @@ public class DeleteTool extends ATool implements IDeleteTool {
 				// Delete the source folders
 				for (int i = 0; i < fList.length; i++) {
 					File source = new File(file, fList[i]);
-					Files.deleteIfExists(source.toPath());
+					if (Files.deleteIfExists(source.toPath()))
+						setStatusCode(0);
+					else
+						setStatusCode(1);
 				}
-				Files.deleteIfExists(file.toPath());
-			} else {
-				// Found a file. Delete it
-				if (!(Files.deleteIfExists(file.toPath()))) {
+				if (!Files.deleteIfExists(file.toPath())){
 					setStatusCode(1);
-				} else {
+				} else{
 					setStatusCode(0);
 				}
-
+			} else {
+				// Found a file. Delete it
+				if (Files.deleteIfExists(file.toPath()))
+					setStatusCode(0);
 			}
 
 		} catch (Exception ex) {

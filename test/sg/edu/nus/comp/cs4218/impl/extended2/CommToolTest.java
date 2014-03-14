@@ -76,7 +76,9 @@ public class CommToolTest {
 
 	}
 
-	// New case added
+	/** @NewCaseAdded
+	 * 
+	 */
 	@Test
 	public void executeNoOptionTestAbsolutePath() {
 		String workingDir = System.getProperty("user.dir");
@@ -92,7 +94,9 @@ public class CommToolTest {
 
 	}
 
-	// New case added
+	/** @NewCaseAdded
+	 * 
+	 */
 	@Test
 	public void executeNoOptionTestInvalidFile() {
 		String workingDir = System.getProperty("user.dir");
@@ -105,7 +109,9 @@ public class CommToolTest {
 
 	}
 
-	// New case added
+	/** @NewCaseAdded
+	 * 
+	 */
 	@Test
 	public void executeNoOptionTestInvalidFile2() {
 		String workingDir = System.getProperty("user.dir");
@@ -118,7 +124,9 @@ public class CommToolTest {
 
 	}
 
-	// New case added
+	/** @NewCaseAdded
+	 * 
+	 */
 	@Test
 	public void executeInvalidOptions() {
 		String workingDir = System.getProperty("user.dir");
@@ -158,6 +166,36 @@ public class CommToolTest {
 
 	}
 
+	/**
+	 * @NewCaseAdded
+	 */
+	@Test
+	public void executeDoNotCheckSortTest2() {
+		String[] args = { "-d", "wrongFileINPUT.txt", "commTestCase1a.txt" };
+		commTool = new CommTool(args);
+		String workingDir = System.getProperty("user.dir");
+		String output = "Invalid command";
+		File f = new File(workingDir);
+		assertEquals(commTool.execute(f, null), output);
+		assertEquals(commTool.getStatusCode(), 1);
+
+	}
+
+//	/**
+//	 * @NewCaseAdded
+//	 */
+//	@Test
+//	public void executeDoNotCheckSortTest3() {
+//		String[] args = { "-d", "testCase_1.txt", "testCase_3.txt" };
+//		commTool = new CommTool(args);
+//		String workingDir = System.getProperty("user.dir");
+//		String output = "\t\t\t\taaa" + "\nbbb" + "\n\t\tccc" + "\n\t\teee"
+//				+ "\nffff" + "\n\t\tgggggg";
+//		File f = new File(workingDir);
+//		assertEquals(commTool.execute(f, null), output);
+//		assertEquals(commTool.getStatusCode(), 0);
+//	}
+	
 	@Test
 	public void executeCheckSortTest() {
 		String[] args = { "-c", "commTestCase1a.txt", "commTestCase1b.txt" };
@@ -168,7 +206,6 @@ public class CommToolTest {
 		File f = new File(workingDir);
 		assertEquals(commTool.execute(f, null), output);
 		assertEquals(commTool.getStatusCode(), 0);
-
 	}
 
 	@Test
@@ -181,7 +218,6 @@ public class CommToolTest {
 		File f = new File(workingDir);
 		assertEquals(commTool.execute(f, null), output);
 		assertEquals(commTool.getStatusCode(), 0);
-
 	}
 
 	@Test
@@ -197,6 +233,37 @@ public class CommToolTest {
 
 	}
 
+	/**
+	 * NewCaseAdded
+	 */
+	@Test
+	public void executeCheckSortTest4() {
+		String[] args = { "-c", "-", "commTestCase2a.txt" };
+		commTool = new CommTool(args);
+		String workingDir = System.getProperty("user.dir");
+		String output = "Invalid command";
+		File f = new File(workingDir);
+		assertEquals(commTool.execute(f, null), output);
+		assertEquals(commTool.getStatusCode(), 1);
+
+	}
+	
+//	/**
+//	 * @NewCaseAdded
+//	 */
+//	@Test
+//	public void executeCheckSortTest5() {
+//		String[] args = { "-c", "testCase_1.txt", "testCase_5.txt" };
+//		commTool = new CommTool(args);
+//		String workingDir = System.getProperty("user.dir");
+//		String output = "bbb" + "\n\t\tccc" + "\n\t\t\t\tddd" + "\n\t\teee"
+//				+ "\nfff" + "\nNot Sorted!";
+//		File f = new File(workingDir);
+//		assertEquals(commTool.execute(f, null), output);
+//		assertEquals(commTool.getStatusCode(), 0);
+//
+//	}
+
 	@Test
 	public void executeCheckSortTest3() {
 		String[] args = { "-c", "commTestCase2b.txt", "commTestCase2a.txt" };
@@ -209,11 +276,14 @@ public class CommToolTest {
 		assertEquals(commTool.getStatusCode(), 0);
 
 	}
-
+/**
+ * @CORRECTED - changed file name to uniqTestCase1 and 2 from
+  uniqTestCase1b and 1a (No files with those names were given to us)
+ * @throws IOException
+ */
 	@Test
 	public void executeMutipleOptionsTest() throws IOException {
-		// @CORRECTED - changed file name to uniqTestCase1 and 2 from
-		// uniqTestCase1b and 1a (No files with those names were given to us)
+	
 		String[] args = { "-c", "-d", "uniqTestCase1.txt", "uniqTestCase2.txt" };
 		commTool = new CommTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -223,7 +293,44 @@ public class CommToolTest {
 		assertEquals(commTool.getStatusCode(), 1);
 
 	}
+	
+	/**
+	 * NewCaseAdded
+	 * @throws IOException
+	 */
+	@Test
+	public void executeMutipleOptionsTest1() throws IOException {
+		// @CORRECTED - changed file name to uniqTestCase1 and 2 from
+		// uniqTestCase1b and 1a (No files with those names were given to us)
+		String[] args = { "-", "-", "uniqTestCase1.txt", "uniqTestCase2.txt" };
+		commTool = new CommTool(args);
+		String workingDir = System.getProperty("user.dir");
 
+		File f = new File(workingDir);
+		assertEquals(commTool.execute(f, null), "Invalid command");
+		assertEquals(commTool.getStatusCode(), 1);
+
+	}
+	
+	/**
+	 * NewCaseAdded
+	 * @throws IOException
+	 */
+	@Test
+	public void executeMutipleOptionsTest2() throws IOException {
+		// @CORRECTED - changed file name to uniqTestCase1 and 2 from
+		// uniqTestCase1b and 1a (No files with those names were given to us)
+		String[] args = { "-d", "-", "uniqTestCase1.txt", "uniqTestCase2.txt" };
+		commTool = new CommTool(args);
+		String workingDir = System.getProperty("user.dir");
+
+		File f = new File(workingDir);
+		assertEquals(commTool.execute(f, null), "Invalid command");
+		assertEquals(commTool.getStatusCode(), 1);
+
+	}
+
+	// no positive test for this one possible
 	@Test
 	public void executeInvalidOptionTest() throws IOException {
 		String[] args = { "-" };
@@ -235,6 +342,7 @@ public class CommToolTest {
 		assertEquals(commTool.getStatusCode(), 1);
 	}
 
+	// no positive test for this one possible
 	@Test
 	public void executeInvalidFileTest() throws IOException {
 		String[] args = { "-i", "commTestCase1a.txt", "input2q3t.tx3t" };
@@ -258,6 +366,38 @@ public class CommToolTest {
 		assertEquals(commTool.getStatusCode(), 0);
 	}
 
+//	/**
+//	 * @NEWCASEADDED
+//	 * @throws IOException
+//	 */
+//	@Test
+//	public void executeSameFileTest1() throws IOException {
+//		String[] args = { "-c", "commTestCase1b.txt", "commTestCase1b.txt" };
+//		commTool = new CommTool(args);
+//		String workingDir = System.getProperty("user.dir");
+//		String output = "\t\t\t\taaa" + "\n\t\t\t\tccc" + "\n\t\t\t\teee"
+//				+ "\n\t\t\t\tgggggg";
+//		File f = new File(workingDir);
+//		assertEquals(commTool.execute(f, null), output);
+//		assertEquals(commTool.getStatusCode(), 0);
+//	}
+//	
+	/**
+	 * @NEWCASEADDED
+	 * @throws IOException
+	 */
+	@Test
+	public void executeSameFileTest2() throws IOException {
+		String[] args = { "-d", "commTestCase1a.txt", "commTestCase1a.txt" };
+		commTool = new CommTool(args);
+		String workingDir = System.getProperty("user.dir");
+		String output = "\t\t\t\taaa" + "\n\t\t\t\tccc" + "\n\t\t\t\teee"
+				+ "\n\t\t\t\tgggggg";
+		File f = new File(workingDir);
+		assertEquals(commTool.execute(f, null), output);
+		assertEquals(commTool.getStatusCode(), 0);
+	}
+	
 	@Test
 	public void compareFilesDifferentInputTest() {
 		String input1 = "abc aed";
@@ -266,8 +406,9 @@ public class CommToolTest {
 		assertTrue(Integer.parseInt(commTool.compareFiles(input1, input2)) < 0);
 	}
 
-	// New case added
-
+	/**
+	 * @NEWCASEADDED
+	 */
 	@Test
 	public void compareFilesDifferentInputTest1() {
 		String input1 = "azz aed";
@@ -275,6 +416,17 @@ public class CommToolTest {
 
 		assertTrue(Integer.parseInt(commTool.compareFiles(input1, input2)) > 0);
 	}
+//	
+//	/**
+//	 * @NEWCASEADDED
+//	 */
+//	@Test
+//	public void compareFilesDifferentInputTest2() {
+//		String input1 = "I am zz aed";
+//		String input2 = "acdef fe";
+//
+//		assertTrue(Integer.parseInt(commTool.compareFiles(input1, input2)) > 0);
+//	}
 
 	@Test
 	public void compareFilesSameInputTest() {

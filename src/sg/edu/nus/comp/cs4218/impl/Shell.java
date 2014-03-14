@@ -173,7 +173,6 @@ public class Shell implements IShell {
 				tool.execute(f, null);
 			}
 		};
-
 		return future = executorService.submit(runnable);
 	}
 
