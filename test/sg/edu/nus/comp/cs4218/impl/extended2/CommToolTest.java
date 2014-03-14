@@ -416,17 +416,17 @@ public class CommToolTest {
 
 		assertTrue(Integer.parseInt(commTool.compareFiles(input1, input2)) > 0);
 	}
-//	
-//	/**
-//	 * @NEWCASEADDED
-//	 */
-//	@Test
-//	public void compareFilesDifferentInputTest2() {
-//		String input1 = "I am zz aed";
-//		String input2 = "acdef fe";
-//
-//		assertTrue(Integer.parseInt(commTool.compareFiles(input1, input2)) > 0);
-//	}
+	
+	/**
+	 * @NEWCASEADDED
+	 */
+	@Test
+	public void compareFilesDifferentInputTest2() {
+		String input1 = "I am zz aed";
+		String input2 = "acdef fe";
+		String result = commTool.compareFiles(input1, input2);
+		assertTrue(Integer.parseInt(result)< 0);
+	}
 
 	@Test
 	public void compareFilesSameInputTest() {
@@ -486,10 +486,42 @@ public class CommToolTest {
 		commTool.currentLine2 = "eifjefe epfamfe";
 		String input2 = "acdef";
 
-		assertEquals(commTool.compareFilesCheckSortStatus(input1, input2),
-				NOT_SORTED);
+		assertEquals(NOT_SORTED, commTool.compareFilesCheckSortStatus(input1, input2));
 	}
 
+	/**
+	 * @NewCaseAdded
+	 */
+	@Test 
+	public void testParser() {
+		String[] args = { "-d", "-", "commTestCase1a.txt" };
+		commTool = new CommTool(args);
+		String output = commTool.parse();
+		assertEquals("d:f1",output);
+	}
+	
+
+	/**
+	 * @NewCaseAdded
+	 */
+	@Test 
+	public void testParser1() {
+		String[] args = { "-c", "commTestCase1a.txt", "-" };
+		commTool = new CommTool(args);
+		String output = commTool.parse();
+		assertEquals("c:f2",output);
+	}
+	
+	/**
+	 * @NewCaseAdded
+	 */
+	@Test 
+	public void testParser2() {
+		String[] args = { "-c", "-", "commTestCase1a.txt", "-" };
+		commTool = new CommTool(args);
+		String output = commTool.parse();
+		assertEquals(INVALID_COMMAND,output);
+	}
 	// user defined function
 	@Test
 	public void readFiletest() {
