@@ -52,7 +52,7 @@ public class CatTool extends ATool implements ICatTool {
 						}
 						content += getStringForFile(file);
 					} else {
-						content += stdin + "\n";
+						content += stdin;
 						setStatusCode(0);
 					}
 				}

@@ -25,6 +25,20 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  *      -help : Brief information about supported options
  */
 
+/**
+ * Specifications: comm file1 file2
+ * comm - file2
+ * comm file2 -
+ * comm -c - file2
+ * comm -d file1 -
+ * comm -c file1 file2
+ * comm -d file1 file2
+ * comm -help
+ * comm - -c -help (help gets priority)
+ * This will not work-> comm - -
+ * @author neha01mittal
+ *
+ */
 public class CommTool extends ATool implements ICommTool {
 
 	private static final String INVALID_COMMAND = "Invalid command";
