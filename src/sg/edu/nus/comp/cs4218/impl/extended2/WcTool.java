@@ -85,17 +85,10 @@ public class WcTool extends ATool implements IWcTool {
 
 		String content = null;
 		if (stdin != null && stdin.compareTo("") != 0) {
-			// content = stdin;
-
-			if (args == null) {
-				args = stdin.split(" ");
-			} else {
-				if (args != null && args.length > 0)
-					content = stdin;
-			}
+			content = stdin;
 		}
 
-		if (args[0] != null && args[0].compareTo("-m") == 0) {
+		if (args.length > 0 && args[0] != null && args[0].compareTo("-m") == 0) {
 			try {
 				characterCount(result, content);
 			} catch (IOException e) {
@@ -103,7 +96,7 @@ public class WcTool extends ATool implements IWcTool {
 						+ ": No such file or directory.");
 				readStatus = 1;
 			}
-		} else if (args[0] != null && args[0].compareTo("-w") == 0) {
+		} else if (args.length > 0 && args[0] != null && args[0].compareTo("-w") == 0) {
 			try {
 				wordCount(result, content);
 			} catch (IOException e) {
@@ -111,7 +104,7 @@ public class WcTool extends ATool implements IWcTool {
 						+ ": No such file or directory.");
 				readStatus = 1;
 			}
-		} else if (args[0] != null && args[0].compareTo("-l") == 0) {
+		} else if (args.length > 0 && args[0] != null && args[0].compareTo("-l") == 0) {
 			try {
 				lineCount(result, content);
 			} catch (IOException e) {
@@ -119,9 +112,9 @@ public class WcTool extends ATool implements IWcTool {
 						+ ": No such file or directory.");
 				readStatus = 1;
 			}
-		} else if (args[0] != null && args[0].compareTo("-help") == 0) {
+		} else if (args.length > 0 && args[0] != null && args[0].compareTo("-help") == 0) {
 			result.append(getHelp());
-		} else if (args[0] != null && args[0].startsWith("-")
+		} else if (args.length > 0 && args[0] != null && args[0].startsWith("-")
 				&& args[0].compareTo("-m") != 0 && args[0].compareTo("-l") != 0
 				&& args[0].compareTo("-w") != 0) {
 			result.append("Invalid arguments.");
