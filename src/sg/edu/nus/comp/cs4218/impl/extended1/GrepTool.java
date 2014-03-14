@@ -194,7 +194,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		for (int i = patternIndex + 1; i < args.length; i++) {
 			result.add(args[i]);
 		}
-
+		setStatusCode(0);
 		return result;
 	}
 
@@ -216,11 +216,12 @@ public class GrepTool extends ATool implements IGrepTool {
 	@Override
 	public int getCountOfMatchingLines(String pattern, String input) {
 		int result = 0;
-		result = getLisOftMatchingLines(pattern, input);
+		result = getListOfMatchingLines(pattern, input);
+		setStatusCode(0);
 		return result;
 	}
 
-	private int getLisOftMatchingLines(String pattern, String input) {
+	private int getListOfMatchingLines(String pattern, String input) {
 		int result = 0;
 
 		try {
@@ -235,6 +236,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		} catch (Exception e) {
 			setStatusCode(1);
 		}
+		setStatusCode(0);
 		return result;
 	}
 
@@ -249,7 +251,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			if (match(line, pattern))
 				mark[i] = 1;
 		}
-
+		setStatusCode(0);
 		return result;
 	}
 
@@ -283,6 +285,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			}
 			i++;
 		}
+		setStatusCode(0);
 		return parsed;
 	}
 
@@ -314,6 +317,7 @@ public class GrepTool extends ATool implements IGrepTool {
 
 		if (result.endsWith("\n"))
 			result = result.substring(0, result.length() - 1);
+		setStatusCode(0);
 		return result;
 	}
 
@@ -345,6 +349,7 @@ public class GrepTool extends ATool implements IGrepTool {
 
 		if (result.endsWith("\n"))
 			result = result.substring(0, result.length() - 1);
+		setStatusCode(0);
 		return result;
 	}
 
@@ -390,23 +395,7 @@ public class GrepTool extends ATool implements IGrepTool {
 
 		if (result.endsWith("\n"))
 			result = result.substring(0, result.length() - 1);
-		return result;
-	}
-
-	/*
-	 * If a grep command has A, B or C options, after each of the corresponding
-	 * method is called, array mark is changed to mark which line will be
-	 * included in the final result. This method will give the final result.
-	 */
-	public String getResultForMultipleOptions(int[] mark, String input) {
-		String result = "";
-		String[] lines = input.split("\n");
-		for (int i = 0; i < mark.length; i++) {
-			if (mark[i] == 1)
-				result += lines[i] + "\n";
-		}
-		if (result.endsWith("\n"))
-			result = result.substring(0, result.length() - 1);
+		setStatusCode(0);
 		return result;
 	}
 
@@ -426,6 +415,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		}
 		if (result.endsWith("\n"))
 			result = result.substring(0, result.length() - 1);
+		setStatusCode(0);
 		return result;
 	}
 
@@ -445,6 +435,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		}
 		// if (result.endsWith("\n"))
 		// result = result.substring(0, result.length() - 1);
+		setStatusCode(0);
 		return result;
 	}
 
@@ -464,6 +455,7 @@ public class GrepTool extends ATool implements IGrepTool {
 				+ "-o : Show only the part of a matching line that matches PATTERN\n"
 				+ "-v : Select non-matching (instead of matching) lines\n"
 				+ "-help : Brief information about supported options";
+		setStatusCode(0);
 		return helpString;
 	}
 
@@ -520,6 +512,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			}
 			begin = fileLength[i];
 		}
+		setStatusCode(0);
 		return result.toString();
 	}
 }

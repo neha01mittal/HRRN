@@ -483,6 +483,31 @@ public class GrepToolTest {
 				catToolOutput);
 		String expected = "a\n" + "b\n" + "b\n" + "c\n" + "c";
 		assertEquals(expected, result);
+		
+		int statusCode = gt.getStatusCode();
+		assertEquals(0, statusCode);
+	}
+	
+	@Test
+	public void testGetHelp() {
+		GrepTool gt = new GrepTool(null);
+		String result = gt.getHelp();
+		String expected = "The grep command searches one or more input files \n"
+				+ "for lines containing a match to a specified pattern. \n"
+				+ "The grep tool must work on all characters in UTF-8 encoding.\n"
+				+ "Command Format - grep [OPTIONS] PATTERN [FILE]\n"
+				+ "PATTERN - This specifies a regular expression pattern that describes a set of strings\n"
+				+ "FILE - Name of the file, when no file is present (denoted by \"-\") use standard input\n"
+				+ "OPTIONS\n"
+				+ "-A NUM : Print NUM lines of trailing context after matching lines\n"
+				+ "-B NUM : Print NUM lines of leading context before matching lines\n"
+				+ "-C NUM : Print NUM lines of output context\n"
+				+ "-c : Suppress normal output. Instead print a count of matching lines for each input file\n"
+				+ "-o : Show only the part of a matching line that matches PATTERN\n"
+				+ "-v : Select non-matching (instead of matching) lines\n"
+				+ "-help : Brief information about supported options";
+		
+		assertEquals(expected, result);
 	}
 
 	private static void writeToFile(File file, String content) {
