@@ -12,7 +12,20 @@ import java.util.List;
 
 import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
-
+/**
+ * Specifications for Cut
+ * 		cut [options] [character_positions] file
+ *	cut file: prints all the file contents on the console
+ *	cut -c 1,2-4,5 file : prints all the characters at positions from each line.
+ *	cut -d delim -f 1,2-4,5 file: separates characters by delimiter and prints    
+ *	command1 | cut : The output of command1 is treated as file contents to be used by cut
+ *  command1 | cut [options] : stdin used as file contents
+ *  command1 | cut - : "-" is replaced by file contents
+ *  command1 | cut -c [character_positions] - 
+ *  command1 | cut -d "," -f [character_positions] - 
+ * @author ranjini
+ *
+ */
 public class CutTool extends ATool implements ICutTool {
 
 	private final List<String> argList;
