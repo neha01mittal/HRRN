@@ -46,9 +46,12 @@ public class UniqTool extends ATool implements IUniqTool {
 	@Override
 	public String execute(File workingDir, String stdin) {
 
+		boolean inputFlag2 = false;
 		// split arguments and inputs
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-") && args[i].length() > 1) {
+				if (inputFlag2)
+					return "Invalid: option found after input argument";
 				argList.add(args[i]);
 				if (args[i].equals("-f")) {
 					try {
@@ -59,9 +62,11 @@ public class UniqTool extends ATool implements IUniqTool {
 				}
 			} else if (args[i].equals("-")) {
 				inputFlag = (inputFlag == 1) ? 1 : 2;
+				inputFlag2 = true;
 			} else if (args[i].trim().length() > 0) {
 				inputList.add(args[i]);
 				inputFlag = 1;
+				inputFlag2 = true;
 			}
 		}
 

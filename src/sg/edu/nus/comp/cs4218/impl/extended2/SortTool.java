@@ -45,16 +45,21 @@ public class SortTool extends ATool implements ISortTool {
 			inputList.add("-");
 		}
 
+		boolean inputFlag = false;
 		// split arguments and inputs
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-") && args[i].length() > 1) {
+				if (inputFlag)
+					return "Invalid: option found after input argument";
 				argList.add(args[i]);
 			} else if (args[i].equals("-")) {
 				if (stdin == null)
 					return "Invalid: no stdin";
 				inputList.add("-");
+				inputFlag = true;
 			} else if (args[i].trim().length() > 0) {
 				inputList.add(args[i]);
+				inputFlag = true;
 			}
 		}
 
@@ -69,12 +74,12 @@ public class SortTool extends ATool implements ISortTool {
 		}
 
 		// note for flags
-		int inputFlag = 0;
+		int inputFlag2 = 0;
 		String input = "";
 		for (int i = 0; i < inputList.size(); i++) {
-			if (inputList.get(i).equals("-") && inputFlag == 0) {
+			if (inputList.get(i).equals("-") && inputFlag2 == 0) {
 				input += stdin + "\n";
-				inputFlag++;
+				inputFlag2++;
 			} else {
 				String tempInput = readFile(workingDir, inputList.get(i));
 				if (tempInput == null) {
