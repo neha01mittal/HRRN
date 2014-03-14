@@ -316,7 +316,7 @@ public class BlackBoxTest {
 		}
 
 		// generate expected string
-		String expected = "sausage\t\t\t\tsausage\nblubber\t\tsausage\npencil\ncloud\n";
+		String expected = "sausage\t\t\t\t\tsausage\nblubber\t\t\tsausage\npencil\ncloud\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
@@ -372,7 +372,7 @@ public class BlackBoxTest {
 		}
 
 		// generate expected string
-		String expected = "aus\tenc\tlou\tlub\n";
+		String expected = "aus\tenc\tlou\tlub\n\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
