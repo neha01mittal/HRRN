@@ -29,6 +29,7 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 public class WcTool extends ATool implements IWcTool {
 
 	int readStatus = -1;
+	//File workingDir;
 
 	public WcTool(String[] args) {
 		super(args);
@@ -77,6 +78,7 @@ public class WcTool extends ATool implements IWcTool {
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
+		//this.workingDir = workingDir;
 		StringBuilder result = new StringBuilder();
 		if ((args == null) && (stdin == null || stdin.compareTo("") == 0)) {
 			result.append("No arguments and no standard input.");
@@ -188,6 +190,7 @@ public class WcTool extends ATool implements IWcTool {
 		try {
 			String filePath;
 			readStatus = -1;
+			//File f = new File(workingDir, fileName);
 			File f = new File(fileName);
 			if (f.isAbsolute())
 				filePath = fileName;

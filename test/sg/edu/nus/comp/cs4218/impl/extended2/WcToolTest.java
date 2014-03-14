@@ -201,6 +201,15 @@ public class WcToolTest {
 		String expected = "\t4\t5\t31\ttestCase_5.txt";
 		assertEquals(expected, result);
 	}
+	
+	@Test
+	public void testRelativePath() {
+		String[] args = {"-l", "test/file1.txt"};
+		WcTool wt = new WcTool(args);
+		String result = wt.execute(null, "");
+		String expected = "302\ttest/file1.txt";
+		assertEquals(expected, result);
+	}
 
 	public String readFile(String fileName, Charset encoding)
 			throws IOException {
