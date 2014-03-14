@@ -180,21 +180,6 @@ public class CommToolTest {
 		assertEquals(commTool.getStatusCode(), 1);
 
 	}
-
-//	/**
-//	 * @NewCaseAdded
-//	 */
-//	@Test
-//	public void executeDoNotCheckSortTest3() {
-//		String[] args = { "-d", "testCase_1.txt", "testCase_3.txt" };
-//		commTool = new CommTool(args);
-//		String workingDir = System.getProperty("user.dir");
-//		String output = "\t\t\t\taaa" + "\nbbb" + "\n\t\tccc" + "\n\t\teee"
-//				+ "\nffff" + "\n\t\tgggggg";
-//		File f = new File(workingDir);
-//		assertEquals(commTool.execute(f, null), output);
-//		assertEquals(commTool.getStatusCode(), 0);
-//	}
 	
 	@Test
 	public void executeCheckSortTest() {

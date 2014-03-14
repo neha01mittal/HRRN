@@ -51,7 +51,7 @@ public class CommTool extends ATool implements ICommTool {
 		if (input1 == null && input2 == null)
 			return "-1";
 		if (input1 == null) {
-			if (input2.compareTo(currentLine2) >= 0)
+ 			if (input2.compareTo(currentLine2) >= 0)
 				return "-1";
 			else
 				return NOT_SORTED;
@@ -257,9 +257,6 @@ public class CommTool extends ATool implements ICommTool {
 		String parsed = "";
 		int count = 0;
 
-		if (args.length > 3 || args.length < 2)
-			return INVALID_COMMAND;
-
 		int i = args.length - 1;
 		// if (args.length!=0&&args[0].equals("-"))
 		// return "stdin";
@@ -269,8 +266,7 @@ public class CommTool extends ATool implements ICommTool {
 				// priority
 				String option = args[i].substring(1);
 				if (option.equalsIgnoreCase("help")) {
-					parsed = option;
-					break;
+					return option;
 				}
 				count++;
 				parsed = option;
@@ -279,6 +275,9 @@ public class CommTool extends ATool implements ICommTool {
 			i--;
 		}
 
+		if (args.length > 3 || args.length < 2)
+			return INVALID_COMMAND;
+		
 		if (count > 1) { // cannot have comm - - or comm - -c -----
 			return INVALID_COMMAND;
 		}
