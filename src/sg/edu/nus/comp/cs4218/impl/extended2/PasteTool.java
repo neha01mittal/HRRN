@@ -29,7 +29,7 @@ public class PasteTool extends ATool implements IPasteTool {
 		argList = new ArrayList<String>();
 		inputList = new ArrayList<String>();
 		directory = null;
-		File f1 = new File("StdContentClass.txt");
+		File f1 = new File("StdinContentClass.txt");
 		if(f1.exists()){
 			f1.delete();
 		}
@@ -170,7 +170,7 @@ public class PasteTool extends ATool implements IPasteTool {
 				}
 			} else {
 				setStatusCode(1);
-				File f1 = new File("StdContentClass.txt");
+				File f1 = new File("StdinContentClass.txt");
 				if(f1.exists()){
 					f1.delete();
 				}
@@ -205,7 +205,7 @@ public class PasteTool extends ATool implements IPasteTool {
 				}
 				else {
 					setStatusCode(1);
-					File f1 = new File("StdContentClass.txt");
+					File f1 = new File("StdinContentClass.txt");
 					if(f1.exists()){
 						f1.delete();
 					}
@@ -245,14 +245,14 @@ public class PasteTool extends ATool implements IPasteTool {
 		} else {
 			characterList = "Wrong command";
 			setStatusCode(1);
-			File f1 = new File("StdContentClass.txt");
+			File f1 = new File("StdinContentClass.txt");
 			if(f1.exists()){
 				f1.delete();
 			}
 			return characterList;
 		}
 		setStatusCode(0);
-		File f1 = new File("StdContentClass.txt");
+		File f1 = new File("StdinContentClass.txt");
 		if(f1.exists()){
 			f1.delete();
 		}

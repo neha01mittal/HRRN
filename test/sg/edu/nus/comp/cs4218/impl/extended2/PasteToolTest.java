@@ -282,6 +282,7 @@ public class PasteToolTest {
 		// assertEquals(pastetool3.execute(null, null),
 		// "Sorry, piping not implemented yet" +
 		// " hence we do not accept standard input.");
+		assertEquals(pastetool3.execute(null, null), "Error: No such file or directory\n");
 	}
 
 	@Test
@@ -291,6 +292,7 @@ public class PasteToolTest {
 		// assertEquals(pastetool4.execute(null, null),
 		// "Sorry, piping not implemented yet" +
 		// " hence we do not accept standard input.");
+		assertEquals(pastetool4.execute(null, null), "Error: No such file or directory\n");
 	}
 
 	@Test
