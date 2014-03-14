@@ -45,8 +45,10 @@ public class PasteTool extends ATool implements IPasteTool {
 			for (numFiles = 0; numFiles < input.length; numFiles++) {
 				File file = new File(input[numFiles]);
 				if (!file.isAbsolute()) {
-					if (directory == null)
-						directory = new File(System.getProperty("user.dir"));
+					if (directory == null){
+						setStatusCode(1);
+						return "Error: No such file or directory\n";
+					}						
 					file = new File(directory, input[numFiles]);
 				}
 				if (file.exists() & file.canRead()) {
@@ -181,7 +183,8 @@ public class PasteTool extends ATool implements IPasteTool {
 						found = x;
 						Writer writer = null;
 						try {
-							writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("StdinContentClass.txt"), "utf-8"));
+							File f1 = new File("StdinContentClass.txt");
+							writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f1.getAbsolutePath().toString()), "utf-8"));
 							writer.write(stdin);
 						} catch (IOException ex) {
 							// report
@@ -192,7 +195,8 @@ public class PasteTool extends ATool implements IPasteTool {
 							}
 						}
 					}
-					inputList.add("StdinContentClass.txt")	;
+					File f1 = new File("StdinContentClass.txt");
+					inputList.add(f1.getAbsolutePath())	;
 				}
 				else {
 					setStatusCode(1);
@@ -214,7 +218,8 @@ public class PasteTool extends ATool implements IPasteTool {
 				found = x;
 				Writer writer = null;
 				try {
-					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("StdinContentClass.txt"), "utf-8"));
+					File f1 = new File("StdinContentClass.txt");
+					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f1.getAbsolutePath().toString()), "utf-8"));
 					writer.write(stdin);
 				} catch (IOException ex) {
 					// report
@@ -225,7 +230,8 @@ public class PasteTool extends ATool implements IPasteTool {
 					}
 				}
 			}
-			inputList.add("StdinContentClass.txt");
+			File f1 = new File("StdinContentClass.txt");
+			inputList.add(f1.getAbsolutePath());
 		}
 		if (argList.contains("-help")) {
 			setStatusCode(0);

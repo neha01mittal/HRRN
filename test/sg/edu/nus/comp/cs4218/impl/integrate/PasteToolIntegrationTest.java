@@ -39,7 +39,7 @@ public class PasteToolIntegrationTest {
 		String commandline = "pwd | paste ";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		assertEquals(output, "Error: No such file or directory");
+		assertEquals(output, "D:\\HRRN");
 	}
 
 
@@ -134,10 +134,11 @@ public class PasteToolIntegrationTest {
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
 	}
+	
 
 	@Test
 	public void testCat2() {
-		String commandline = "cat " + file1 + "|  paste - ";
+		String commandline = "cat " + file1 + "|  paste -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\n" + "2. Symantec\n" + "3. Palantir\n" + "10. hp\n" + "11. ihis");
