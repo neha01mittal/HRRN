@@ -60,7 +60,7 @@ public class CatToolIntegrationTest {
 		String commandline = "ls | cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
+		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2\n";
 		assertEquals(expectedOutput, output);
 	}
 	
@@ -69,7 +69,7 @@ public class CatToolIntegrationTest {
 		String commandline = "pwd | cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		String expectedOutput = f1.getAbsolutePath();
+		String expectedOutput = f1.getAbsolutePath() + "\n";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -173,7 +173,7 @@ public class CatToolIntegrationTest {
 		String commandline = "echo | cat - repeat";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		String expectedOutput = "";
+		String expectedOutput = "" + "\n";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -182,7 +182,7 @@ public class CatToolIntegrationTest {
 		String commandline = "cat " + file2 + "| cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		String expectedOutput = "This is file 2 content\n";
+		String expectedOutput = "This is file 2 content"+ "\n"+ "\n";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -239,7 +239,7 @@ public class CatToolIntegrationTest {
 		String commandline = "paste " + file1 + " " + file2 + "| cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		String expectedOutput = "This is test content and more	This is file 2 content";
+		String expectedOutput = "This is test content and more	This is file 2 content"+ "\n";
 		assertEquals(expectedOutput, output);
 	} 
 
@@ -248,7 +248,7 @@ public class CatToolIntegrationTest {
 		String commandline = "paste " + file1 + "| cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		String expectedOutput = "This is test content and more";
+		String expectedOutput = "This is test content and more" + "\n";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -257,7 +257,7 @@ public class CatToolIntegrationTest {
 		String commandline = "cut -f "+file1+ "| cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		String expectedOutput = "";
+		String expectedOutput = ""+ "\n";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -275,7 +275,7 @@ public class CatToolIntegrationTest {
 		String commandline = "sort -c " + file1 + "| cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		String expectedOutput = "In order.";
+		String expectedOutput = "In order."+ "\n";
 		assertEquals(expectedOutput, output);
 	}
 	@Test
@@ -283,7 +283,7 @@ public class CatToolIntegrationTest {
 		String commandline = "sort | cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		String expectedOutput = "";
+		String expectedOutput = ""+ "\n";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -293,7 +293,7 @@ public class CatToolIntegrationTest {
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		System.out.println(output);
-		String expectedOutput = "\t\tThis is file 2 content\nThis is test content and more";
+		String expectedOutput = "\t\tThis is file 2 content\nThis is test content and more" + "\n";
 		assertEquals(expectedOutput, output);
 	}
 
