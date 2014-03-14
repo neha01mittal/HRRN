@@ -173,7 +173,7 @@ public class CatToolIntegrationTest {
 		String commandline = "echo | cat - repeat";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		String expectedOutput = "Error: No such file or directory";
+		String expectedOutput = "Error: No such file or directory\n";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -198,11 +198,11 @@ public class CatToolIntegrationTest {
 	@Test
 	public void testWc() {
 		// breaking
-		String commandline = "wc -l test1.txt | cat";
+		String commandline = "wc -l input.txt | cat";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		System.out.println(output);
-		String expectedOutput = "0 test1.txt";
+		String expectedOutput = "\t3\tinput.txt\n";
 		assertEquals(expectedOutput, output);
 	}
 
