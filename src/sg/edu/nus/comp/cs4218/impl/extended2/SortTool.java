@@ -63,6 +63,11 @@ public class SortTool extends ATool implements ISortTool {
 			return getHelp();
 		}
 
+		// help always get print first
+		if (inputList.size() == 0) {
+			inputList.add("-");
+		}
+
 		// note for flags
 		int inputFlag = 0;
 		String input = "";

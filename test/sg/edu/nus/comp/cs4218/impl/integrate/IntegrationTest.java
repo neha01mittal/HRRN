@@ -36,12 +36,9 @@ public class IntegrationTest {
 		FilenameFilter fileNameFilter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				if (name.lastIndexOf('.') > 0) {
-					int lastIndex = name.lastIndexOf('.');
-					String str = name.substring(lastIndex);
-					if (str.equals(".txt")) {
-						return true;
-					}
+				// just ignore the hidden files
+				if (name.lastIndexOf('.') != 0) {
+					return true;
 				}
 				return false;
 			}
