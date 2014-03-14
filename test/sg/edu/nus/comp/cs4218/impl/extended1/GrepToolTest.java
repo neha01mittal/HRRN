@@ -2,14 +2,9 @@ package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -19,7 +14,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Vector;
 
-import org.junit.AfterClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -32,20 +28,20 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
  * @options grep -A NUM filename: Print NUM lines of trailing context after
  *          matching lines grep -B NUM filename: Print NUM lines of leading
  *          context before matching lines grep -C NUM filename: Print NUM lines
- *          of output context grep -c “pattern” filename : Print a count of
- *          matching lines with pattern grep -c ‘“pattern”’ filename : Print a
- *          count of matching lines with “pattern”(pattern surrounded by double
- *          quotes) grep -c “pattern” file1 file2 : Print a count of matching
- *          lines containing pattern for both files grep -o “pattern” filename:
+ *          of output context grep -c ï¿½patternï¿½ filename : Print a count of
+ *          matching lines with pattern grep -c ï¿½ï¿½patternï¿½ï¿½ filename : Print a
+ *          count of matching lines with ï¿½patternï¿½(pattern surrounded by double
+ *          quotes) grep -c ï¿½patternï¿½ file1 file2 : Print a count of matching
+ *          lines containing pattern for both files grep -o ï¿½patternï¿½ filename:
  *          Show only the part of a matching line that matches PATTERN grep -v
- *          “pattern” filename: Select non-matching (instead of matching) lines
+ *          ï¿½patternï¿½ filename: Select non-matching (instead of matching) lines
  *          grep -help : Brief information about supported options grep -o -v
- *          “pattern filename: Provides the conjunction of results from both
- *          options grep -<any option> ‘pattern’ filename: Provides the same
+ *          ï¿½pattern filename: Provides the conjunction of results from both
+ *          options grep -<any option> ï¿½patternï¿½ filename: Provides the same
  *          output as compared to pattern surrounded by double quotes grep -<any
  *          option> <pattern with one word> filename: Provides the same output
  *          even without surrounding quotes if the pattern consists of one word
- *          grep -<any option> “pattern” file1 file2: Provides the output after
+ *          grep -<any option> ï¿½patternï¿½ file1 file2: Provides the output after
  *          executing the command on both files grep filename: Prints the
  *          command since no option was provided
  * @note
@@ -54,26 +50,21 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
  */
 public class GrepToolTest {
 
-	private static File file1;
-	private static File file2;
+	private static String	originalDirString;
 
 	@BeforeClass
-	public static void before() throws IOException {
-		// create file1.txt and file2.txt in current directory
-		GrepToolTest gtt = new GrepToolTest();
-		String curDir = System.getProperty("user.dir");
-		file1 = new File(curDir, "file1.txt");
-		file2 = new File(curDir, "file2.txt");
-		String content = readFile("file1.txt", gtt);
-		writeToFile(file1, content);
-		String content2 = readFile("file2.txt", gtt);
-		writeToFile(file2, content2);
+	public static void beforeClass() {
+		originalDirString = System.getProperty("user.dir");
 	}
 
-	@AfterClass
-	public static void after() throws IOException {
-		file1.delete();
-		file2.delete();
+	@Before
+	public void before() {
+		System.setProperty("user.dir", File.separator + "data" + File.separator + "unitTest");
+	}
+
+	@After
+	public void after() {
+		System.setProperty("user.dir", originalDirString);
 	}
 
 	@Test
@@ -463,7 +454,7 @@ public class GrepToolTest {
 				+ "BAA\n" + "BBAA\n" + "B^A\n" + "BBB^A";
 		assertEquals(expected, result);
 	}
-	
+
 	@Test
 	public void testPipingWithGrepFullOption_02() {
 		String input = "cat testCase_3.txt | grep -A 2 -B 3 b";
@@ -483,11 +474,11 @@ public class GrepToolTest {
 				catToolOutput);
 		String expected = "a\n" + "b\n" + "b\n" + "c\n" + "c";
 		assertEquals(expected, result);
-		
+
 		int statusCode = gt.getStatusCode();
 		assertEquals(0, statusCode);
 	}
-	
+
 	@Test
 	public void testGetHelp() {
 		GrepTool gt = new GrepTool(null);
@@ -506,19 +497,8 @@ public class GrepToolTest {
 				+ "-o : Show only the part of a matching line that matches PATTERN\n"
 				+ "-v : Select non-matching (instead of matching) lines\n"
 				+ "-help : Brief information about supported options";
-		
-		assertEquals(expected, result);
-	}
 
-	private static void writeToFile(File file, String content) {
-		try {
-			PrintWriter out = new PrintWriter(new BufferedWriter(
-					new FileWriter(file, true)));
-			out.print(content);
-			out.close();
-		} catch (IOException e) {
-			// exception handling left as an exercise for the reader
-		}
+		assertEquals(expected, result);
 	}
 
 	private static String readFile(String file, GrepToolTest gtt)
