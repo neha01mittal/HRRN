@@ -90,6 +90,7 @@ public class CdToolTest {
 
 	@After
 	public void after() throws IOException {
+		System.setProperty("user.dir", originalPath);
 		cdTool = null;
 	}
 

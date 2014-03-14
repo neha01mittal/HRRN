@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Vector;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -59,12 +58,6 @@ public class GrepToolTest {
 
 	@Before
 	public void before() {
-		//System.setProperty("user.dir", File.separator + "data" + File.separator + "unitTest");
-	}
-
-	@After
-	public void after() {
-		System.setProperty("user.dir", originalDirString);
 	}
 
 	@Test
@@ -517,5 +510,79 @@ public class GrepToolTest {
 			e.printStackTrace();
 		}
 		return "";
+	}
+
+	@Test
+	public void testParser() {
+		String input = "grep -A 2 \"temp\" file1.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[2] = "temp";
+
+		GrepTool gt = new GrepTool(args);
+		gt.getCountOfMatchingLines("temp", input);
+		Map<String, ArrayList<String>> parsed = gt.parse();
+		assertEquals(parsed.size(), 1);
+	}
+
+	@Test
+	public void testGetFileListFromInput() {
+		String input = "grep -A 2 \"temp\" file1.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[2] = "temp";
+
+		GrepTool gt = new GrepTool(args);
+		gt.getCountOfMatchingLines("temp", input);
+		gt.lastOpt = 1;
+		Vector<String> fileList = gt.getFileListFromInput();
+		assertEquals(fileList.size(), 1);
+	}
+
+	@Test
+	public void testGetFileListFromMultipleFileInput() {
+		String input = "grep -A 2 \"temp\" file1.txt file2.txt file3.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[2] = "temp";
+
+		GrepTool gt = new GrepTool(args);
+		gt.getCountOfMatchingLines("temp", input);
+		gt.lastOpt = 1;
+		Vector<String> fileList = gt.getFileListFromInput();
+		assertEquals(fileList.size(), 3);
+	}
+
+	@Test
+	public void testGetPatternFromInput() {
+		String input = "grep -A 2 \"temp\" file1.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[2] = "temp";
+
+		GrepTool gt = new GrepTool(args);
+		gt.lastOpt = 1;
+		gt.getCountOfMatchingLines("temp", input);
+		String pattern = gt.getPatternFromInput();
+		assertEquals("temp", pattern);
+	}
+
+	@Test
+	public void testGetPatternInDoubleQuotesFromInput() {
+		String input = "grep -A 2 \"=\" file1.txt";
+
+		String[] tokens = input.split(" ");
+		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
+		args[2] = "\"=\"";
+
+		GrepTool gt = new GrepTool(args);
+		gt.lastOpt = 1;
+		gt.getCountOfMatchingLines("\"=\"", input);
+		String pattern = gt.getPatternFromInput();
+		assertEquals("\"=\"", pattern);
 	}
 }

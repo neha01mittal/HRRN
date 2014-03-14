@@ -26,12 +26,19 @@ public class IntegrationTest {
 	private static String				testDirString;
 	private static List<File>			testDirFileList;
 	private Shell						shell;
-	private static InputStream			stdin;
+	private static InputStream			originalStdin;
+	private static PrintStream			originalStdout;
+	private static PrintStream			originalStderr;
 
 	@BeforeClass
 	public static void beforeClass() {
-		// create new dir and files inside
+		// cache system variables.
 		originalDirString = System.getProperty("user.dir");
+		originalStdin = System.in;
+		originalStdout = System.out;
+		originalStderr = System.err;
+
+		// create new dir and files inside
 		testDirString = originalDirString + File.separator + "data" + File.separator + "integrationTest2";
 		FilenameFilter fileNameFilter = new FilenameFilter() {
 			@Override
@@ -44,9 +51,6 @@ public class IntegrationTest {
 			}
 		};
 		testDirFileList = Arrays.asList(new File(testDirString).listFiles(fileNameFilter));
-
-		stdin = System.in;
-		System.setProperty("user.dir", testDirString);
 	}
 
 	@AfterClass
@@ -57,18 +61,19 @@ public class IntegrationTest {
 
 	@Before
 	public void before() {
-		// seize the std content
+		System.setProperty("user.dir", testDirString);
 		System.setOut(new PrintStream(outContent));
 		System.setErr(new PrintStream(errContent));
+
 		shell = new Shell();
 	}
 
 	@After
 	public void after() {
 		// release std and clean the buffer
-		System.setIn(stdin);
-		System.setOut(null);
-		System.setErr(null);
+		System.setIn(originalStdin);
+		System.setOut(originalStdout);
+		System.setErr(originalStderr);
 		shell = null;
 	}
 
