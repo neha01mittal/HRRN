@@ -132,7 +132,9 @@ public class PasteToolTest {
 		// "-s testCase_1.txt testCase_2.txt testCase_3.txt"),
 		// "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\t"
 		// + "gek1517\tACC1002X\tsw2104\tpc1141\ta\tb\tb\tc\tc\tc\t");
-		assertEquals(pastetool.execute(f, "-s testCase_1.txt testCase_2.txt testCase_3.txt"), "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\n"
+		String[] args = {"-s", "testCase_1.txt", "testCase_2.txt", "testCase_3.txt"};
+		pastetool = new PasteTool(args);
+		assertEquals(pastetool.execute(f,null), "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\n"
 				+ "gek1517\tACC1002X\tsw2104\tpc1141\n" + "a\tb\tb\tc\tc\tc");
 
 	}
@@ -145,7 +147,9 @@ public class PasteToolTest {
 		// "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\t"
 		// +
 		// "gek1517\tACC1002X\tsw2104\tpc1141\ta\tb\tb\tc\tc\tc\tapple\tban\tbanana\tcarrot\tcarro\tc\t");
-		assertEquals(pastetool.execute(f, "-s testCase_1.txt testCase_2.txt testCase_3.txt testCase_4.txt"),
+		String[] args = {"-s", "testCase_1.txt", "testCase_2.txt", "testCase_3.txt", "testCase_4.txt"};
+		pastetool = new PasteTool(args);
+		assertEquals(pastetool.execute(f, null),
 				"1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\n" + "gek1517\tACC1002X\tsw2104\tpc1141\n" + "a\tb\tb\tc\tc\tc\n"
 						+ "apple\tban\tbanana\tcarrot\tcarro\tc");
 	}
@@ -222,7 +226,9 @@ public class PasteToolTest {
 		// +
 		// "3. Palantir$$$10. hp$$$11. ihis$$$gek1517$$$ACC1002X$$$sw2104$$$pc1141$$$"
 		// + "a$$$b$$$b$$$c$$$c$$$c$$$");
-		assertEquals(pastetool.execute(f, "-d $$$ testCase_1.txt testCase_2.txt testCase_3.txt"), "1. IBM$$$gek1517$$$a\n" + "2. Symantec$$$ACC1002X$$$b\n"
+		String[] args = {"-d","$$$", "testCase_1.txt", "testCase_2.txt", "testCase_3.txt"};
+		pastetool = new PasteTool(args);
+		assertEquals(pastetool.execute(f, null), "1. IBM$$$gek1517$$$a\n" + "2. Symantec$$$ACC1002X$$$b\n"
 				+ "3. Palantir$$$sw2104$$$b\n" + "10. hp$$$pc1141$$$c\n" + "11. ihis$$$c\n" + "c");
 
 	}
@@ -236,7 +242,10 @@ public class PasteToolTest {
 		// "3. Palantir$$$10. hp$$$11. ihis$$$gek1517$$$ACC1002X$$$sw2104$$$pc1141$$$"
 		// +
 		// "a$$$b$$$b$$$c$$$c$$$c$$$apple$$$ban$$$banana$$$carrot$$$carro$$$c$$$");
-		assertEquals(pastetool.execute(f, "-d $$$ testCase_1.txt testCase_2.txt testCase_3.txt testCase_4.txt"), "1. IBM$$$gek1517$$$a$$$apple\n"
+		String[] args = {"-d","$$$", "testCase_1.txt", "testCase_2.txt", "testCase_3.txt", "testCase_4.txt"};
+		pastetool = new PasteTool(args);
+		
+		assertEquals(pastetool.execute(f, null ), "1. IBM$$$gek1517$$$a$$$apple\n"
 				+ "2. Symantec$$$ACC1002X$$$b$$$ban\n" + "3. Palantir$$$sw2104$$$b$$$banana\n" + "10. hp$$$pc1141$$$c$$$carrot\n" + "11. ihis$$$c$$$carro\n"
 				+ "c$$$c");
 
@@ -260,8 +269,9 @@ public class PasteToolTest {
 
 	@Test
 	public void getHelpTest3() {
-
-		assertEquals(pastetool.execute(f, "-help"), "-s : paste one file at a time instead of in parallel\t"
+		String[] args = {"-help"};
+		pastetool = new PasteTool(args);
+		assertEquals(pastetool.execute(f, null), "-s : paste one file at a time instead of in parallel\t"
 				+ " -d DELIM: Use characters from the DELIM instead of TAB character\t" + " -help : Brief information about supported options");
 	}
 
@@ -320,6 +330,19 @@ public class PasteToolTest {
 		String[] args = { "-d", "@",  "testCase_1.txt", "-" };
 		pastetool = new PasteTool(args);
 		assertEquals(pastetool.execute(f, "1234\n1234"), "1. IBM@1234\n" + "2. Symantec@1234\n" + "3. Palantir\n" + "10. hp\n" + "11. ihis");
+	}
+	
+	@Test
+	public void stdinValidationTest4() {
+		String[] args = { "-s"};
+		pastetool = new PasteTool(args);
+		assertEquals(pastetool.execute(f, "1234\n1234"), "1234\t1234");
+	}
+	
+	@Test
+	public void stdinValidationTest5() {
+		pastetool = new PasteTool(null);
+		assertEquals(pastetool.execute(f, "1234\n1234"), "1234\n1234");
 	}
 
 }
