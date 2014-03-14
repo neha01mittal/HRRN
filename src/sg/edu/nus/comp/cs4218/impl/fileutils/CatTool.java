@@ -51,8 +51,10 @@ public class CatTool extends ATool implements ICatTool {
 							file = new File(workingDir, arg);
 						}
 						content += getStringForFile(file);
-					} else
+					} else {
 						content += stdin + "\n";
+						setStatusCode(0);
+					}
 				}
 			}
 			return content;
