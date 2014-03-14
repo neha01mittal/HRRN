@@ -135,8 +135,9 @@ public class CutToolIntegrationTest {
 		String commandline = "cat " + file1 + "| cut -d 3 -f 1 - ";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		assertEquals(output, "12345\n1234567\n123456789\n12345\n");
+		assertEquals(output, "12\n12\n12\n12");
 	}
+	
 	
 	@Test
 	public void testWc() {

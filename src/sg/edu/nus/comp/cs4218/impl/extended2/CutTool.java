@@ -38,15 +38,12 @@ public class CutTool extends ATool implements ICutTool {
 	@Override
 	public String cutSpecifiedCharactersUseDelimiter(String list, String delim, String input) {
 		// TODO Auto-generated method stub
-		//String escapeDelim = delim;
 		String escapeDelim = "";
-		//if (delim.matches("[^a-zA-Z0-9 ]"))
-		//	escapeDelim = "\\" + delim;
 		for(int i = 0; i < delim.length(); i ++){
 			if (delim.substring(i, i+1).matches("[^a-zA-Z0-9 ]")){
 				escapeDelim = escapeDelim + "\\" + delim.substring(i, i+1);
 			}else{
-				escapeDelim = delim.substring(i, i+1);
+				escapeDelim = escapeDelim + delim.substring(i, i+1);
 			}
 		}
 		String cutString = "";
@@ -214,6 +211,12 @@ public class CutTool extends ATool implements ICutTool {
 		// Set file contents to a string
 		if (file.exists()) {
 			fileContents = getStringForFile(file);
+		}else if(stdin != null && stdin != ""){
+			fileContents = stdin;
+		}else{
+			setStatusCode(1);
+			return "Invalid command";
+		}
 
 			for ( x = 0; x < argList.size(); x++) {
 
@@ -223,9 +226,9 @@ public class CutTool extends ATool implements ICutTool {
 						setStatusCode(0);
 					if(stdin != null && stdin != ""){
 						if(x > found)
-							characterList = stdin + "\t" + result;
+							characterList = "Invalid command";
 						else
-							characterList =  result + "\t" + stdin;
+							characterList =  result;
 					}
 					else
 						characterList = result;
@@ -239,30 +242,15 @@ public class CutTool extends ATool implements ICutTool {
 						setStatusCode(0);
 					if(stdin != null && stdin != "" && (found>-1)){
 						if(x > found)
-							characterList = stdin + "\t" + result;
+							characterList = "Invalid command";
 						else
-							characterList =  result + "\t" + stdin;
+							characterList =  result;
 					}
 					else
 						characterList = result;
 					return characterList;
 				}
 			}
-		} else {
-			if(found > -1){
-				if(stdin != null && stdin != "")
-					return stdin;
-				else{
-					setStatusCode(1);
-					return "Invalid command";
-				}
-			}
-			else {
-				setStatusCode(1);
-				return "Invalid command";
-			}
-		}
-
 		return characterList;
 	}
 
