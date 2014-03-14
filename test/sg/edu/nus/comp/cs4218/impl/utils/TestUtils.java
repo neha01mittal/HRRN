@@ -5,31 +5,32 @@ import java.io.File;
 public class TestUtils {
 
 	public static void delete(File file) {
-		if (file.isDirectory()) {
-			// directory is empty, then delete it
-			if (file.list().length == 0) {
-				file.delete();
-			} else {
-				// list all the directory contents
-				String files[] = file.list();
-
-				for (String temp : files) {
-					// construct the file structure
-					File fileDelete = new File(file, temp);
-
-					// recursive delete
-					delete(fileDelete);
-				}
-
-				// check the directory again, if empty then delete it
+		if (file.exists()) {
+			if (file.isDirectory()) {
+				// directory is empty, then delete it
 				if (file.list().length == 0) {
 					file.delete();
-				}
-			}
+				} else {
+					// list all the directory contents
+					String files[] = file.list();
 
-		} else {
-			// if file, then delete it
-			file.delete();
+					for (String temp : files) {
+						// construct the file structure
+						File fileDelete = new File(file, temp);
+						// recursive delete
+						delete(fileDelete);
+					}
+
+					// check the directory again, if empty then delete it
+					if (file.list().length == 0) {
+						file.delete();
+					}
+				}
+
+			} else {
+				// if file, then delete it
+				file.delete();
+			}
 		}
 	}
 }
