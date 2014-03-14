@@ -13,9 +13,9 @@ public class PasteToolIntegrationTest {
 
 	// ls, pwd, cd, copy, delete, move, paste, comm, grep, wc, uniq, sort, copy
 
-	private static File f1;
-	private static File file1;
-	private static File file2;
+	private static File	f1;
+	private static File	file1;
+	private static File	file2;
 
 	@BeforeClass
 	public static void init() {
@@ -25,7 +25,6 @@ public class PasteToolIntegrationTest {
 		f1.mkdir();
 	}
 
-
 	@Test
 	public void testLs() {
 		String commandline = "ls | paste " + file1 + " " + file2;
@@ -33,15 +32,6 @@ public class PasteToolIntegrationTest {
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
 	}
-	
-	@Test
-	public void testPwd() {
-		String commandline = "pwd | paste ";
-		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
-		String output = pipingTool.execute(f1, null);
-		assertEquals(output, "D:\\HRRN");
-	}
-
 
 	@Test
 	public void testCd() {
@@ -61,12 +51,11 @@ public class PasteToolIntegrationTest {
 
 	@Test
 	public void testMove() {
-		String commandline = "move " + file1 + " " + f1 + "| paste " + file1 + " " + file2; 
+		String commandline = "move " + file1 + " " + f1 + "| paste " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
 	}
-
 
 	@Test
 	public void testCopy() {
@@ -89,12 +78,12 @@ public class PasteToolIntegrationTest {
 	@Test
 	public void testDelete() {
 		File file3 = new File("test.txt");
-		String commandline = "delete " + file3 + "| paste -d ' @ ' " + file1 + " " + file2 ;
+		String commandline = "delete " + file3 + "| paste -d ' @ ' " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM @ gek1517\n" + "2. Symantec @ ACC1002X\n" + "3. Palantir @ sw2104\n" + "10. hp @ pc1141\n" + "11. ihis");
 	}
-		
+
 	@Test
 	public void testDelete2() {
 		String commandline = "delete testFolder2 | paste " + file1 + " " + file2;
@@ -113,20 +102,20 @@ public class PasteToolIntegrationTest {
 
 	@Test
 	public void testEcho2() {
-		String commandline = "echo " + file2 + " | paste -d @ " + file1 + " - " ;
+		String commandline = "echo " + file2 + " | paste -d @ " + file1 + " - ";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM@" + file2 + "\n" + "2. Symantec\n" + "3. Palantir\n" + "10. hp\n" + "11. ihis");
 	}
-	
+
 	@Test
 	public void testEcho3() {
-		String commandline = "echo " + file1 + " " + file2 + " | paste -d @  - " ;
+		String commandline = "echo " + file1 + " " + file2 + " | paste -d @  - ";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "testCase_1.txt testCase_2.txt");
 	}
-	
+
 	@Test
 	public void testCat() {
 		String commandline = "cat " + file1 + "| paste " + file1 + " " + file2;
@@ -134,7 +123,6 @@ public class PasteToolIntegrationTest {
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
 	}
-	
 
 	@Test
 	public void testCat2() {
@@ -143,10 +131,10 @@ public class PasteToolIntegrationTest {
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\n" + "2. Symantec\n" + "3. Palantir\n" + "10. hp\n" + "11. ihis");
 	}
-	
+
 	@Test
 	public void testWc() {
-		String commandline = "wc -l "+file1+"| paste " + file1 + " " + file2;
+		String commandline = "wc -l " + file1 + "| paste " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
@@ -154,7 +142,7 @@ public class PasteToolIntegrationTest {
 
 	@Test
 	public void testWc2() {
-		String commandline = "wc -x test1.txt | paste " + file1 + " " + file2; 
+		String commandline = "wc -x test1.txt | paste " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
@@ -162,7 +150,7 @@ public class PasteToolIntegrationTest {
 
 	@Test
 	public void testUniq() {
-		String commandline = "uniq -f "+file1+"| paste " + file1 + " " + file2;
+		String commandline = "uniq -f " + file1 + "| paste " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
@@ -170,7 +158,7 @@ public class PasteToolIntegrationTest {
 
 	@Test
 	public void testUniq2() {
-		String commandline = "uniq -f -l "+file1+" | paste " + file1 + " " + file2;
+		String commandline = "uniq -f -l " + file1 + " | paste " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
@@ -182,19 +170,19 @@ public class PasteToolIntegrationTest {
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
-	} 
+	}
 
 	@Test
 	public void testPaste2() {
-		String commandline = "paste " + file1 + "| paste -s - " + file2 ;
+		String commandline = "paste " + file1 + "| paste -s - " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		assertEquals(output, "1. IBM\t" + "2. Symantec\t" + "3. Palantir\t" + "10. hp\t"+ "11. ihis\ngek1517\tACC1002X\tsw2104\tpc1141");
+		assertEquals(output, "1. IBM\t" + "2. Symantec\t" + "3. Palantir\t" + "10. hp\t" + "11. ihis\ngek1517\tACC1002X\tsw2104\tpc1141");
 	}
 
 	@Test
 	public void testCut() {
-		String commandline = "cut -c 1,2 "+file1+ "| paste " + file1 + " " + file2;
+		String commandline = "cut -c 1,2 " + file1 + "| paste " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
@@ -202,7 +190,7 @@ public class PasteToolIntegrationTest {
 
 	@Test
 	public void testCut2() {
-		String commandline = "cut -f -c "+file1+ "| paste " + file1 + " " + file2;
+		String commandline = "cut -f -c " + file1 + "| paste " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
@@ -215,6 +203,7 @@ public class PasteToolIntegrationTest {
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\tgek1517\n" + "2. Symantec\tACC1002X\n" + "3. Palantir\tsw2104\n" + "10. hp\tpc1141\n" + "11. ihis");
 	}
+
 	@Test
 	public void testSort2() {
 		String commandline = "sort | paste " + file1 + " " + file2;
@@ -225,12 +214,10 @@ public class PasteToolIntegrationTest {
 
 	@Test
 	public void testComm() {
-		String commandline = "comm "+file1+" "+file2+"| paste -s - ";
+		String commandline = "comm " + file1 + " " + file2 + "| paste -s - ";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "1. IBM\t\t\tgek1517\t" + "2. Symantec\t\t\tACC1002X\t" + "3. Palantir\t\t\tsw2104\t" + "10. hp\t\t\tpc1141\t" + "11. ihis");
 	}
 
-
-	
 }

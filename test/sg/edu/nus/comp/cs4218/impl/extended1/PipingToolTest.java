@@ -25,14 +25,12 @@ public class PipingToolTest {
 
 	private PipingTool		pipingTool;
 	private static Path		rootDirectory;
-	private static String	rootParent;
 	private static String	rootDirectoryString;
 
 	@BeforeClass
 	public static void before() throws IOException {
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + File.separator + "test";
-		rootParent = System.getProperty("user.dir");
+		rootDirectoryString = System.getProperty("user.dir");
 		rootDirectory = Paths.get(rootDirectoryString);
 	}
 
@@ -87,14 +85,12 @@ public class PipingToolTest {
 
 	@Test
 	public void testLsPipeToGrep() {
-		String commandline = "ls | grep .";
+		String commandline = "ls | grep file";
 		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
 		String result = pipingTool.execute(new File(rootDirectoryString), null);
-		String[] results = result.split("\n");
 
-		assertEquals("file1.txt", results[0]);
-		assertEquals("file2.txt", results[1]);
+		assertEquals("file1.txt\nfile2.txt\nfile3.txt", result);
 	}
 
 	@Test
@@ -134,7 +130,7 @@ public class PipingToolTest {
 				+ "\n\t\tffff" + "\ngggggg";
 		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
-		String result = pipingTool.execute(new File(rootParent), null);
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
 
 		assertEquals(result, output);
 	}
@@ -146,7 +142,7 @@ public class PipingToolTest {
 				+ "\n\t\tffff" + "\ngggggg";
 		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
-		String result = pipingTool.execute(new File(rootParent), null);
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
 
 		assertEquals(result, "");
 	}
@@ -157,7 +153,7 @@ public class PipingToolTest {
 		String output = "";
 		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
-		String result = pipingTool.execute(new File(rootParent), null);
+		String result = pipingTool.execute(new File(rootDirectoryString), null);
 
 		assertEquals(output, result);
 	}
