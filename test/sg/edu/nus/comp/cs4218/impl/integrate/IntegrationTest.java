@@ -32,7 +32,7 @@ public class IntegrationTest {
 	public static void beforeClass() {
 		// create new dir and files inside
 		originalDirString = System.getProperty("user.dir");
-		testDirString = originalDirString + File.separator + "data" + File.separator + "integrationTest";
+		testDirString = originalDirString + File.separator + "data" + File.separator + "integrationTest2";
 		FilenameFilter fileNameFilter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {

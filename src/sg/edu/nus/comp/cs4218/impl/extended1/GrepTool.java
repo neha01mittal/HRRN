@@ -104,6 +104,9 @@ public class GrepTool extends ATool implements IGrepTool {
 		} else
 			result = getFinalResultString(fileContent.split("\n"));
 
+		//cut out the \n char at the end of result
+		if (result.endsWith("\n"))
+			result = result.substring(0, result.length() - 1);
 		return result;
 	}
 
@@ -304,7 +307,9 @@ public class GrepTool extends ATool implements IGrepTool {
 			if (mark[i] != 0)
 				result += lines[i] + "\n";
 		}
-
+		
+		if (result.endsWith("\n"))
+			result = result.substring(0, result.length() - 1);
 		return result;
 	}
 
@@ -331,7 +336,9 @@ public class GrepTool extends ATool implements IGrepTool {
 			if (mark[i] != 0)
 				result += lines[i] + "\n";
 		}
-
+		
+		if (result.endsWith("\n"))
+			result = result.substring(0, result.length() - 1);
 		return result;
 	}
 
@@ -369,6 +376,9 @@ public class GrepTool extends ATool implements IGrepTool {
 			if (mark[i] != 0)
 				result += lines[i];
 		}
+		
+		if (result.endsWith("\n"))
+			result = result.substring(0, result.length() - 1);
 		return result;
 	}
 
@@ -384,6 +394,8 @@ public class GrepTool extends ATool implements IGrepTool {
 			if (mark[i] == 1)
 				result += lines[i] + "\n";
 		}
+		if (result.endsWith("\n"))
+			result = result.substring(0, result.length() - 1);
 		return result;
 	}
 
@@ -401,6 +413,8 @@ public class GrepTool extends ATool implements IGrepTool {
 				result += getMatchedGroups(pattern, line) + "\n";
 			}
 		}
+		if (result.endsWith("\n"))
+			result = result.substring(0, result.length() - 1);
 		return result;
 	}
 
@@ -418,7 +432,8 @@ public class GrepTool extends ATool implements IGrepTool {
 			} else
 				mark[i] = 0;
 		}
-
+		//if (result.endsWith("\n"))
+		// result = result.substring(0, result.length() - 1);
 		return result;
 	}
 
@@ -445,12 +460,12 @@ public class GrepTool extends ATool implements IGrepTool {
 	 * source contains pattern as a substring
 	 */
 	public static boolean match(String source, String pattern) {
-		Pattern p = Pattern.compile("[\\[\\]\\+\\|\\*\\\\^\\$]",
-				java.util.regex.Pattern.CASE_INSENSITIVE);
-		Matcher m = p.matcher(pattern);
-
-		if (m.find()) // if pattern contains characters [,],\,$,*,+
-		{
+//		Pattern p = Pattern.compile("[\\[\\]\\+\\|\\*\\\\^\\$]",
+//				java.util.regex.Pattern.CASE_INSENSITIVE);
+//		Matcher m = p.matcher(pattern);
+//
+//		if (m.find()) // if pattern contains characters [,],\,$,*,+
+//		{
 			boolean isRegex;
 			try {
 				Pattern.compile(pattern);
@@ -458,18 +473,17 @@ public class GrepTool extends ATool implements IGrepTool {
 			} catch (PatternSyntaxException e) {
 				isRegex = false;
 			}
-			if (isRegex == false) // pattern is not a syntactically correct
-									// regex
+			if (isRegex == false) 
 				return source.contains(pattern);
 
 			// if pattern is a correct regex
-			Pattern p1 = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+			Pattern p1 = Pattern.compile(pattern);
 			Matcher m1 = p1.matcher(source);
 			return m1.find();
 			// return source.matches(pattern);
-		} else {
-			return source.contains(pattern);
-		}
+//		} else {
+//			return source.contains(pattern);
+//		}
 	}
 
 	public static String getMatchedGroups(String pattern, String line) {

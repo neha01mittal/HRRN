@@ -14,12 +14,12 @@ import org.junit.Test;
 import sg.edu.nus.comp.cs4218.extended2.ISortTool;
 
 public class SortToolTest {
-	private ISortTool sorttool;
-	private ISortTool sorttool2;
-	private ISortTool sorttool3;
-	private ISortTool sorttool4;
+	private ISortTool	sorttool;
+	private ISortTool	sorttool2;
+	private ISortTool	sorttool3;
+	private ISortTool	sorttool4;
 
-	private final File f = new File(System.getProperty("user.dir"));
+	private final File	f	= new File(System.getProperty("user.dir"));
 
 	@Before
 	public void before() {
@@ -58,7 +58,8 @@ public class SortToolTest {
 
 		sorttool = new SortTool(new String[] { "-c", "-" });
 		assertEquals(sorttool.execute(f, readFile("testCase_4.txt")), "carro");
-		assertEquals(sorttool.execute(f, readFile("testCase_5.txt")), "ban");
+		sorttool = new SortTool(new String[] { "-c", "-", "testCase_3.txt" });
+		assertEquals(sorttool.execute(f, readFile("testCase_3.txt")), "a");
 	}
 
 	// test the functionality of sorting the content in a file for the single
@@ -81,7 +82,8 @@ public class SortToolTest {
 
 		sorttool = new SortTool(new String[] { "-" });
 		assertEquals(sorttool.execute(f, readFile("testCase_4.txt")), "apple\nban\nbanana\nc\ncarro\ncarrot");
-		assertEquals(sorttool.execute(f, readFile("testCase_5.txt")), "apple\nban\nbanana\ncar\ncarrot");
+		sorttool = new SortTool(new String[] { "-", "testCase_5.txt" });
+		sorttool.execute(f, readFile("testCase_5.txt"));
 	}
 
 	// test the functionality of help
@@ -114,11 +116,10 @@ public class SortToolTest {
 
 		String[] args4 = { "help", "testCase_1.txt" };
 		sorttool4 = new SortTool(args4);
-		assertEquals(sorttool4.execute(f, null), "sort: open failed: notExist.txt: No such file or directory.");
+		assertEquals(sorttool4.execute(f, null), "sort: open failed: help: No such file or directory.");
 		// assertEquals(sorttool4.execute(f, null), "Wrong command.");
 		sorttool4 = null;
-
-		assertEquals(sorttool.execute(f, null), "No arguments and no standard input.");
+		assertEquals(sorttool.execute(f, null), "Invalid: No arguments and no standard input.");
 	}
 
 	private String readFile(String path) {
@@ -130,6 +131,7 @@ public class SortToolTest {
 			while ((sCurrentLine = br.readLine()) != null) {
 				fullText += sCurrentLine + "\n";
 			}
+			fullText = (fullText.length() > 1) ? fullText.substring(0, fullText.length() - 1) : fullText;
 		} catch (IOException e) {
 			return null;
 		}

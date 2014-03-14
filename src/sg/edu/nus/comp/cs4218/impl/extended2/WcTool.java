@@ -121,31 +121,46 @@ public class WcTool extends ATool implements IWcTool {
 			}
 		} else if (args[0] != null && args[0].compareTo("-help") == 0) {
 			result.append(getHelp());
-		} else {
+		} else if (args[0] != null && args[0].startsWith("-")
+				&& args[0].compareTo("-m") != 0 && args[0].compareTo("-l") != 0
+				&& args[0].compareTo("-w") != 0) {
 			result.append("Invalid arguments.");
-			setStatusCode(1);
+		} else {
+			try {
+				generalCount(result, content);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return result.toString();
+	}
+
+	private void generalCount(StringBuilder result, String content)
+			throws IOException {
+		if (content != null) {
+			result.append("\t" + getNewLineCount(content));
+			result.append("\t" + getWordCount(content));
+			result.append("\t" + getCharacterCount(content));
+		} else
+			for (int i = 0; i < args.length; i++) {
+				content = readFile(args[i], Charset.forName("UTF-8"));
+				result.append("\t" + getNewLineCount(content));
+				result.append("\t" + getWordCount(content));
+				result.append("\t" + getCharacterCount(content));
+				result.append("\t" + args[i]);
+			}
 	}
 
 	private void lineCount(StringBuilder result, String content)
 			throws IOException {
 		Charset std = Charset.forName("UTF-8");
-
-		try {
-			if (content != null)
-				result.append(getNewLineCount(content));
-			else
-				for (int i = 1; i < args.length; i++) {
-					content = readFile(args[i], std);
-					if (readStatus != 1)
-						result.append(getNewLineCount(content));
-					else
-						result.append(content);
-				}
-		} catch (IOException e) {
-			throw new IOException(e.getMessage());
-		}
+		if (content != null)
+			result.append(getNewLineCount(content));
+		else
+			for (int i = 1; i < args.length; i++) {
+				content = readFile(args[i], std);
+				result.append(getNewLineCount(content) + "\t" + args[i]);
+			}
 	}
 
 	private void wordCount(StringBuilder result, String content)
@@ -156,10 +171,7 @@ public class WcTool extends ATool implements IWcTool {
 		else
 			for (int i = 1; i < args.length; i++) {
 				content = readFile(args[i], std);
-				if (readStatus != 1)
-					result.append(getWordCount(content));
-				else
-					result.append(content);
+				result.append(getWordCount(content) + "\t" + args[i]);
 			}
 	}
 
@@ -171,47 +183,13 @@ public class WcTool extends ATool implements IWcTool {
 		else
 			for (int i = 1; i < args.length; i++) {
 				content = readFile(args[i], std);
-				if (readStatus != 1)
-					result.append(getCharacterCount(content));
-				else
-					result.append(content);
+				result.append(getCharacterCount(content) + "\t" + args[i]);
 			}
 	}
 
 	/*
 	 * Read content from file
 	 */
-	public String readFile(String fileName) {
-		String filePath;
-		readStatus = -1;
-		File f = new File(fileName);
-		if (f.isAbsolute())
-			filePath = fileName;
-		else
-			filePath = System.getProperty("user.dir") + File.separator
-					+ fileName;
-
-		StringBuilder sb = new StringBuilder();
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(new File(
-					filePath)));
-
-			String line = "";
-			while ((line = br.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			br.close();
-			readStatus = 0;
-			return sb.toString();
-		} catch (Exception e) {
-			sb.append("word count: open failed: " + fileName
-					+ ": No such file or directory.");
-			readStatus = 1;
-			setStatusCode(1);
-		}
-		return sb.toString();
-	}
-
 	public String readFile(String fileName, Charset encoding)
 			throws IOException {
 		try {

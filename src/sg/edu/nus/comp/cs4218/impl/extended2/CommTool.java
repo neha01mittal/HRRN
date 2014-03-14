@@ -43,7 +43,6 @@ public class CommTool extends ATool implements ICommTool {
 		// TODO Auto-generated method stub
 		return (input1.compareTo(input2) < 0 ? "-1"
 				: (input1.compareTo(input2) == 0) ? "0" : "1");
-
 	}
 
 	@Override
@@ -59,13 +58,15 @@ public class CommTool extends ATool implements ICommTool {
 		} else if (input2 == null) {
 			if (input1.compareTo(currentLine1) > 0)
 				return "-1";
-			else
+			else {
 				return NOT_SORTED;
+			}
 		} else if (input1.compareTo(currentLine1) > 0
 				&& input2.compareTo(currentLine2) > 0)
 			return "-1";
-		else
+		else {
 			return NOT_SORTED;
+		}
 	}
 
 	@Override
@@ -97,21 +98,27 @@ public class CommTool extends ATool implements ICommTool {
 		// TODO Auto-generated method stub
 		String file1 = "";
 		String file2 = "";
-		boolean flag = false;
+		boolean flag1 = false;
+		boolean flag2 = false;
 		String operation = parse();
 		if (operation.equals(INVALID_COMMAND))
 			return INVALID_COMMAND;
 
-		
-		 if (args != null && args.length > 0) {
+		if (args != null && args.length > 0) {
 			if (operation.equalsIgnoreCase("help")) {
 				return getHelp();
-			}
-			else if (operation.equals("stdin") && stdin!=null && !stdin.equals("") && args.length == 2) {
-				flag = true;
-				file2 = args[1];
-			}
-			else if (operation.equalsIgnoreCase("d") && args.length == 3) {
+			} else if (stdin != null && !stdin.equals("") && args.length == 2) {
+				if (operation.equals("f1")) {
+					flag1 = true;
+					file1 = stdin;
+					file2= args[1];
+				}
+				if (operation.equals("f2")) {
+					flag2 = true;
+					file2 = stdin;
+					file1= args[0];
+				}
+			} else if (operation.equalsIgnoreCase("d") && args.length == 3) {
 				// do not care about sorting
 				file1 = args[args.length - 2];
 				file2 = args[args.length - 1];
@@ -128,24 +135,25 @@ public class CommTool extends ATool implements ICommTool {
 			File f1 = new File(file1);
 			File f2 = new File(file2);
 
-			if (!f1.isAbsolute()) {
-				f1 = new File(workingDir, file1);
-			}
-
-			if (!f2.isAbsolute()) {
-				f2 = new File(workingDir, file2);
-			}
-
 			List<String> file1Data = new ArrayList<String>();
-			if (flag) {
+			List<String> file2Data = new ArrayList<String>();
+			
+			if (flag1) {
 				file1Data = Arrays.asList(stdin.split("\\r?\\n"));
 			} else {
-				file1Data = readFile(f1);
+				file1Data = readFile(f1.isAbsolute()?f1:new File(workingDir, file1));
 			}
-			List<String> file2Data = readFile(f2);
+			
+			if (flag2) {
+				file2Data = Arrays.asList(stdin.split("\\r?\\n"));
+			} else {
+				file2Data = readFile(f2.isAbsolute()?f2:new File(workingDir, file2));
+			}
 
-			if (file1Data == null || file1Data.size()==0|| file2Data == null||file2Data.size()==0)
+			if (file1Data == null || file1Data.size() == 0 || file2Data == null
+					|| file2Data.size() == 0) {
 				return INVALID_COMMAND;
+			}
 
 			String line1 = "";
 			String line2 = "";
@@ -183,6 +191,7 @@ public class CommTool extends ATool implements ICommTool {
 						if (!compareFilesCheckSortStatus(line1, line2).equals(
 								"-1")) {
 							expectedOutput += NOT_SORTED;
+							setStatusCode(1);
 							break;
 						}
 						currentLine1 = line1;
@@ -217,11 +226,15 @@ public class CommTool extends ATool implements ICommTool {
 	public String parse() {
 		String parsed = "";
 		int count = 0;
+		
+		if(args.length>3||args.length<2)
+			return INVALID_COMMAND;
+		
 		int i = args.length - 1;
-		if (args.length!=0&&args[0].equals("-"))
-			return "stdin";
+		// if (args.length!=0&&args[0].equals("-"))
+		// return "stdin";
 		while (i >= 0) {
-			if (args[i].startsWith("-")) {
+			if (args[i].length()>1 &&args[i].startsWith("-")) {
 				// help gets priority // if not help, the first one gets
 				// priority
 				String option = args[i].substring(1);
@@ -233,11 +246,23 @@ public class CommTool extends ATool implements ICommTool {
 				parsed = option;
 			}
 
-			if (count > 1) {
-				return INVALID_COMMAND;
-			}
 			i--;
 		}
+
+		if (args[0].equals("-")) {
+			parsed = "f1";
+			count++;
+		}
+
+		if (args[1].equals("-")) {
+			parsed = "f2";
+			count++;
+		}
+
+		if (count > 1) { // cannot have comm - - or comm - -c -----
+			return INVALID_COMMAND;
+		}
+
 		return parsed;
 	}
 
