@@ -294,11 +294,32 @@ public class PasteToolTest {
 		// " hence we do not accept standard input.");
 		assertEquals(pastetool4.execute(null, null), "Error: No such file or directory\n");
 	}
-
+	
 	@Test
 	public void validationTest4() {
 		assertEquals(pastetool.execute(f, null), "No arguments and no standard input.");
 
+	}
+	
+	@Test
+	public void stdinValidationTest() {
+		String[] args = { "-s", "-" };
+		pastetool = new PasteTool(args);
+		assertEquals(pastetool.execute(f, "1234\n1234"), "1234\t1234");
+	}
+	
+	@Test
+	public void stdinValidationTest2() {
+		String[] args = { "-d", "$", "-" };
+		pastetool = new PasteTool(args);
+		assertEquals(pastetool.execute(f, "1234\n1234"), "1234\n1234");
+	}
+
+	@Test
+	public void stdinValidationTest3() {
+		String[] args = { "-d", "@",  "testCase_1.txt", "-" };
+		pastetool = new PasteTool(args);
+		assertEquals(pastetool.execute(f, "1234\n1234"), "1. IBM@1234\n" + "2. Symantec@1234\n" + "3. Palantir\n" + "10. hp\n" + "11. ihis");
 	}
 
 }

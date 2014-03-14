@@ -322,4 +322,56 @@ public class CutToolTest {
 		// assertEquals(cutTool.sortAndRemoveDuplicateNumbers(list), "10-1");
 		// assertEquals(cutTool.getStatusCode(), 0);
 	}
+	
+	@Test
+	public void sortAndRemoveNumbersTest1() {
+		String[] args = { "-c", "3-4,1,2-6,2-3,5", "input.txt" };
+		cutTool = new CutTool(args);
+		String workingDir = System.getProperty("user.dir");
+
+		File f = new File(workingDir);
+		assertEquals(cutTool.execute(f, null), "12345\n123456\n123456\n12345");
+		assertEquals(cutTool.getStatusCode(), 0);
+
+	}
+
+	@Test
+	public void sortAndRemoveNumbersTest2() {
+		String[] args = { "-c", "8,7,6,5,4,4,5,6,7,8", "input.txt" };
+		cutTool = new CutTool(args);
+		String workingDir = System.getProperty("user.dir");
+
+		File f = new File(workingDir);
+		assertEquals(cutTool.execute(f, null), "45\n4567\n45678\n45");
+		assertEquals(cutTool.getStatusCode(), 0);
+
+	}
+
+	@Test
+	public void stdinValidationTest() {
+		String[] args = { "-c", "1-3", "-" };
+		CutTool cuttooltest = new CutTool(args);
+		String workingDir = System.getProperty("user.dir");
+		File f = new File(workingDir);
+		assertEquals(cuttooltest.execute(f, "1234\n1234\n1234"), "123\n123\n123");
+	}
+
+	@Test
+	public void stdinValidationTest2() {
+		String[] args = { "-c", "1-3", "-" };
+		CutTool cuttooltest = new CutTool(args);
+		String workingDir = System.getProperty("user.dir");
+		File f = new File(workingDir);
+		assertEquals(cuttooltest.execute(f, null), "Invalid command");
+
+	}
+	
+	@Test
+	public void stdinValidationTest3() {
+		String[] args = { "-d", "3", "-f" , "1", "-" };
+		CutTool cuttooltest = new CutTool(args);
+		String workingDir = System.getProperty("user.dir");
+		File f = new File(workingDir);
+		assertEquals(cuttooltest.execute(f, "1234\n1234\n1234"), "12\n12\n12");
+	}
 }
