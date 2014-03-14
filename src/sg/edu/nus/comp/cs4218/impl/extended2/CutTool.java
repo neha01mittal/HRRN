@@ -38,9 +38,17 @@ public class CutTool extends ATool implements ICutTool {
 	@Override
 	public String cutSpecifiedCharactersUseDelimiter(String list, String delim, String input) {
 		// TODO Auto-generated method stub
-		String escapeDelim = delim;
-		if (delim.matches("[^a-zA-Z0-9 ]"))
-			escapeDelim = "\\" + delim;
+		//String escapeDelim = delim;
+		String escapeDelim = "";
+		//if (delim.matches("[^a-zA-Z0-9 ]"))
+		//	escapeDelim = "\\" + delim;
+		for(int i = 0; i < delim.length(); i ++){
+			if (delim.substring(i, i+1).matches("[^a-zA-Z0-9 ]")){
+				escapeDelim = escapeDelim + "\\" + delim.substring(i, i+1);
+			}else{
+				escapeDelim = delim.substring(i, i+1);
+			}
+		}
 		String cutString = "";
 
 		List<Integer> characterList = new ArrayList<Integer>();
@@ -141,8 +149,7 @@ public class CutTool extends ATool implements ICutTool {
 		String fileContents = "";
 		String characterList = "";
 
-		if ((args != null && args.length != 0) || (stdin != null && !stdin.equals(""))) {
-			if (args == null || args.length == 0) {
+		if (args == null || args.length == 0) {
 				if (stdin != null && stdin != "") {
 					List<String> ar = Arrays.asList(stdin.split(" "));
 					args = new String[ar.size()];
@@ -153,30 +160,19 @@ public class CutTool extends ATool implements ICutTool {
 					setStatusCode(1);
 					return "No arguments and no standard input.";
 				}
-			} else {
-				if (stdin != null && stdin != "") {
-					String command = "";
-					for (int a = 0; a < args.length; a++) {
-						command = command + args[a] + " ";
-					}
-					command = command + stdin;
-					List<String> ar = Arrays.asList(command.split(" "));
-					args = new String[ar.size()];
-					for (int a = 0; a < ar.size(); a++) {
-						args[a] = ar.get(a);
-					}
-				}
-			}
-		} else {
-			setStatusCode(1);
-			return "No arguments and no standard input.";
-		}
+		}  
+		
 
 		// split arguments and inputs
+		int x = 0;
+		int found = -1;
 		for (String arg : args) {
 			if (arg.startsWith("-")) {
 				if (arg.equals("-c") || arg.equals("-d") || arg.equals("-f") || arg.equals("-help"))
 					argList.add(arg);
+				else if (arg.equals("-")){
+					found = x;
+				}
 				else {
 					setStatusCode(1);
 					return "Invalid command";
@@ -184,15 +180,17 @@ public class CutTool extends ATool implements ICutTool {
 			} else {
 				inputList.add(arg);
 			}
+			x++;
 		}
 
-		for (int x = 0; x < argList.size(); x++) {
+		for (x = 0; x < argList.size(); x++) {
 			String arg = argList.get(x);
 			if (arg.equals("-d")) {
 				delim = inputList.get(x);
 			}
 
 			else if (arg.equals("-help")) {
+				setStatusCode(0);
 				return getHelp();
 			}
 		}
@@ -217,24 +215,52 @@ public class CutTool extends ATool implements ICutTool {
 		if (file.exists()) {
 			fileContents = getStringForFile(file);
 
-			for (int x = 0; x < argList.size(); x++) {
+			for ( x = 0; x < argList.size(); x++) {
 
 				if (argList.get(x).equals("-c")) {
-					characterList = cutSpecfiedCharacters(inputList.get(x), fileContents);
-					if (characterList == "Invalid command")
-						setStatusCode(1);
+					String result = cutSpecfiedCharacters(inputList.get(x), fileContents);
+					if (result != "Invalid command")
+						setStatusCode(0);
+					if(stdin != null && stdin != ""){
+						if(x > found)
+							characterList = stdin + "\t" + result;
+						else
+							characterList =  result + "\t" + stdin;
+					}
+					else
+						characterList = result;
 					return characterList;
+					
 				} else if (argList.get(x).equals("-f")) {
+					String result = "";
 					if (delim != null)
-						characterList = cutSpecifiedCharactersUseDelimiter(inputList.get(x), delim, fileContents);
-					if (characterList == "Invalid command")
-						setStatusCode(1);
+						result = cutSpecifiedCharactersUseDelimiter(inputList.get(x), delim, fileContents);
+					if (result != "Invalid command")
+						setStatusCode(0);
+					if(stdin != null && stdin != "" && (found>-1)){
+						if(x > found)
+							characterList = stdin + "\t" + result;
+						else
+							characterList =  result + "\t" + stdin;
+					}
+					else
+						characterList = result;
 					return characterList;
 				}
 			}
 		} else {
-			setStatusCode(1);
-			return "Invalid command";
+			if(found > -1){
+				if(stdin != null && stdin != "")
+					return stdin;
+				else{
+					setStatusCode(1);
+					return "Invalid command";
+				}
+			}
+			else {
+				setStatusCode(1);
+				return "Invalid command";
+			}
 		}
 
 		return characterList;

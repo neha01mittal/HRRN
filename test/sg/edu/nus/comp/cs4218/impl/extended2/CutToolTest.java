@@ -68,6 +68,18 @@ public class CutToolTest {
 	}
 
 	@Test
+	public void executeInvalidDelimTest() {
+		String[] args = { "-d", "3**", "-f", "1", "input.txt" };
+		cutTool = new CutTool(args);
+		String workingDir = System.getProperty("user.dir");
+
+		File f = new File(workingDir);
+		assertEquals(cutTool.execute(f, null), "12345\n1234567\n123456789\n12345");
+		assertEquals(cutTool.getStatusCode(), 0);
+
+	}
+
+	@Test
 	public void executeUnsortedListFTest() {
 		String[] args = { "-f", "1", "-d", "3", "input.txt" };
 		cutTool = new CutTool(args);
@@ -86,7 +98,7 @@ public class CutToolTest {
 		String workingDir = System.getProperty("user.dir");
 
 		File f = new File(workingDir);
-		// assertEquals(cutTool.execute(f, null), "");
+		//assertEquals(cutTool.execute(f, null), "");
 		assertEquals(cutTool.execute(f, null), "Invalid command");
 		// assertEquals(cutTool.getStatusCode(), 0);
 		assertEquals(cutTool.getStatusCode(), 1);
@@ -172,6 +184,17 @@ public class CutToolTest {
 		assertEquals(cutTool.execute(f, null), "Invalid command");
 		assertEquals(cutTool.getStatusCode(), 1);
 	}
+	
+	@Test
+	public void executeListMissingDigitTest2() throws IOException {
+		String[] args = { "-c", "-2", "input.txt" };
+		cutTool = new CutTool(args);
+		String workingDir = System.getProperty("user.dir");
+
+		File f = new File(workingDir);
+		assertEquals(cutTool.execute(f, null), "Invalid command");
+		assertEquals(cutTool.getStatusCode(), 1);
+	}
 
 	@Test
 	public void executeDashTest() throws IOException {
@@ -201,6 +224,7 @@ public class CutToolTest {
 
 	}
 
+	//CHANGES MADE: Giving negative line number is invalid.
 	@Test
 	public void cutSpecifiedCharactersUseDelimiterNegativeTest() {
 		String currentLine = "Executing.the.program";
@@ -212,7 +236,8 @@ public class CutToolTest {
 		assertEquals(cutTool.cutSpecifiedCharactersUseDelimiter(list, delim, currentLine), "Invalid command");
 		assertEquals(cutTool.getStatusCode(), 1);
 	}
-
+	
+	//CHANGES MADE: Giving line number 0 is invalid.
 	@Test
 	public void cutSpecifiedCharactersUseDelimiter0Test() {
 		String currentLine = "Executing.the.program";
@@ -274,6 +299,7 @@ public class CutToolTest {
 		// assertEquals(cutTool.getStatusCode(), 0);
 	}
 
+	//User Defined Function
 	@Test
 	public void sortAndRemoveDuplicateNumbersUnsortedOverlapTest() {
 		String list = "3-4,1,2-6,2-3";
@@ -281,6 +307,7 @@ public class CutToolTest {
 		// assertEquals(cutTool.getStatusCode(), 0);
 	}
 
+	//User Defined Function
 	@Test
 	public void sortAndRemoveDuplicateNumbersUnsortedOverlapTest2() {
 		String list = "3-4,1,2-6,2-3";
@@ -288,6 +315,7 @@ public class CutToolTest {
 		// assertEquals(cutTool.getStatusCode(), 0);
 	}
 
+	//User Defined Function
 	@Test
 	public void sortAndRemoveDuplicateNumbersUnsortedOverlapTest3() {
 		String list = "10-1";

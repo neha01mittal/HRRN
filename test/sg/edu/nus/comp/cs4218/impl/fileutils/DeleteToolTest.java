@@ -1,5 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -84,20 +86,29 @@ public class DeleteToolTest {
 
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test1.txt");
 		create(testDirectoryListAbsoluteString.get(0) + "//test1.txt", "something");
-
-		deleteTool.delete(f1);
+		String a[] = { f1.toString() };
+		deleteTool = new DeleteTool(a);
+		deleteTool.execute(rootDirectory.toFile(), "");
 		assert (!(f1.exists()));
+		assertEquals(deleteTool.getStatusCode(), 0);
 	}
 
 	@Test
 	public void testDeleteRelativePathFile() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "//test1.txt");
-		create(testDirectoryListRelativeString.get(0) + "//test1.txt", "something");
-
-		deleteTool.delete(f1);
+		File f1 = new File(testDirectoryListRelativeString.get(0), "test1.txt");
+		create(testDirectoryListAbsoluteString.get(0) + "//test1.txt", "something");
+		String a[] = { f1.toString() };
+		deleteTool = new DeleteTool(a);
+		deleteTool.execute(rootDirectory.toFile(), "");
 		assert (!(f1.exists()));
+		assertEquals(deleteTool.getStatusCode(), 0);
+		
+		//Delete Again and Check for StatusCode = 1
+		deleteTool.execute(rootDirectory.toFile(), "");
+		assert (!(f1.exists()));
+		assertEquals(deleteTool.getStatusCode(), 1);
 	}
 
 	@Test
@@ -106,42 +117,50 @@ public class DeleteToolTest {
 
 		File f1 = new File(testDirectoryListRelativeString.get(0) + "//test1.txt");
 		deleteTool.delete(f1);
-		deleteTool.delete(f1);
-		assert (f1.exists());
-
+		assert (!f1.exists());
+		assertEquals(deleteTool.getStatusCode(), 1);
 	}
 
 	@Test
 	public void testDeleteFolder() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "/new");
-		deleteTool.delete(f1);
+		File f1 = new File(rootDirectoryString + File.separator + testDirectoryListRelativeString.get(0),"new");
+		f1.mkdir();
+		String a[] = { f1.toString() };
+		deleteTool = new DeleteTool(a);
+		deleteTool.execute(rootDirectory.toFile(), "");
 		assert (!(f1.exists()));
-
+		assertEquals(deleteTool.getStatusCode(), 0);
 	}
 
 	@Test
 	public void testDeleteFolderWithContents() {
-		deleteTool = new DeleteTool(null);
-
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "/new");
-		File f2 = new File(testDirectoryListRelativeString.get(0) + "/new/test1.txt");
+		File f1 = new File( rootDirectoryString + File.separator +  testDirectoryListRelativeString.get(0), "/new");
+		f1.mkdir();
+		File f2 = new File(f1, "test1.txt");
+		try {
+			f2.createNewFile();
+		} catch (IOException e) {
+			
+		}
 		create(testDirectoryListRelativeString.get(0) + "/new/test1.txt", "something");
-		deleteTool.delete(f1);
+		String a[] = { f1.toString() };
+		deleteTool = new DeleteTool(a);
+		deleteTool.execute(rootDirectory.toFile(), "");
 		assert (!(f1.exists() || f2.exists()));
+		assertEquals(deleteTool.getStatusCode(), 0);
 
 	}
 
 	@Test
 	public void testDeleteNonExistingFolder() {
-		deleteTool = new DeleteTool(null);
-
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "/new");
-		deleteTool.delete(f1);
-		deleteTool.delete(f1);
-		assert (f1.exists());
-
+		File f1 = new File( rootDirectoryString + File.separator + testDirectoryListRelativeString.get(0) + "/new");
+		String a[] = { f1.toString() };
+		deleteTool = new DeleteTool(a);
+		deleteTool.execute(rootDirectory.toFile(), "");
+		assert (!f1.exists());
+		assertEquals(deleteTool.getStatusCode(), 1);
 	}
 
 	public void create(String filename, String content) {
