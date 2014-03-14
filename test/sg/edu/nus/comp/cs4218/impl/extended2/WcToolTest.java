@@ -39,10 +39,10 @@ public class WcToolTest {
 	public void getCharacterCountTest() throws IOException {
 		// assertEquals(wctool.getCharacterCount(readFile("testCase_1.txt",
 		// std)), "50");
-		assertEquals("33", wctool.getCharacterCount(readFile("testCase_2.txt", std)));
-		assertEquals("16", wctool.getCharacterCount(readFile("testCase_3.txt", std)));
-		assertEquals("38", wctool.getCharacterCount(readFile("testCase_4.txt", std)));
-		assertEquals("31", wctool.getCharacterCount(readFile("testCase_5.txt", std)));
+		assertEquals("30", wctool.getCharacterCount(readFile("testCase_2.txt", std)));
+		assertEquals("11", wctool.getCharacterCount(readFile("testCase_3.txt", std)));
+		assertEquals("32", wctool.getCharacterCount(readFile("testCase_4.txt", std)));
+		assertEquals("27", wctool.getCharacterCount(readFile("testCase_5.txt", std)));
 
 		String[] args2 = { "-m", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
@@ -240,8 +240,10 @@ public class WcToolTest {
 				filePath = System.getProperty("user.dir") + File.separator
 						+ fileName;
 
+			
 			byte[] encoded = Files.readAllBytes(Paths.get(filePath));
-			return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+			String result = encoding.decode(ByteBuffer.wrap(encoded)).toString();
+			return result.replace("\r", "");
 		} catch (IOException e) {
 			throw new IOException(fileName);
 		}
