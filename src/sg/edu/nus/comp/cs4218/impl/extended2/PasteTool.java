@@ -21,7 +21,7 @@ public class PasteTool extends ATool implements IPasteTool {
 	private final List<String> argList;
 	private final List<String> inputList;
 	private File directory;
-	private File stdinFile;
+	private static File stdinFile;
 
 	public PasteTool(String[] arguments) {
 		super(arguments);
@@ -30,10 +30,8 @@ public class PasteTool extends ATool implements IPasteTool {
 		argList = new ArrayList<String>();
 		inputList = new ArrayList<String>();
 		directory = null;
-		stdinFile = new File("StdinContentClass.txt");
-		if(stdinFile.exists()){
-			stdinFile.delete();
-		}
+		stdinFile = new File("");
+		
 	}
 
 	@Override
@@ -167,6 +165,9 @@ public class PasteTool extends ATool implements IPasteTool {
 		if (args == null || args.length == 0) {
 			if (stdin == null ||  stdin == "") {
 				setStatusCode(1);
+				if(stdinFile.exists()){
+					stdinFile.delete();
+				}
 				return "No arguments and no standard input.";
 			}
 		}
@@ -184,7 +185,7 @@ public class PasteTool extends ATool implements IPasteTool {
 						found = x;
 						Writer writer = null;
 						try {
-							stdinFile = new File("StdinContentClass.txt");
+							stdinFile = new File(directory, "StdinContentClass.txt");
 							writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(stdinFile.getAbsolutePath().toString()), "utf-8"));
 							writer.write(stdin);
 						} catch (IOException ex) {
@@ -196,12 +197,10 @@ public class PasteTool extends ATool implements IPasteTool {
 							}
 						}
 					}
-					stdinFile = new File("StdinContentClass.txt");
 					inputList.add(stdinFile.getAbsolutePath())	;
 				}
 				else {
 					setStatusCode(1);
-					stdinFile = new File("StdinContentClass.txt");
 					if(stdinFile.exists()){
 						stdinFile.delete();
 					}
@@ -219,7 +218,7 @@ public class PasteTool extends ATool implements IPasteTool {
 				found = x;
 				Writer writer = null;
 				try {
-					stdinFile = new File("StdinContentClass.txt");
+					stdinFile = new File(directory, "StdinContentClass.txt");
 					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(stdinFile.getAbsolutePath().toString()), "utf-8"));
 					writer.write(stdin);
 				} catch (IOException ex) {
@@ -231,11 +230,13 @@ public class PasteTool extends ATool implements IPasteTool {
 					}
 				}
 			}
-			stdinFile = new File("StdinContentClass.txt");
 			inputList.add(stdinFile.getAbsolutePath());
 		}
 		if (argList.contains("-help")) {
 			setStatusCode(0);
+			if(stdinFile.exists()){
+				stdinFile.delete();
+			}
 			return getHelp();
 		} else if (argList.size() == 0) {
 			String[] listOfFiles = new String[inputList.size()];
