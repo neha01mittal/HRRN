@@ -51,18 +51,18 @@ public class CommTool extends ATool implements ICommTool {
 		if (input1 == null && input2 == null)
 			return "-1";
 		if (input1 == null) {
-			if (input2.compareTo(currentLine2) > 0)
+			if (input2.compareTo(currentLine2) >= 0)
 				return "-1";
 			else
 				return NOT_SORTED;
 		} else if (input2 == null) {
-			if (input1.compareTo(currentLine1) > 0)
+			if (input1.compareTo(currentLine1) >= 0)
 				return "-1";
 			else {
 				return NOT_SORTED;
 			}
-		} else if (input1.compareTo(currentLine1) > 0
-				&& input2.compareTo(currentLine2) > 0)
+		} else if (input1.compareTo(currentLine1) >= 0
+				&& input2.compareTo(currentLine2) >= 0)
 			return "-1";
 		else {
 			return NOT_SORTED;
@@ -107,25 +107,53 @@ public class CommTool extends ATool implements ICommTool {
 		if (args != null && args.length > 0) {
 			if (operation.equalsIgnoreCase("help")) {
 				return getHelp();
-			} else if (stdin != null && !stdin.equals("") && args.length == 2) {
-				if (operation.equals("f1")) {
-					flag1 = true;
-					file1 = stdin;
-					file2= args[1];
+			} else if (stdin != null && !stdin.equals("")) {
+				if (args.length == 2) {
+					if (operation.equals("f1")) {
+						flag1 = true;
+						file1 = stdin;
+						file2 = args[1];
+					}
+					if (operation.equals("f2")) {
+						flag2 = true;
+						file2 = stdin;
+						file1 = args[0];
+					}
 				}
-				if (operation.equals("f2")) {
-					flag2 = true;
-					file2 = stdin;
-					file1= args[0];
+				if (args.length == 3) {
+					if (operation.equals("c:f2")) {
+						flag2 = true;
+						file2 = stdin;
+						file1 = args[1];
+						sortFlag = true;
+					}
+					if (operation.equals("c:f1")) {
+						flag1 = true;
+						file1 = stdin;
+						file2 = args[2];
+						sortFlag = true;
+					}
+					if (operation.equals("d:f2")) {
+						flag2 = true;
+						file2 = stdin;
+						file1 = args[1];
+						sortFlag = false;
+					}
+					if (operation.equals("d:f1")) {
+						flag1 = true;
+						file1 = stdin;
+						file2 = args[2];
+						sortFlag = false;
+					}
 				}
 			} else if (operation.equalsIgnoreCase("d") && args.length == 3) {
 				// do not care about sorting
-				file1 = args[args.length - 2];
-				file2 = args[args.length - 1];
-			} else if (operation.equalsIgnoreCase("c") && args.length > 2) {
+				file1 = args[1];
+				file2 = args[2];
+			} else if (operation.equalsIgnoreCase("c") && args.length == 3) {
 				sortFlag = true;
-				file1 = args[args.length - 2];
-				file2 = args[args.length - 1];
+				file1 = args[1];
+				file2 = args[2];
 			} else if (args.length == 2 && operation.equals("")) {
 				sortFlag = false;
 				file1 = args[0];
@@ -137,17 +165,19 @@ public class CommTool extends ATool implements ICommTool {
 
 			List<String> file1Data = new ArrayList<String>();
 			List<String> file2Data = new ArrayList<String>();
-			
+
 			if (flag1) {
 				file1Data = Arrays.asList(stdin.split("\\r?\\n"));
 			} else {
-				file1Data = readFile(f1.isAbsolute()?f1:new File(workingDir, file1));
+				file1Data = readFile(f1.isAbsolute() ? f1 : new File(
+						workingDir, file1));
 			}
-			
+
 			if (flag2) {
 				file2Data = Arrays.asList(stdin.split("\\r?\\n"));
 			} else {
-				file2Data = readFile(f2.isAbsolute()?f2:new File(workingDir, file2));
+				file2Data = readFile(f2.isAbsolute() ? f2 : new File(
+						workingDir, file2));
 			}
 
 			if (file1Data == null || file1Data.size() == 0 || file2Data == null
@@ -226,15 +256,15 @@ public class CommTool extends ATool implements ICommTool {
 	public String parse() {
 		String parsed = "";
 		int count = 0;
-		
-		if(args.length>3||args.length<2)
+
+		if (args.length > 3 || args.length < 2)
 			return INVALID_COMMAND;
-		
+
 		int i = args.length - 1;
 		// if (args.length!=0&&args[0].equals("-"))
 		// return "stdin";
 		while (i >= 0) {
-			if (args[i].length()>1 &&args[i].startsWith("-")) {
+			if (args[i].length() > 1 && args[i].startsWith("-")) {
 				// help gets priority // if not help, the first one gets
 				// priority
 				String option = args[i].substring(1);
@@ -249,20 +279,25 @@ public class CommTool extends ATool implements ICommTool {
 			i--;
 		}
 
-		if (args[0].equals("-")) {
-			parsed = "f1";
-			count++;
-		}
-
-		if (args[1].equals("-")) {
-			parsed = "f2";
-			count++;
-		}
-
 		if (count > 1) { // cannot have comm - - or comm - -c -----
 			return INVALID_COMMAND;
 		}
 
+		if (count == 0 && args.length > 0 && args[0].equals("-")) {
+			parsed = "f1";
+		}
+
+		if (count == 0 && args.length > 1 && args[1].equals("-")) {
+			parsed = "f2";
+		}
+
+		if (count == 1 && args.length > 1 && args[1].equals("-")) {
+			parsed += ":f1";
+		}
+
+		if (count == 1 && args.length > 2 && args[2].equals("-")) {
+			parsed += ":f2";
+		}
 		return parsed;
 	}
 
