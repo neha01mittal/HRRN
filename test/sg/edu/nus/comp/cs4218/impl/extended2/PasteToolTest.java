@@ -7,6 +7,7 @@ package sg.edu.nus.comp.cs4218.impl.extended2;
  * The default case with no option was not returning the correct output. It expected contents of files printed sequentially instead of in parallel
  * The -d option was not returning the correct output. It expected contents of files printed sequentially instead of in parallel
  * The -s option had a trailing \t instead of a newline
+ * Added absolute paths to all the file arrays since the PasteSerial function receives files without the directory
  */
 import static org.junit.Assert.assertEquals;
 
@@ -23,12 +24,13 @@ public class PasteToolTest {
 	private IPasteTool pastetool2;
 	private IPasteTool pastetool3;
 	private IPasteTool pastetool4;
-	String[] fileArray1 = { "testCase_1.txt" };
-	String[] fileArray2 = { "testCase_1.txt", "testCase_2.txt" };
-	String[] fileArray3 = { "testCase_1.txt", "testCase_2.txt", "testCase_3.txt" };
-	String[] fileArray4 = { "testCase_1.txt", "testCase_2.txt", "testCase_3.txt", "testCase_4.txt" };
-
+	
 	private final File f = new File(System.getProperty("user.dir"));
+	String[] fileArray1 = { f + File.separator + "testCase_1.txt" };
+	String[] fileArray2 = { f + File.separator +  "testCase_1.txt",  f + File.separator + "testCase_2.txt" };
+	String[] fileArray3 = {  f + File.separator + "testCase_1.txt",  f + File.separator + "testCase_2.txt",  f + File.separator + "testCase_3.txt" };
+	String[] fileArray4 = {  f + File.separator + "testCase_1.txt", f + File.separator +  "testCase_2.txt", f + File.separator +  "testCase_3.txt",  f + File.separator + "testCase_4.txt" };
+
 
 	@Before
 	public void before() {
@@ -111,7 +113,7 @@ public class PasteToolTest {
 		pastetool2 = new PasteTool(args2);
 		// assertEquals(pastetool2.execute(null, null),
 		// "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\t");
-		assertEquals(pastetool2.execute(null, null), "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis");
+			assertEquals(pastetool2.execute(f, null), "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis");
 	}
 
 	@Test
@@ -121,7 +123,7 @@ public class PasteToolTest {
 		// assertEquals(pastetool3.execute(null, null),
 		// "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\t" +
 		// "gek1517\tACC1002X\tsw2104\tpc1141\t");
-		assertEquals(pastetool3.execute(null, null), "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\n" + "gek1517\tACC1002X\tsw2104\tpc1141");
+		assertEquals(pastetool3.execute(f, null), "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\n" + "gek1517\tACC1002X\tsw2104\tpc1141");
 
 	}
 
