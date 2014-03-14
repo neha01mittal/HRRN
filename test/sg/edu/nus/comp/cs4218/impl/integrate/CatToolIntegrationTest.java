@@ -102,14 +102,14 @@ public class CatToolIntegrationTest {
 	}
 
 	@Test
-	public void testMove() {
+	public void testMove() throws IOException {
 		String commandline = "move " + file1 + " " + f1 + "| cat";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output=pipingTool.execute(f1, null);
 		System.out.println(output);
 		String expectedOutput = "";
 		assertEquals(expectedOutput, output);
-		file1.mkdir();
+		file1.createNewFile();
 	}
 
 	@Test

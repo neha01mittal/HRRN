@@ -34,8 +34,7 @@ public class CatTool extends ATool implements ICatTool {
 	public String execute(File workingDir, String stdin) {
 		File file;
 
-		if ((args != null && args.length != 0)
-				|| (stdin != null && !stdin.equals(""))) {
+		if ((args != null && args.length > 0) || (stdin != null)) {
 			String content = "";
 			if (args == null || args.length == 0) {
 				if (stdin != null && stdin != "") {
@@ -51,10 +50,10 @@ public class CatTool extends ATool implements ICatTool {
 						}
 						content += getStringForFile(file);
 					} else
-						content += stdin+"\n";
+						content += stdin + "\n";
 				}
 			}
-			
+
 			setStatusCode(0);
 			return content;
 		}

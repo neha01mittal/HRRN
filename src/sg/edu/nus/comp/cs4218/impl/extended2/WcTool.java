@@ -1,14 +1,12 @@
 package sg.edu.nus.comp.cs4218.impl.extended2;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.Vector;
 
 import sg.edu.nus.comp.cs4218.extended2.IWcTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
@@ -27,9 +25,9 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 
 public class WcTool extends ATool implements IWcTool {
-
-	int readStatus = -1;
-	//File workingDir;
+	private int	readStatus	= -1;
+	private int fileIndex = -1;
+	Vector<String> argList = new Vector<String>();
 
 	public WcTool(String[] args) {
 		super(args);
@@ -89,45 +87,92 @@ public class WcTool extends ATool implements IWcTool {
 		if (stdin != null && stdin.compareTo("") != 0) {
 			content = stdin;
 		}
-
-		if (args.length > 0 && args[0] != null && args[0].compareTo("-m") == 0) {
-			try {
-				characterCount(result, content);
-			} catch (IOException e) {
-				result.append("word count: open failed: " + e.getMessage()
-						+ ": No such file or directory.");
-				readStatus = 1;
+		
+		for (int i = 0; i < args.length; i++) {
+	        String arg = args[i];
+	        if (arg.startsWith("-") && arg.compareTo("-m") != 0
+	        		&& arg.compareTo("-w") != 0 && arg.compareTo("-l") != 0
+	        		&& arg.compareTo("-help") != 0) {
+	        	result.append("Invalid arguments.");
+	        	return result.toString();
+	        }
+	    }
+		
+		for (int i = 0; i < args.length; i++) {
+			if (args[i] == null || !args[i].startsWith("-")) {
+				fileIndex = i;
+				break;
 			}
-		} else if (args.length > 0 && args[0] != null && args[0].compareTo("-w") == 0) {
-			try {
-				wordCount(result, content);
-			} catch (IOException e) {
-				result.append("word count: open failed: " + e.getMessage()
-						+ ": No such file or directory.");
-				readStatus = 1;
-			}
-		} else if (args.length > 0 && args[0] != null && args[0].compareTo("-l") == 0) {
-			try {
-				lineCount(result, content);
-			} catch (IOException e) {
-				result.append("word count: open failed: " + e.getMessage()
-						+ ": No such file or directory.");
-				readStatus = 1;
-			}
-		} else if (args.length > 0 && args[0] != null && args[0].compareTo("-help") == 0) {
-			result.append(getHelp());
-		} else if (args.length > 0 && args[0] != null && args[0].startsWith("-")
-				&& args[0].compareTo("-m") != 0 && args[0].compareTo("-l") != 0
-				&& args[0].compareTo("-w") != 0) {
-			result.append("Invalid arguments.");
-		} else {
-			try {
-				generalCount(result, content);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			if (args[i].compareTo("-w") == 0)
+				argList.add("-w");
+			if (args[i].compareTo("-m") == 0)
+				argList.add("-m");
+			if (args[i].compareTo("-l") == 0)
+				argList.add("-l");			
+			if (args[i].compareTo("-help") == 0)
+				argList.add("-help");
 		}
+		
+		if (argList.contains("-help")) {
+			result.append(getHelp());
+			return result.toString();
+		}
+ 
+	    if (fileIndex == -1)
+			try {
+				processString(result, content);
+			} catch (IOException e) {
+			}
+	    else
+			for (int i = fileIndex; i < args.length; i++) {
+				try {
+					processFile(result, args[i]);
+				} catch (IOException e1) {
+					result.append("word count: open failed: " + args[i]
+								+ ": No such file or directory.");
+				}
+		}
+		
 		return result.toString();
+	}
+	
+	private void processString(StringBuilder sb, String content) throws IOException {
+		if (this.argList.contains("-m")) {
+			sb.append("\t");
+			characterCount(sb, content);
+		}
+		if (this.argList.contains("-w")) {
+			sb.append("\t");
+			wordCount(sb, content);
+		}
+		if (this.argList.contains("-l")) {
+			sb.append("\t");
+			lineCount(sb, content);
+		}
+		if (this.argList.isEmpty())
+			generalCount(sb, content);
+	}
+
+	private void processFile(StringBuilder sb, String fileName) throws IOException{
+		// TODO Auto-generated method stub
+		String fileContent = readFile(fileName, Charset.forName("UTF-8"));
+		if (this.argList.contains("-m")) {
+			sb.append("\t");
+			characterCount(sb, fileContent);
+		}
+		if (this.argList.contains("-w")) {
+			sb.append("\t");
+			wordCount(sb, fileContent);
+		}
+		if (this.argList.contains("-l")) {
+			sb.append("\t");
+			lineCount(sb, fileContent);
+		}
+		if (this.argList.isEmpty()) {
+			generalCount(sb, fileContent);
+		}
+		sb.append("\t"+fileName);
+		sb.append("\n");
 	}
 
 	private void generalCount(StringBuilder result, String content)
@@ -136,50 +181,25 @@ public class WcTool extends ATool implements IWcTool {
 			result.append("\t" + getNewLineCount(content));
 			result.append("\t" + getWordCount(content));
 			result.append("\t" + getCharacterCount(content));
-		} else
-			for (int i = 0; i < args.length; i++) {
-				content = readFile(args[i], Charset.forName("UTF-8"));
-				result.append("\t" + getNewLineCount(content));
-				result.append("\t" + getWordCount(content));
-				result.append("\t" + getCharacterCount(content));
-				result.append("\t" + args[i]);
-			}
+		}
 	}
 
 	private void lineCount(StringBuilder result, String content)
 			throws IOException {
-		Charset std = Charset.forName("UTF-8");
 		if (content != null)
 			result.append(getNewLineCount(content));
-		else
-			for (int i = 1; i < args.length; i++) {
-				content = readFile(args[i], std);
-				result.append(getNewLineCount(content) + "\t" + args[i]);
-			}
 	}
 
 	private void wordCount(StringBuilder result, String content)
 			throws IOException {
-		Charset std = Charset.forName("UTF-8");
 		if (content != null)
 			result.append(getWordCount(content));
-		else
-			for (int i = 1; i < args.length; i++) {
-				content = readFile(args[i], std);
-				result.append(getWordCount(content) + "\t" + args[i]);
-			}
 	}
 
 	private void characterCount(StringBuilder result, String content)
 			throws IOException {
-		Charset std = Charset.forName("UTF-8");
 		if (content != null)
 			result.append(getCharacterCount(content));
-		else
-			for (int i = 1; i < args.length; i++) {
-				content = readFile(args[i], std);
-				result.append(getCharacterCount(content) + "\t" + args[i]);
-			}
 	}
 
 	/*

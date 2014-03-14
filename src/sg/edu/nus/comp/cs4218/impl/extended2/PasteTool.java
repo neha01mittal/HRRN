@@ -162,30 +162,21 @@ public class PasteTool extends ATool implements IPasteTool {
 		String characterList = "";
 
 		if (args == null || args.length == 0) {
-			if (stdin != null && stdin != "") {
-				List<String> ar = Arrays.asList(stdin.split(" "));
-				args = new String[ar.size()];
-				for (int a = 0; a < ar.size(); a++) {
-					args[a] = ar.get(a);
-				}
-			} else {
+			if (stdin == null ||  stdin == "") {
 				setStatusCode(1);
-				File f1 = new File("StdinContentClass.txt");
-				if(f1.exists()){
-					f1.delete();
-				}
 				return "No arguments and no standard input.";
 			}
-		}  
+		}
 		// split arguments and inputs
 		int x = 0;
-		int found = -1;
-		
+		int found = 0;
+		if(args!= null ){
 		for (String arg : args) {
 			if (arg.startsWith("-")) {
 				if (arg.equals("-s") || arg.equals("-d") || arg.equals("-help"))
 					argList.add(arg);
 				else if (arg.equals("-")){
+					found = 1;
 					if(stdin != null && stdin != ""){
 						found = x;
 						Writer writer = null;
@@ -217,7 +208,25 @@ public class PasteTool extends ATool implements IPasteTool {
 			}
 			x++;
 		}
-
+		}
+		if(inputList.size() == 0 && found == 0){
+			if(stdin != null && stdin != ""){
+				found = x;
+				Writer writer = null;
+				try {
+					writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("StdinContentClass.txt"), "utf-8"));
+					writer.write(stdin);
+				} catch (IOException ex) {
+					// report
+				} finally {
+					try {
+						writer.close();
+					} catch (Exception ex) {
+					}
+				}
+			}
+			inputList.add("StdinContentClass.txt");
+		}
 		if (argList.contains("-help")) {
 			setStatusCode(0);
 			return getHelp();

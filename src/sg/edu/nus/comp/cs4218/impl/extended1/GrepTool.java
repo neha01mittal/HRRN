@@ -51,6 +51,7 @@ public class GrepTool extends ATool implements IGrepTool {
 	public int lastOpt = -1;
 	private int[] fileLength;
 	private Vector<String> fileList;
+	File workingDir;
 
 	public GrepTool(String[] arguments) {
 		super(arguments);
@@ -59,6 +60,7 @@ public class GrepTool extends ATool implements IGrepTool {
 
 	@Override
 	public String execute(File workingDir, String stdin) {
+		this.workingDir = workingDir;
 		String result = "";
 
 		Map<String, ArrayList<String>> parsed = parse();
@@ -153,7 +155,7 @@ public class GrepTool extends ATool implements IGrepTool {
 				if (f.isAbsolute())
 					filePath = stdin.get(i);
 				else
-					filePath = System.getProperty("user.dir") + File.separator
+					filePath = workingDir + File.separator
 							+ stdin.get(i);
 				File targetFile = new File(filePath);
 				if (!targetFile.isFile())

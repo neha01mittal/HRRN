@@ -46,17 +46,17 @@ public class WcToolTest {
 
 		String[] args2 = { "-m", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
-		assertEquals("46\ttestCase_1.txt", wctool2.execute(null, null));
+		assertEquals("\t46\ttestCase_1.txt\n", wctool2.execute(null, null));
 		
 		wctool2 = null;
 		String[] args3 = { "-m", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
-		assertEquals("33\ttestCase_2.txt", wctool3.execute(null, null));
+		assertEquals("\t33\ttestCase_2.txt\n", wctool3.execute(null, null));
 		wctool3 = null;
 
 		String[] args4 = { "-m", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
-		assertEquals("16\ttestCase_3.txt", wctool4.execute(null, null));
+		assertEquals("\t16\ttestCase_3.txt\n", wctool4.execute(null, null));
 	}
 
 	// test the functionality of getWordCount to count the number of words in a
@@ -71,17 +71,17 @@ public class WcToolTest {
 
 		String[] args2 = { "-w", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
-		assertEquals("10\ttestCase_1.txt", wctool2.execute(null, null));
+		assertEquals("\t10\ttestCase_1.txt\n", wctool2.execute(null, null));
 		wctool2 = null;
 
 		String[] args3 = { "-w", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
-		assertEquals("4\ttestCase_2.txt", wctool3.execute(null, null));
+		assertEquals("\t4\ttestCase_2.txt\n", wctool3.execute(null, null));
 		wctool3 = null;
 
 		String[] args4 = { "-w", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
-		assertEquals("6\ttestCase_3.txt", wctool4.execute(null, null));
+		assertEquals("\t6\ttestCase_3.txt\n", wctool4.execute(null, null));
 	}
 
 	// test the functionality of getNewLineCount to count the number of lines in
@@ -101,17 +101,17 @@ public class WcToolTest {
 
 		String[] args2 = { "-l", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
-		assertEquals("4\ttestCase_1.txt", wctool2.execute(null, null));
+		assertEquals("\t4\ttestCase_1.txt\n", wctool2.execute(null, null));
 		wctool2 = null;
 
 		String[] args3 = { "-l", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
-		assertEquals("3\ttestCase_2.txt", wctool3.execute(null, null));
+		assertEquals("\t3\ttestCase_2.txt\n", wctool3.execute(null, null));
 		wctool3 = null;
 
 		String[] args4 = { "-l", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
-		assertEquals("5\ttestCase_3.txt", wctool4.execute(null, null));
+		assertEquals("\t5\ttestCase_3.txt\n", wctool4.execute(null, null));
 	}
 
 	// test the functionality of printing help message
@@ -189,7 +189,7 @@ public class WcToolTest {
 				+ "	perl -MHTML::TextToHTML -e run_txt2html -- *options*\n";
 		WcTool wt = new WcTool(args);
 		String result = wt.execute(null, stdin);
-		String expected = "14";
+		String expected = "\t14";
 		assertEquals(expected, result);
 	}
 	
@@ -198,16 +198,34 @@ public class WcToolTest {
 		String[] args = {"testCase_5.txt"};
 		WcTool wt = new WcTool(args);
 		String result = wt.execute(null, "");
-		String expected = "\t4\t5\t31\ttestCase_5.txt";
+		String expected = "\t4\t5\t31\ttestCase_5.txt\n";
 		assertEquals(expected, result);
 	}
 	
 	@Test
 	public void testRelativePath() {
-		String[] args = {"-l", "test/file1.txt"};
+		String[] args = {"-l", "data/unitTest/file1.txt"};
 		WcTool wt = new WcTool(args);
 		String result = wt.execute(null, "");
-		String expected = "302\ttest/file1.txt";
+		String expected = "\t302\tdata/unitTest/file1.txt\n";
+		assertEquals(expected, result);
+	}
+	
+	@Test
+	public void testMultipleOptions() {
+		String[] args = {"-w", "-l", "testCase_1.txt"};
+		WcTool wt = new WcTool(args);
+		String result = wt.execute(null, "");
+		String expected = "\t10\t4\ttestCase_1.txt\n";
+		assertEquals(expected, result);
+	}
+	
+	@Test
+	public void testMultipleOptions_02() {
+		String[] args = {"-w", "-l", "testCase_1.txt", "testCase_2.txt"};
+		WcTool wt = new WcTool(args);
+		String result = wt.execute(null, "");
+		String expected = "\t10\t4\ttestCase_1.txt\n"+"\t4\t3\ttestCase_2.txt\n";
 		assertEquals(expected, result);
 	}
 

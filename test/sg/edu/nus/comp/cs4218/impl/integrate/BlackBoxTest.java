@@ -400,7 +400,7 @@ public class BlackBoxTest {
 		}
 
 		// generate expected string
-		String expected = "saus";
+		String expected = "saus\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
