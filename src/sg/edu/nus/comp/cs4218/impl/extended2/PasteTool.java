@@ -1,10 +1,14 @@
 package sg.edu.nus.comp.cs4218.impl.extended2;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +29,10 @@ public class PasteTool extends ATool implements IPasteTool {
 		argList = new ArrayList<String>();
 		inputList = new ArrayList<String>();
 		directory = null;
+		File f1 = new File("StdinContentClass.txt");
+		if(f1.exists()){
+			f1.delete();
+		}
 	}
 
 	@Override
@@ -162,6 +170,10 @@ public class PasteTool extends ATool implements IPasteTool {
 				}
 			} else {
 				setStatusCode(1);
+				File f1 = new File("StdinContentClass.txt");
+				if(f1.exists()){
+					f1.delete();
+				}
 				return "No arguments and no standard input.";
 			}
 		}  
@@ -174,10 +186,29 @@ public class PasteTool extends ATool implements IPasteTool {
 				if (arg.equals("-s") || arg.equals("-d") || arg.equals("-help"))
 					argList.add(arg);
 				else if (arg.equals("-")){
-					found = x;
+					if(stdin != null && stdin != ""){
+						found = x;
+						Writer writer = null;
+						try {
+							writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("StdinContentClass.txt"), "utf-8"));
+							writer.write(stdin);
+						} catch (IOException ex) {
+							// report
+						} finally {
+							try {
+								writer.close();
+							} catch (Exception ex) {
+							}
+						}
+					}
+					inputList.add("StdinContentClass.txt")	;
 				}
 				else {
 					setStatusCode(1);
+					File f1 = new File("StdinContentClass.txt");
+					if(f1.exists()){
+						f1.delete();
+					}
 					return "Wrong command";
 				}
 
@@ -196,48 +227,35 @@ public class PasteTool extends ATool implements IPasteTool {
 				listOfFiles[a] = inputList.get(a);
 			}
 			String result = pasteUseDelimiter("\t", listOfFiles);
-			if(stdin != null && stdin != "" && (found>-1)){
-				if(x > found)
-					characterList = stdin + "\t" + result;
-				else
-					characterList =  result + "\t" + stdin;
-			}
-			else
-				characterList = result;
+			characterList = result;
 		} else if (argList.get(0).equals("-s")) {
 			String[] listOfFiles = new String[inputList.size()];
 			for (int a = 0; a < inputList.size(); a++) {
 				listOfFiles[a] = inputList.get(a);
 			}
 			String result = pasteSerial(listOfFiles);
-			if(stdin != null && stdin != "" && (found>-1)){
-				if(x > found)
-					characterList = stdin + "\t" + result;
-				else
-					characterList =  result + "\t" + stdin;
-			}
-			else
-				characterList = result;
+			characterList = result;
 		} else if (argList.get(0).equals("-d")) {
 			String[] listOfFiles = new String[inputList.size() - 1];
 			for (int a = 1; a < inputList.size(); a++) {
 				listOfFiles[a - 1] = inputList.get(a);
 			}
 			String result = pasteUseDelimiter(inputList.get(0), listOfFiles);
-			if(stdin != null && stdin != "" && (args == null || args.length == 0)){
-				if(x > found)
-					characterList = stdin + "\t" + result;
-				else
-					characterList =  result +  "\t" + stdin;
-			}
-			else
-				characterList = result;
+			characterList = result;
 		} else {
 			characterList = "Wrong command";
 			setStatusCode(1);
+			File f1 = new File("StdinContentClass.txt");
+			if(f1.exists()){
+				f1.delete();
+			}
 			return characterList;
 		}
 		setStatusCode(0);
+		File f1 = new File("StdinContentClass.txt");
+		if(f1.exists()){
+			f1.delete();
+		}
 		return characterList;
 
 	}

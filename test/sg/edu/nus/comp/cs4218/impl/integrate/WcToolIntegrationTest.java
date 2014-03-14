@@ -95,4 +95,13 @@ public class WcToolIntegrationTest {
 		String expectedOutput = "2";
 		assertEquals(expectedOutput, output);
 	}
+	
+	@Test
+	public void testGeneralOptionWithPipe() {
+		String commandline = "cat testCase_4.txt | wc";
+		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
+		String output = pipingTool.execute(rootParent, null);
+		String expectedOutput = "\t6\t6\t32";
+		assertEquals(expectedOutput, output);
+	}
 }
