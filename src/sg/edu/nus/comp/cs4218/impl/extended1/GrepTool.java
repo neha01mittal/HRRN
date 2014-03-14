@@ -63,6 +63,8 @@ public class GrepTool extends ATool implements IGrepTool {
 
 		Map<String, ArrayList<String>> parsed = parse();
 		String pattern = getPatternFromInput();
+		if (pattern.compareTo("") == 0)
+			return "Invalid command";
 		fileList = getFileListFromInput();
 		fileLength = new int[fileList.size()];
 
@@ -104,7 +106,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		} else
 			result = getFinalResultString(fileContent.split("\n"));
 
-		//cut out the \n char at the end of result
+		// cut out the \n char at the end of result
 		if (result.endsWith("\n"))
 			result = result.substring(0, result.length() - 1);
 		return result;
@@ -296,9 +298,11 @@ public class GrepTool extends ATool implements IGrepTool {
 			String line = lines[j]; // if j-th line hits, print lines j + 1 -> j
 									// + option_A - 1
 			if (match(line, pattern)) {
-				int i = 0;
+				int i = 1;
+				mark[j] = 1;
 				while (i + j < mark.length && i <= optionA) {
-					mark[i + j] = 2;
+					if (mark[i + j] != 1)
+						mark[i + j] = 2;
 					i++;
 				}
 			}
@@ -307,7 +311,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			if (mark[i] != 0)
 				result += lines[i] + "\n";
 		}
-		
+
 		if (result.endsWith("\n"))
 			result = result.substring(0, result.length() - 1);
 		return result;
@@ -323,10 +327,12 @@ public class GrepTool extends ATool implements IGrepTool {
 		for (int j = 0; j < mark.length; j++) {
 			String line = lines[j];
 			if (match(line, pattern)) {
-				int i = 0;
-				while (i < j && i <= optionB) {
+				int i = 1;
+				mark[j] = 1;
+				while (i <= j && i <= optionB) {
 					// result += lines[j - i];
-					mark[j - i] = 2;
+					if (mark[j - i] != 1)
+						mark[j - i] = 2;
 					i++;
 				}
 			}
@@ -336,7 +342,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			if (mark[i] != 0)
 				result += lines[i] + "\n";
 		}
-		
+
 		if (result.endsWith("\n"))
 			result = result.substring(0, result.length() - 1);
 		return result;
@@ -350,12 +356,15 @@ public class GrepTool extends ATool implements IGrepTool {
 		if (mark == null)
 			mark = new int[lines.length];
 		for (int j = 0; j < mark.length; j++) {
-			String line = lines[j]; // if j-th line hits, print lines j + 1 -> j + option_A - 1
+			String line = lines[j]; // if j-th line hits, print lines j + 1 -> j
+									// + option_A - 1
 			// if (line.matches(pattern))
 			if (match(line, pattern)) {
-				int i = 0;
-				while (i + j < mark.length && i < optionC) {
-					mark[i + j] = 2;
+				int i = 1;
+				mark[j] = 1;
+				while (i + j < mark.length && i <= optionC) {
+					if (mark[i + j] != 1)
+						mark[i + j] = 2;
 					i++;
 				}
 			}
@@ -364,19 +373,21 @@ public class GrepTool extends ATool implements IGrepTool {
 			String line = lines[j];
 			// if (line.matches(pattern))
 			if (match(line, pattern)) {
-				int i = 0;
-				while (i < j && i < optionC) {
+				int i = 1;
+				mark[j] = 1;
+				while (i <= j && i <= optionC) {
 					// result += lines[j - i];
-					mark[j - i] = 2;
+					if (mark[j - i] != 1)
+						mark[j - i] = 2;
 					i++;
 				}
 			}
 		}
 		for (int i = 0; i < mark.length; i++) {
 			if (mark[i] != 0)
-				result += lines[i];
+				result += lines[i] + "\n";
 		}
-		
+
 		if (result.endsWith("\n"))
 			result = result.substring(0, result.length() - 1);
 		return result;
@@ -432,7 +443,7 @@ public class GrepTool extends ATool implements IGrepTool {
 			} else
 				mark[i] = 0;
 		}
-		//if (result.endsWith("\n"))
+		// if (result.endsWith("\n"))
 		// result = result.substring(0, result.length() - 1);
 		return result;
 	}
@@ -456,34 +467,25 @@ public class GrepTool extends ATool implements IGrepTool {
 		return helpString;
 	}
 
-	/* If PATTERN has special character: take it as a regex else: check if
+	/*
+	 * If PATTERN has special character: take it as a regex else: check if
 	 * source contains pattern as a substring
 	 */
 	public static boolean match(String source, String pattern) {
-//		Pattern p = Pattern.compile("[\\[\\]\\+\\|\\*\\\\^\\$]",
-//				java.util.regex.Pattern.CASE_INSENSITIVE);
-//		Matcher m = p.matcher(pattern);
-//
-//		if (m.find()) // if pattern contains characters [,],\,$,*,+
-//		{
-			boolean isRegex;
-			try {
-				Pattern.compile(pattern);
-				isRegex = true;
-			} catch (PatternSyntaxException e) {
-				isRegex = false;
-			}
-			if (isRegex == false) 
-				return source.contains(pattern);
+		boolean isRegex;
+		try {
+			Pattern.compile(pattern);
+			isRegex = true;
+		} catch (PatternSyntaxException e) {
+			isRegex = false;
+		}
+		if (isRegex == false)
+			return source.contains(pattern);
 
-			// if pattern is a correct regex
-			Pattern p1 = Pattern.compile(pattern);
-			Matcher m1 = p1.matcher(source);
-			return m1.find();
-			// return source.matches(pattern);
-//		} else {
-//			return source.contains(pattern);
-//		}
+		// if pattern is a correct regex
+		Pattern p1 = Pattern.compile(pattern);
+		Matcher m1 = p1.matcher(source);
+		return m1.find();
 	}
 
 	public static String getMatchedGroups(String pattern, String line) {

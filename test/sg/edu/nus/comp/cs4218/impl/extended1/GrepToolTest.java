@@ -268,7 +268,7 @@ public class GrepToolTest {
 
 		String result = gt.execute(new File(System.getProperty("user.dir")),
 				input);
-		assertEquals("grep", result);
+		assertEquals("Invalid command", result);
 	}
 
 	@Test
@@ -352,7 +352,7 @@ public class GrepToolTest {
 	@Test
 	public void testOptionC() {
 		File f = new File("file1.txt");
-		String input = "grep -B 2 \"reserve\" " + f.getAbsolutePath();
+		String input = "grep -C 2 \"reserve\" " + f.getAbsolutePath();
 
 		String[] tokens = input.split(" ");
 		String[] args = Arrays.copyOfRange(tokens, 1, tokens.length);
@@ -368,17 +368,20 @@ public class GrepToolTest {
 			e.printStackTrace();
 		}
 
-		String result = gt.getMatchingLinesWithLeadingContext(2, "reserve",
+		String result = gt.getMatchingLinesWithOutputContext(2, "reserve",
 				fileContent);
 		String expected = "#Cell Size:#  If you have more than one line (as just above) then\n"
 				+ "              you will simply get empty cells where the other column is empty.\n"
 				+ "#Alignment:#  Alignment of cells is attempted to be preserved.\n"
+				+ "\n"
+				+ "BORDER\n"
 				+ "I would like to implement.\n"
 				+ "\n"
 				+ "A. I would like to be able to preserve lettered lists, that is:\n"
 				+ "   a) recognise that they are letters and not numbers (which it already\n"
 				+ "      does)\n"
-				+ "   b) display the correct OL properties with CSS so as to preserve";
+				+ "   b) display the correct OL properties with CSS so as to preserve\n"
+				+ "      that information.\n";
 
 		assertEquals(expected, result);
 	}
@@ -444,7 +447,7 @@ public class GrepToolTest {
 		String input = "cat file1.txt | grep \"A\" file2.txt";
 		String[] tokens = input.split(" ");
 
-		String[] catArgs = Arrays.copyOfRange(tokens, 1, 1);
+		String[] catArgs = Arrays.copyOfRange(tokens, 1, 2);
 		CatTool ct = new CatTool(catArgs);
 		String catToolOutput = ct.execute(
 				new File(System.getProperty("user.dir")), "");
@@ -458,6 +461,27 @@ public class GrepToolTest {
 				catToolOutput);
 		String expected = "^A^A^A\n" + "A\n" + "AA\n" + "A B\n" + "A\n"
 				+ "BAA\n" + "BBAA\n" + "B^A\n" + "BBB^A";
+		assertEquals(expected, result);
+	}
+	
+	@Test
+	public void testPipingWithGrepFullOption_02() {
+		String input = "cat testCase_3.txt | grep -A 2 -B 3 b";
+		String[] tokens = input.split(" ");
+
+		String[] catArgs = Arrays.copyOfRange(tokens, 1, 2);
+		CatTool ct = new CatTool(catArgs);
+		String catToolOutput = ct.execute(
+				new File(System.getProperty("user.dir")), "");
+
+		String[] grepArgs = Arrays.copyOfRange(tokens, 4, tokens.length);
+		grepArgs[4] = "b";
+
+		GrepTool gt = new GrepTool(grepArgs);
+
+		String result = gt.execute(new File(System.getProperty("user.dir")),
+				catToolOutput);
+		String expected = "a\n" + "b\n" + "b\n" + "c\n" + "c";
 		assertEquals(expected, result);
 	}
 
