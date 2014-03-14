@@ -61,9 +61,15 @@ public class UniqTool extends ATool implements IUniqTool {
 					}
 				}
 			} else if (args[i].equals("-")) {
-				inputFlag = (inputFlag == 1) ? 1 : 2;
+				if (inputFlag != 0) {
+					return null;
+				}
+				inputFlag = 2;
 				inputFlag2 = true;
 			} else if (args[i].trim().length() > 0) {
+				if (inputFlag != 0) {
+					return null;
+				}
 				inputList.add(args[i]);
 				inputFlag = 1;
 				inputFlag2 = true;
@@ -116,6 +122,8 @@ public class UniqTool extends ATool implements IUniqTool {
 					getUnique(!argList.contains("-i"), sCurrentLine);
 				}
 			}
+
+			br.close();
 		} catch (IOException e) {
 			return null;
 		}

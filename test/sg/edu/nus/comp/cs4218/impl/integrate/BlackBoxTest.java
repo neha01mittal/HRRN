@@ -316,7 +316,7 @@ public class BlackBoxTest {
 		}
 
 		// generate expected string
-		String expected = "\t\t\t\tsausage\n\t\tsausage	sausage\nblubber\npencil\ncloud\n";
+		String expected = "sausage\t\t\t\tsausage\nblubber\t\tsausage\npencil\ncloud\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
@@ -400,7 +400,7 @@ public class BlackBoxTest {
 		}
 
 		// generate expected string
-		String expected = "saus";
+		String expected = "saus\n";
 
 		// remove header and windows dependency
 		String result = outContent.toString().replace(header, "").replaceAll("\r", "");
@@ -552,8 +552,8 @@ public class BlackBoxTest {
 	@Test
 	public void testStateChange2() {
 		String input = "ls | grep tempFile_01 \r\n move testFolder" +
-				File.separator + "tempFile_01.txt . \r\n ls | grep tempFile_01 \r\n move tempFile_01.txt testFolder"
-				+ File.separator + " \r\n ls | grep tempFile_01 \r\n";
+				File.separator + "tempFile_01.txt . \r\n ls | grep tempFile_01 \r\n " +
+				"move tempFile_01.txt testFolder" + " \r\n ls | grep tempFile_01 \r\n";
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
 		String header = System.getProperty("user.dir") + " $: ";
 
