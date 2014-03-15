@@ -288,7 +288,7 @@ public class CopyToolIntegrationTest {
 		}
 	}
 
-	public boolean compare(File file1, File file2) {
+	public static boolean compare(File file1, File file2) {
 
 		String s1 = "";
 		String s3 = "";

@@ -87,7 +87,6 @@ public class CatToolIntegrationTest {
 		String commandline = "cd .. | cat";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f2, null);
-		System.out.println(output);
 		String expectedOutput = "";
 		assertEquals(expectedOutput, output);
 	}
@@ -106,7 +105,6 @@ public class CatToolIntegrationTest {
 		String commandline = "move " + file1 + " " + f1 + "| cat";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		System.out.println(output);
 		String expectedOutput = "";
 		assertEquals(expectedOutput, output);
 		file1.createNewFile();
@@ -210,7 +208,6 @@ public class CatToolIntegrationTest {
 		String commandline = "uniq -f -1 test1.txt | cat";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		System.out.println(output);
 		String expectedOutput = "This is test content and more";
 		assertEquals(expectedOutput, output);
 	}
@@ -283,7 +280,6 @@ public class CatToolIntegrationTest {
 		String commandline = "comm test1.txt test2.txt | cat -";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		System.out.println(output);
 		String expectedOutput = "\t\tThis is file 2 content\nThis is test content and more";
 		assertEquals(expectedOutput, output);
 	}
@@ -293,7 +289,6 @@ public class CatToolIntegrationTest {
 		String commandline = "comm -d test1.txt test2.txt | cat";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
-		System.out.println(output);
 		String expectedOutput = "\t\tThis is file 2 content\nThis is test content and more";
 		assertEquals(expectedOutput, output);
 	}

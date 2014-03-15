@@ -27,7 +27,7 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 /**
  * copy a file/folder to a given location
  * 
- * @usage copy [path1] [path2] … [path to folder]
+ * @usage copy [path1] [path2] ��� [path to folder]
  * @options 
  * copy file1 file2 Copies file1 contents into file2 
  * copy /../file1 file2  Copies file1 contents into file2 
@@ -150,7 +150,7 @@ public class CopyToolTest {
 	}
 
 	// Test copying file into invalid path
-	// @Test
+    @Test
 	public void testCopyFileIntoInvalidPath() {
 		copyTool = new CopyTool(null);
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt");

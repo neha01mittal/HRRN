@@ -123,7 +123,7 @@ public class MyFunctionsCopyToolTest {
 	}
 
 	// Test copying file into invalid path
-	// @Test
+	 @Test
 	public void testRecursiveCopyIntoInvalidPath() {
 		copyTool = new CopyTool(null);
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt");
@@ -225,7 +225,7 @@ public class MyFunctionsCopyToolTest {
 		}
 	}
 
-	public boolean compare(File file1, File file2) {
+	public static boolean compare(File file1, File file2) {
 
 		String s1 = "";
 		String s3 = "";
