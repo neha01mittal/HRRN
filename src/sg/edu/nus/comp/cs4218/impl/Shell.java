@@ -99,7 +99,16 @@ public class Shell implements IShell {
 				if (isInteruptable) {
 					try {
 						if (in.ready() && in.readLine().equals("ctrl-z")) {
-							stop(toolExecution);
+							if (!(future.isDone() || future.isCancelled())) {
+								boolean cancellable = future.cancel(true);
+								if (!cancellable) {
+									System.err.println("[" + currentTool.getStatusCode() + "]+  Cannot stop thread, thus quit!");
+									System.exit(1);
+								} else {
+									System.err.println("[" + currentTool.getStatusCode() + "]+  Stopped                 "
+											+ currentTool.getClass().getSimpleName());
+								}
+							}
 							break;
 						}
 					} catch (IOException e1) {
@@ -147,15 +156,6 @@ public class Shell implements IShell {
 	@Override
 	public void stop(Runnable toolExecution) {
 
-		if (!(future.isDone() || future.isCancelled())) {
-			boolean cancellable = future.cancel(true);
-			if (!cancellable) {
-				System.err.println("[" + currentTool.getStatusCode() + "]+  Cannot stop thread, thus quit!");
-				System.exit(1);
-			} else {
-				System.err.println("[" + currentTool.getStatusCode() + "]+  Stopped                 " + currentTool.getClass().getSimpleName());
-			}
-		}
 	}
 
 	//
