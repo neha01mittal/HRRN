@@ -2,12 +2,11 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -28,29 +27,29 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
  * copy a file/folder to a given location
  * 
  * @usage copy [path1] [path2] … [path to folder]
- * @options 
- * copy file1 file2 Copies file1 contents into file2 
- * copy /../file1 file2  Copies file1 contents into file2 
- * copy "file1" "file2" Copies file1 contents into file2 
- * copy file1 newfile Creates newfile and copies file1 contents into newfile 
- * copy file1 folder Copies file1 contents into folder 
- * copy file1 newfolder Creates newfolder and copies file1 contents into newfolder 
- * copy folder1 folder2 Copies contents of folder1 into folder2 
- * copy folder1 newfolder Creates newfolder and copies folder1 contents into newfolder 
- * copy file1 file2 file3 folder1 Copies/Replaces file1, file2, file3 in folder1
- * copy folder1 folder2 file3 newfolder - Creates and copies folder1, folder2, file3 into newfolder
+ * @options copy file1 file2 Copies file1 contents into file2 copy /../file1
+ *          file2 Copies file1 contents into file2 copy "file1" "file2" Copies
+ *          file1 contents into file2 copy file1 newfile Creates newfile and
+ *          copies file1 contents into newfile copy file1 folder Copies file1
+ *          contents into folder copy file1 newfolder Creates newfolder and
+ *          copies file1 contents into newfolder copy folder1 folder2 Copies
+ *          contents of folder1 into folder2 copy folder1 newfolder Creates
+ *          newfolder and copies folder1 contents into newfolder copy file1
+ *          file2 file3 folder1 Copies/Replaces file1, file2, file3 in folder1
+ *          copy folder1 folder2 file3 newfolder - Creates and copies folder1,
+ *          folder2, file3 into newfolder
  * @note
  * @success
  * @exceptions
  */
 public class CopyToolTest {
 
-	private static CopyTool copyTool;
-	private static Path rootDirectory;
-	private static String rootDirectoryString;
-	private static List<Path> testDirectoryList;
-	private static List<String> testDirectoryListRelativeString;
-	private static List<String> testDirectoryListAbsoluteString;
+	private static CopyTool		copyTool;
+	private static Path			rootDirectory;
+	private static String		rootDirectoryString;
+	private static List<Path>	testDirectoryList;
+	private static List<String>	testDirectoryListRelativeString;
+	private static List<String>	testDirectoryListAbsoluteString;
 
 	@BeforeClass
 	public static void before() throws IOException {
@@ -96,7 +95,7 @@ public class CopyToolTest {
 		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt", "something");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test2.txt");
 		copyTool.copy(f1, f2);
-		assert (compare(f1, f2));
+		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
 		f2.delete();
 	}
@@ -109,7 +108,7 @@ public class CopyToolTest {
 		create(testDirectoryListRelativeString.get(0) + File.separator + "test.txt", "something");
 		File f2 = new File(testDirectoryListRelativeString.get(0) + File.separator + "test2.txt");
 		copyTool.copy(f1, f2);
-		assert (compare(f1, f2));
+		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
 		f2.delete();
 	}
@@ -122,7 +121,7 @@ public class CopyToolTest {
 		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt.txt", "something");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test2.txt");
 		copyTool.copy(f1, f2);
-		assert (compare(f1, f2));
+		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
 		f2.delete();
 	}
@@ -189,7 +188,7 @@ public class CopyToolTest {
 
 		f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
 
-		assert (compare(f1, f2));
+		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
 		f2.delete();
 	}
@@ -245,7 +244,7 @@ public class CopyToolTest {
 		copyTool.execute(rootDirectory.toFile(), "");
 		File f3 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test.txt");
 		File f4 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test2.txt");
-		assert (compare(f1, f3) && compare(f2, f4));
+		assertTrue(TestUtils.compare(f1, f3) && TestUtils.compare(f2, f4));
 		f1.delete();
 		f2.delete();
 		f3.delete();
@@ -266,7 +265,7 @@ public class CopyToolTest {
 				testDirectoryListAbsoluteString.get(0) + File.separator + "test2.txt", testDirectoryListAbsoluteString.get(1) + File.separator + "a.txt" };
 		copyTool = new CopyTool(arg);
 		copyTool.execute(rootDirectory.toFile(), "");
-		assert (compare(f2, f));
+		assertTrue(TestUtils.compare(f2, f));
 		f1.delete();
 		f2.delete();
 		f.delete();
@@ -285,7 +284,7 @@ public class CopyToolTest {
 		copyTool = new CopyTool(arg);
 		copyTool.execute(rootDirectory.toFile(), "");
 		File f = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "a.txt");
-		assert (compare(f2, f));
+		assertTrue(TestUtils.compare(f2, f));
 		f1.delete();
 		f2.delete();
 		f.delete();
@@ -322,7 +321,7 @@ public class CopyToolTest {
 				testDirectoryListAbsoluteString.get(1) + File.separator + "test.txt", testDirectoryListAbsoluteString.get(2) };
 		copyTool = new CopyTool(arg);
 		copyTool.execute(rootDirectory.toFile(), "");
-		assert (copyTool.getStatusCode() == 1 && compare(f1, f2));
+		assertTrue(copyTool.getStatusCode() == 1 && TestUtils.compare(f1, f2));
 		f1.delete();
 		f2.delete();
 	}
@@ -341,7 +340,7 @@ public class CopyToolTest {
 		copyTool.execute(rootDirectory.toFile(), "");
 		File f3 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test.txt");
 		File f4 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test2.txt");
-		assert (compare(f1, f3) && compare(f2, f4));
+		assertTrue(TestUtils.compare(f1, f3) && TestUtils.compare(f2, f4));
 		f1.delete();
 		f2.delete();
 		f3.delete();
@@ -365,7 +364,7 @@ public class CopyToolTest {
 		copyTool.execute(rootDirectory.toFile(), "");
 		File f3 = new File(testDirectoryListAbsoluteString.get(2) + File.separator + "test.txt");
 		File f4 = new File(testDirectoryListAbsoluteString.get(2) + File.separator + "test2.txt");
-		assert (compare(f1, f3) && compare(f2, f4));
+		assertTrue(TestUtils.compare(f1, f3) && TestUtils.compare(f2, f4));
 		f1.delete();
 		f2.delete();
 		f.delete();
@@ -389,11 +388,11 @@ public class CopyToolTest {
 		for (int index = 0; index < fList.length; index++) {
 			File dest = new File(to, fList[index]);
 			File source = new File(from, fList[index]);
-			if (compare(dest, source) == false) {
+			if (TestUtils.compare(dest, source) == false) {
 				result = "false";
 			}
 		}
-		assert (result == "true");
+		assertTrue(result == "true");
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt");
 		f1.delete();
 		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
@@ -410,7 +409,7 @@ public class CopyToolTest {
 		copyTool.copy(f2, to);
 		File f1 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + " .." + File.separator + "newfolder" + File.separator + "test1.txt");
 
-		assert (compare(f1, f2));
+		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
 		to.delete();
 		f2.delete();
@@ -431,33 +430,6 @@ public class CopyToolTest {
 			} catch (Exception ex) {
 			}
 		}
-	}
-
-	public boolean compare(File file1, File file2) {
-
-		String s1 = "";
-		String s3 = "";
-		String y = "", z = "";
-		try {
-			@SuppressWarnings("resource")
-			BufferedReader bfr = new BufferedReader(new FileReader(file1));
-			@SuppressWarnings("resource")
-			BufferedReader bfr1 = new BufferedReader(new FileReader(file2));
-			while ((z = bfr1.readLine()) != null)
-				s3 += z;
-
-			while ((y = bfr.readLine()) != null)
-				s1 += y;
-		} catch (Exception e) {
-			return false;
-		}
-
-		if (s3.equals(s1)) {
-			return true;
-		} else {
-			return false;
-		}
-
 	}
 
 }

@@ -1,6 +1,8 @@
 package sg.edu.nus.comp.cs4218.impl.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 
 public class TestUtils {
 
@@ -32,5 +34,32 @@ public class TestUtils {
 				file.delete();
 			}
 		}
+	}
+
+	public static boolean compare(File file1, File file2) {
+
+		String s1 = "";
+		String s3 = "";
+		String y = "", z = "";
+		try {
+			@SuppressWarnings("resource")
+			BufferedReader bfr = new BufferedReader(new FileReader(file1));
+			@SuppressWarnings("resource")
+			BufferedReader bfr1 = new BufferedReader(new FileReader(file2));
+			while ((z = bfr1.readLine()) != null)
+				s3 += z;
+
+			while ((y = bfr.readLine()) != null)
+				s1 += y;
+		} catch (Exception e) {
+			return false;
+		}
+
+		if (s3.equals(s1)) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 }
