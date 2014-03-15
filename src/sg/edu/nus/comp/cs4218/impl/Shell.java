@@ -45,16 +45,16 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
  *          moves file/folder from path1 to path2 $: delete path1 - deletes
  *          file/folder $: pwd - displays present working directory $: echo
  *          input - displays input $: cat file - prints contents of
- *          file/standard input $: grep options ���pattern��� file - searches for a
+ *          file/standard input $: grep options "pattern" file - searches for a
  *          pattern in file(s) $: p1 | p2 - send stdout of p1 to p2 to execute
  * @note The input arguments or path can be relative or absolute, in quotes or
  *       without quotes, with backslash or front slash, with escaped space. But
- *       other escaped like \��� or \��� characters are not yet handled. But you can
- *       still escape ��� by surrounding it with ���, vise versa. The termination
+ *       other escaped like \" or \' characters are not yet handled. But you can
+ *       still escape " by surrounding it with ", vise versa. The termination
  *       function is either ctrl-z to terminate a running tool, the char has to
- *       be input with enter key hit. The shell will try it���s best to stop the
- *       running thread, if it���s really not able to stop the thread, the program
- *       will stop for safety. User are not allowed to use ���~��� to denote home
+ *       be input with enter key hit. The shell will try it"s best to stop the
+ *       running thread, if it"s really not able to stop the thread, the program
+ *       will stop for safety. User are not allowed to use "~" to denote home
  *       directory.
  * @success It will print the returning string, or nothing if returned null, or
  *          a blank line if returned empty string.
