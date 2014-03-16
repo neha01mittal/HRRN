@@ -63,6 +63,7 @@ public class DeleteTool extends ATool implements IDeleteTool {
 			setStatusCode(1);
 		}
 		if (delete(f1)) {
+			setStatusCode(0);
 		}
 		return null;
 

@@ -84,6 +84,8 @@ public class PipingTool extends ATool implements IPipingTool {
 		if (from.getStatusCode() != 0 && returnedValue != null) {
 			System.err.println(returnedValue);
 			return "";
+		} else if(returnedValue == null){
+			return "";
 		}
 		return returnedValue;
 	}
@@ -97,6 +99,8 @@ public class PipingTool extends ATool implements IPipingTool {
 		String returnedValue = to.execute(workingDir, stdout);
 		if (to.getStatusCode() != 0 && returnedValue != null) {
 			System.err.println(returnedValue);
+			return "";
+		} else if(returnedValue == null){
 			return "";
 		}
 		return returnedValue;

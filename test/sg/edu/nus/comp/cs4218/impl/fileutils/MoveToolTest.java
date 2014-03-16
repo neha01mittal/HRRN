@@ -1,6 +1,6 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -91,33 +91,37 @@ public class MoveToolTest {
 		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
 		moveTool.move(f1, f2);
-		assert ((!(f1.exists())) && f2.exists());
+		assertFalse (f1.exists()) ;assertTrue( f2.exists());
 		f2.delete();
 	}
 
 	@Test
 	public void testMoveFileWithRelativePath() {
 		moveTool = new MoveTool(null);
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "//test.txt");
-		create(testDirectoryListRelativeString.get(0) + "//test.txt", "something");
-		File f2 = new File(testDirectoryListRelativeString.get(0) + "//test2.txt");
-		moveTool.move(f1, f2);
-		assert ((!(f1.exists())) && f2.exists());
-		f2.delete();
+		File f1 = new File("test.txt");
+		create(rootDirectoryString + File.separator + "test.txt", "something");
+		File f2 = new File("test2.txt");
+		String a[] = { f1.toString(), f2.toString() };
+		moveTool = new MoveTool(a);
+		moveTool.execute(rootDirectory.toFile(), "");
+		File f3 = new File(rootDirectoryString ,"test.txt");
+		File f4 = new File(rootDirectoryString , "test2.txt");
+		assertFalse( f3.exists());
+		assertTrue( f4.exists());
+		f4.delete();
 	}
 
 	@Test
 	public void testMoveIntoFileWithSameName() {
 		moveTool = new MoveTool(null);
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test1.txt");
-		File f2 = new File(testDirectoryListAbsoluteString.get(1));
+		File f2 = new File(testDirectoryListAbsoluteString.get(1) + "//test1.txt");
 		create(testDirectoryListAbsoluteString.get(0) + "//test1.txt", "something");
 
 		moveTool.move(f1, f2);
 
-		f2 = new File(testDirectoryListAbsoluteString.get(1) + "//test1.txt");
-
-		assert ((!(f1.exists())) && f2.exists());
+		assertFalse (f1.exists()) ;
+		assertTrue( f2.exists());
 		f2.delete();
 	}
 
@@ -132,7 +136,7 @@ public class MoveToolTest {
 
 		moveTool.move(from, to);
 
-		assert ((!(from.exists())) && to.exists());
+		assertFalse (from.exists()) ;assertTrue( to.exists());
 		f1 = new File(testDirectoryListAbsoluteString.get(0) + "/level0level1/test1.txt");
 		f1.delete();
 		f1 = new File(testDirectoryListAbsoluteString.get(0) + "/level0level1");
@@ -147,7 +151,7 @@ public class MoveToolTest {
 		File to = new File(testDirectoryListAbsoluteString.get(1) + "//..//newfolder");
 		File f2 = new File(testDirectoryListAbsoluteString.get(1) + "//..//newfolder//test1.txt");
 		moveTool.move(f1, to);
-		assert ((!(f1.exists())) && to.exists());
+		assertFalse (f1.exists()) ;assertTrue( to.exists());
 		f2.delete();
 		to.delete();
 
@@ -162,7 +166,7 @@ public class MoveToolTest {
 		String a[] = { f1.getPath().toString(), testDirectoryListAbsoluteString.get(0) };
 		moveTool = new MoveTool(a);
 		moveTool.execute(rootDirectory.toFile(), "");
-		assert (moveTool.getStatusCode() == 0);
+		assertEquals (moveTool.getStatusCode(), 0);
 		f1.delete();
 	}
 
@@ -176,7 +180,7 @@ public class MoveToolTest {
 		moveTool = new MoveTool(a);
 		moveTool.execute(rootDirectory.toFile(), "");
 		f1.delete();
-		assert (moveTool.getStatusCode() == 1);
+		assertEquals (moveTool.getStatusCode(), 1);
 	}
 
 	// Test moving folder to invalid path
@@ -186,7 +190,7 @@ public class MoveToolTest {
 		String a[] = { testDirectoryListAbsoluteString.get(0), "invalid" };
 		moveTool = new MoveTool(a);
 		moveTool.execute(rootDirectory.toFile(), "");
-		assert (moveTool.getStatusCode() == 1);
+		assertEquals (moveTool.getStatusCode(), 1);
 	}
 
 	// Test moving folder into its parent folder (does it replace)
@@ -196,7 +200,7 @@ public class MoveToolTest {
 		String a[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(0) + "//.." };
 		moveTool = new MoveTool(a);
 		moveTool.execute(rootDirectory.toFile(), "");
-		assert (moveTool.getStatusCode() == 1);
+		assertEquals (moveTool.getStatusCode(), 1);
 
 	}
 
@@ -214,7 +218,8 @@ public class MoveToolTest {
 		moveTool.execute(rootDirectory.toFile(), "");
 		File f3 = new File(testDirectoryListAbsoluteString.get(1) + "//test.txt");
 		File f4 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
-		assert (!(f1.exists() || f2.exists()) && f3.exists() && f4.exists());
+		assertFalse (f1.exists()) ;assertFalse( f2.exists());
+		assertTrue (f3.exists()) ;assertTrue( f4.exists());
 		f3.delete();
 		f4.delete();
 	}
@@ -233,7 +238,8 @@ public class MoveToolTest {
 				testDirectoryListAbsoluteString.get(1) + "//a.txt" };
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
-		assert (!(f1.exists() || f2.exists()) && f.exists());
+		assertFalse (f1.exists()) ;assertFalse( f2.exists());
+		assertTrue (f.exists()) ;
 		f.delete();
 	}
 
@@ -268,7 +274,7 @@ public class MoveToolTest {
 		create(testDirectoryListAbsoluteString.get(0) + "//test.txt.txt", "something");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
 		moveTool.move(f1, f2);
-		assert ((!(f1.exists())) && f2.exists());
+		assertFalse (f1.exists()) ;assertTrue( f2.exists());
 		f2.delete();
 	}
 
@@ -280,7 +286,7 @@ public class MoveToolTest {
 		String a[] = { f1.getPath().toString(), f2.getPath().toString() };
 		moveTool = new MoveTool(a);
 		moveTool.execute(rootDirectory.toFile(), "");
-		assert (moveTool.getStatusCode() == 1);
+		assertEquals (moveTool.getStatusCode(), 1);
 	}
 
 	// Test moving multiple files into a new file - move operations happens in
@@ -296,8 +302,8 @@ public class MoveToolTest {
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
 		File f = new File(testDirectoryListAbsoluteString.get(1) + "//a.txt");
-		assert (!(f1.exists() || f2.exists()) && f.exists());
-		f.delete();
+		assertFalse (f1.exists()) ;assertFalse( f2.exists());
+		assertTrue (f.exists()) ;
 	}
 
 	// Test moving multiple folders into a file -Test if it creates a folder
@@ -313,7 +319,7 @@ public class MoveToolTest {
 		String arg[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(1), testDirectoryListAbsoluteString.get(2) + "//a.txt" };
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
-		assert (moveTool.getStatusCode() == 1);
+		assertEquals (moveTool.getStatusCode() , 1);
 		f1.delete();
 		f2.delete();
 		f.delete();
@@ -331,7 +337,8 @@ public class MoveToolTest {
 				testDirectoryListAbsoluteString.get(2) };
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
-		assert (moveTool.getStatusCode() == 1 && !(f1.exists()) && f2.exists());
+		assertEquals (moveTool.getStatusCode() , 1);
+		assertFalse (f1.exists()) ;assertTrue( f2.exists());
 		f1.delete();
 		f2.delete();
 	}
@@ -344,17 +351,18 @@ public class MoveToolTest {
 		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
 		create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
+		File f = new File(rootDirectoryString + File.separator + "new");
+		f.mkdir();
 		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
-				testDirectoryListAbsoluteString.get(0) + "//..//new" };
+				rootDirectoryString + File.separator + "new" };
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
-		File f3 = new File(testDirectoryListAbsoluteString.get(1) + "//test.txt");
-		File f4 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
-		assert (!(f1.exists() || f2.exists()) && f3.exists() && f4.exists());
+		File f3 = new File(rootDirectoryString + File.separator + "new" + File.separator + "test.txt");
+		File f4 = new File(rootDirectoryString + File.separator + "new" + File.separator + "test2.txt");
+		assertFalse (f1.exists()) ;assertFalse( f2.exists());
+		assertTrue (f3.exists()) ;assertTrue( f4.exists());
 		f3.delete();
 		f4.delete();
-
-		File f = new File(testDirectoryListAbsoluteString.get(1) + "//..//new");
 		f.delete();
 	}
 
@@ -369,7 +377,8 @@ public class MoveToolTest {
 		File f3 = new File(testDirectoryListAbsoluteString.get(2) + "//level0");
 		File f4 = new File(testDirectoryListAbsoluteString.get(2) + "//level0level1");
 
-		assert (!(f1.exists() || f2.exists()) && f3.exists() && f4.exists());
+		assertFalse (f1.exists()) ;assertFalse( f2.exists());
+		assertTrue (f3.exists()) ;assertTrue( f4.exists());
 		f3.delete();
 		f4.delete();
 	}

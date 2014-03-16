@@ -15,7 +15,21 @@ import java.util.List;
 
 import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
-
+/**
+ * Specifications for Paste	
+ * 	paste [options] [file1 ..]
+ * 	paste file1 file2: prints contents of files in parallel on the console
+ * 	paste -d delim file1 file2: file content printed in parallel separated by delimiter.
+ * 	paste -s file1 file2 : paste appends the data in serial rather than in parallel.
+ *  command1 | paste : The output of command1 is treated as file contents to be used by paste
+ *  command1 | paste [options] : stdin used as file contents
+ *  command1 | paste - [file1 ..] : "-" is replaced by file contents
+ *  command1 | paste [file1 ..] - : "-" is replaced by file contents
+ *  command1 | paste -s - [file1 ..] 
+ *  command1 | paste -d "," [file1 ..] - 
+ * @author ranjini
+ *
+ */
 public class PasteTool extends ATool implements IPasteTool {
 
 	private final List<String> argList;

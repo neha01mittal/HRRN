@@ -57,7 +57,6 @@ public class CommToolIntegrationTest {
 		String commandline = "ls | comm - commTestCase1b.txt";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(new File(rootParent), null);
-		System.out.println(output);
 		String expectedOutput = "\t\taaa\ncommTestCase1a.txt\n\t\tbbb\ncommTestCase1b.txt\n\t\tffff\nlvl1folder\ntestCase_2.txt\ntestCase_3.txt\ntestCase_4.txt\ntestCase_5.txt";
 		assertEquals(expectedOutput, output);
 	}
@@ -180,7 +179,7 @@ public class CommToolIntegrationTest {
 		String commandline = "wc -l testCase_3.txt | comm - testCase_2.txt";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(new File(rootParent), null);
-		String expectedOutput = "5\ttestCase_3.txt" +
+		String expectedOutput = "\t5\ttestCase_3.txt" +
 				"\n\t\tgek1517" +
 				"\n\t\tACC1002X" +
 				"\n\t\tsw2104" +
@@ -202,7 +201,6 @@ public class CommToolIntegrationTest {
 		String commandline = "uniq -f -1 testCase_3.txt | comm - testCase_2.txt";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(new File(rootParent), null);
-		System.out.println(output);
 		String expectedOutput = "a\n\t\tgek1517\n\t\tACC1002X\nb\nc\n\t\tsw2104\n\t\tpc1141";
 		assertEquals(expectedOutput, output);
 	}

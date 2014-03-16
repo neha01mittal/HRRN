@@ -1,12 +1,11 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -28,18 +27,18 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
  */
 public class MyFunctionsCopyToolTest {
 
-	private static CopyTool copyTool;
-	private static Path rootDirectory;
-	private static String rootDirectoryString;
-	private static List<Path> testDirectoryList;
-	private static List<String> testDirectoryListRelativeString;
-	private static List<String> testDirectoryListAbsoluteString;
+	private static CopyTool		copyTool;
+	private static Path			rootDirectory;
+	private static String		rootDirectoryString;
+	private static List<Path>	testDirectoryList;
+	private static List<String>	testDirectoryListRelativeString;
+	private static List<String>	testDirectoryListAbsoluteString;
 
 	@BeforeClass
 	public static void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + "/copyToolTest";
+		rootDirectoryString = System.getProperty("user.dir") + "/myCopyToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -79,20 +78,7 @@ public class MyFunctionsCopyToolTest {
 		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt", "something");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test2.txt");
 		copyTool.recursivecopy(f1, f2);
-		assert (compare(f1, f2));
-		f1.delete();
-		f2.delete();
-	}
-
-	// Test copying file with relative path into a new file
-	@Test
-	public void testRecursiveCopyWithRelativePath() {
-		copyTool = new CopyTool(null);
-		File f1 = new File(testDirectoryListRelativeString.get(0) + File.separator + "test.txt");
-		create(testDirectoryListRelativeString.get(0) + File.separator + "test.txt", "something");
-		File f2 = new File(testDirectoryListRelativeString.get(0) + File.separator + "test2.txt");
-		copyTool.recursivecopy(f1, f2);
-		assert (compare(f1, f2));
+		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
 		f2.delete();
 	}
@@ -105,7 +91,7 @@ public class MyFunctionsCopyToolTest {
 		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt.txt", "something");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test2.txt");
 		copyTool.recursivecopy(f1, f2);
-		assert (compare(f1, f2));
+		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
 		f2.delete();
 	}
@@ -123,12 +109,15 @@ public class MyFunctionsCopyToolTest {
 	}
 
 	// Test copying file into invalid path
-	// @Test
+	@Test
 	public void testRecursiveCopyIntoInvalidPath() {
 		copyTool = new CopyTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt", "something");
-		String a[] = { f1.getPath().toString(), testDirectoryListAbsoluteString.get(0) + "/blah/test.txt" };
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) +
+				File.separator + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator +
+				"test.txt", "something");
+		String a[] = { f1.getPath().toString(),
+				testDirectoryListAbsoluteString.get(0) + "/blah/test.txt" };
 		copyTool = new CopyTool(a);
 		copyTool.recursivecopy(rootDirectory.toFile(), f1);
 		f1.delete();
@@ -140,14 +129,14 @@ public class MyFunctionsCopyToolTest {
 	public void testCopyAndReplaceExistingFile() {
 		copyTool = new CopyTool(null);
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt");
-		File f2 = new File(testDirectoryListAbsoluteString.get(1));
+		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
 		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt", "something");
 
 		copyTool.copy(f1, f2);
 
 		f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
 
-		assert (compare(f1, f2));
+		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
 		f2.delete();
 	}
@@ -181,32 +170,15 @@ public class MyFunctionsCopyToolTest {
 		for (int index = 0; index < fList.length; index++) {
 			File dest = new File(to, fList[index]);
 			File source = new File(from, fList[index]);
-			if (compare(dest, source) == false) {
+			if (TestUtils.compare(dest, source) == false) {
 				result = "false";
 			}
 		}
-		assert (result == "true");
+		assertTrue(result == "true");
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt");
 		f1.delete();
 		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
 		f2.delete();
-	}
-
-	// Test copying file into new folder
-	@Test
-	public void testCopyToNewFolder() {
-		copyTool = new CopyTool(null);
-		create(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt", "something");
-		File to = new File(testDirectoryListAbsoluteString.get(1) + File.separator + " .." + File.separator + "newfolder");
-		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
-		copyTool.recursivecopy(f2, to);
-		File f1 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + " .." + File.separator + "newfolder" + File.separator + "test1.txt");
-
-		assert (compare(f1, f2));
-		f1.delete();
-		to.delete();
-		f2.delete();
-
 	}
 
 	public void create(String filename, String content) {
@@ -223,33 +195,6 @@ public class MyFunctionsCopyToolTest {
 			} catch (Exception ex) {
 			}
 		}
-	}
-
-	public boolean compare(File file1, File file2) {
-
-		String s1 = "";
-		String s3 = "";
-		String y = "", z = "";
-		try {
-			@SuppressWarnings("resource")
-			BufferedReader bfr = new BufferedReader(new FileReader(file1));
-			@SuppressWarnings("resource")
-			BufferedReader bfr1 = new BufferedReader(new FileReader(file2));
-			while ((z = bfr1.readLine()) != null)
-				s3 += z;
-
-			while ((y = bfr.readLine()) != null)
-				s1 += y;
-		} catch (Exception e) {
-			return false;
-		}
-
-		if (s3.equals(s1)) {
-			return true;
-		} else {
-			return false;
-		}
-
 	}
 
 }

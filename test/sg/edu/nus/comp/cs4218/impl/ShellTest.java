@@ -6,7 +6,13 @@ public class ShellTest {
 
 	@Test
 	public void test() {
+		new Shell().stop(new Runnable() {
 
+			@Override
+			public void run() {
+				// do nothing
+			}
+		});
 	}
 
 }

@@ -25,9 +25,10 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 
 public class WcTool extends ATool implements IWcTool {
-	private int	readStatus	= -1;
-	private int fileIndex = -1;
-	Vector<String> argList = new Vector<String>();
+	private int		readStatus	= -1;
+	private int		fileIndex	= -1;
+	private File	workingDir;
+	Vector<String>	argList		= new Vector<String>();
 
 	public WcTool(String[] args) {
 		super(args);
@@ -76,7 +77,7 @@ public class WcTool extends ATool implements IWcTool {
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
-		//this.workingDir = workingDir;
+		this.workingDir = workingDir;
 		StringBuilder result = new StringBuilder();
 		if ((args == null) && (stdin == null || stdin.compareTo("") == 0)) {
 			result.append("No arguments and no standard input.");
@@ -87,7 +88,7 @@ public class WcTool extends ATool implements IWcTool {
 		if (stdin != null && stdin.compareTo("") != 0) {
 			content = stdin;
 		}
-		
+
 		for (int i = 0; i < args.length; i++) {
 	        String arg = args[i];
 	        if (arg.compareTo("-") == 0)
@@ -99,7 +100,6 @@ public class WcTool extends ATool implements IWcTool {
 	        	return result.toString();
 	        }
 	    }
-		
 		for (int i = 0; i < args.length; i++) {
 			if (args[i] == null || !args[i].startsWith("-")) {
 				fileIndex = i;
@@ -110,34 +110,34 @@ public class WcTool extends ATool implements IWcTool {
 			if (args[i].compareTo("-m") == 0)
 				argList.add("-m");
 			if (args[i].compareTo("-l") == 0)
-				argList.add("-l");			
+				argList.add("-l");
 			if (args[i].compareTo("-help") == 0)
 				argList.add("-help");
 		}
-		
+
 		if (argList.contains("-help")) {
 			result.append(getHelp());
 			return result.toString();
 		}
- 
-	    if (fileIndex == -1)
+
+		if (fileIndex == -1)
 			try {
 				processString(result, content);
 			} catch (IOException e) {
 			}
-	    else
+		else
 			for (int i = fileIndex; i < args.length; i++) {
 				try {
 					processFile(result, args[i]);
 				} catch (IOException e1) {
 					result.append("word count: open failed: " + args[i]
-								+ ": No such file or directory.");
+							+ ": No such file or directory.");
 				}
-		}
-		
+			}
+
 		return result.toString();
 	}
-	
+
 	private void processString(StringBuilder sb, String content) throws IOException {
 		if (this.argList.contains("-m")) {
 			sb.append("\t");
@@ -155,7 +155,7 @@ public class WcTool extends ATool implements IWcTool {
 			generalCount(sb, content);
 	}
 
-	private void processFile(StringBuilder sb, String fileName) throws IOException{
+	private void processFile(StringBuilder sb, String fileName) throws IOException {
 		// TODO Auto-generated method stub
 		String fileContent = readFile(fileName, Charset.forName("UTF-8"));
 		if (this.argList.contains("-m")) {
@@ -173,7 +173,7 @@ public class WcTool extends ATool implements IWcTool {
 		if (this.argList.isEmpty()) {
 			generalCount(sb, fileContent);
 		}
-		sb.append("\t"+fileName);
+		sb.append("\t" + fileName);
 		sb.append("\n");
 	}
 
@@ -212,12 +212,15 @@ public class WcTool extends ATool implements IWcTool {
 		try {
 			String filePath;
 			readStatus = -1;
-			//File f = new File(workingDir, fileName);
+			// File f = new File(workingDir, fileName);
 			File f = new File(fileName);
 			if (f.isAbsolute())
 				filePath = fileName;
-			else
+			else if (workingDir == null)
 				filePath = System.getProperty("user.dir") + File.separator
+						+ fileName;
+			else
+				filePath = workingDir.getAbsolutePath() + File.separator
 						+ fileName;
 
 			byte[] encoded = Files.readAllBytes(Paths.get(filePath));
