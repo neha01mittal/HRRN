@@ -101,7 +101,7 @@ public class CopyToolIntegrationTest {
 
 	@Test
 	public void testMove() {
-		String commandline = "move " + file1 + " " + f2 + "| copy " + f2 + File.separator + file1 + " " + file2; 
+		String commandline = "move " + file1 + " " + file2 + "| copy " + file2 + " "+ file1; 
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
 		assertTrue (compare(file1, file2));

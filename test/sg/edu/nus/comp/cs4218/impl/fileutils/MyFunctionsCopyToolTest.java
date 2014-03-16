@@ -38,7 +38,7 @@ public class MyFunctionsCopyToolTest {
 	public static void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + "/copyToolTest";
+		rootDirectoryString = System.getProperty("user.dir") + "/myCopyToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -77,19 +77,6 @@ public class MyFunctionsCopyToolTest {
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt");
 		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt", "something");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test2.txt");
-		copyTool.recursivecopy(f1, f2);
-		assertTrue(TestUtils.compare(f1, f2));
-		f1.delete();
-		f2.delete();
-	}
-
-	// Test copying file with relative path into a new file
-	@Test
-	public void testRecursiveCopyWithRelativePath() {
-		copyTool = new CopyTool(null);
-		File f1 = new File(testDirectoryListRelativeString.get(0) + File.separator + "test.txt");
-		create(testDirectoryListRelativeString.get(0) + File.separator + "test.txt", "something");
-		File f2 = new File(testDirectoryListRelativeString.get(0) + File.separator + "test2.txt");
 		copyTool.recursivecopy(f1, f2);
 		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
@@ -142,7 +129,7 @@ public class MyFunctionsCopyToolTest {
 	public void testCopyAndReplaceExistingFile() {
 		copyTool = new CopyTool(null);
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt");
-		File f2 = new File(testDirectoryListAbsoluteString.get(1));
+		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
 		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt", "something");
 
 		copyTool.copy(f1, f2);
@@ -191,22 +178,6 @@ public class MyFunctionsCopyToolTest {
 		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt");
 		f1.delete();
 		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
-		f2.delete();
-	}
-
-	// Test copying file into new folder
-	@Test
-	public void testCopyToNewFolder() {
-		copyTool = new CopyTool(null);
-		create(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt", "something");
-		File to = new File(testDirectoryListAbsoluteString.get(1) + File.separator + " .." + File.separator + "newfolder");
-		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
-		copyTool.recursivecopy(f2, to);
-		File f1 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + " .." + File.separator + "newfolder" + File.separator + "test1.txt");
-
-		assertTrue(TestUtils.compare(f1, f2));
-		f1.delete();
-		to.delete();
 		f2.delete();
 	}
 

@@ -163,7 +163,7 @@ public class CopyToolTest {
 	public void testCopyFileIntoInvalidPath() {
 		copyTool = new CopyTool(null);
 		create(file1.toString(), "Something");
-		String a[] = { file1.toString(), testDirectoryListAbsoluteString.get(0) + "/blah/test.txt" };
+		String a[] = { file1.toString(), testDirectoryListAbsoluteString.get(0) + File.separator + "123**@1/^" };
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
 		assertEquals( copyTool.getStatusCode(), 1);
