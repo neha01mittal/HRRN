@@ -56,16 +56,13 @@ public class WcToolTest {
 
 	@Test
 	public void getCharacterCountTest_03() throws IOException {
-		wctool2 = null;
 		String[] args3 = { "-m", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals("\t33\ttestCase_2.txt\n", wctool3.execute(null, null));
-		wctool3 = null;
 	}
 
 	@Test
 	public void getCharacterCountTest_04() throws IOException {
-
 		String[] args4 = { "-m", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
 		assertEquals("\t16\ttestCase_3.txt\n", wctool4.execute(null, null));
@@ -84,11 +81,9 @@ public class WcToolTest {
 
 	@Test
 	public void getWordCountTest_02() throws IOException {
-
 		String[] args2 = { "-w", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
 		assertEquals("\t10\ttestCase_1.txt\n", wctool2.execute(null, null));
-		wctool2 = null;
 	}
 
 	@Test
@@ -120,17 +115,23 @@ public class WcToolTest {
 				"6");
 		assertEquals(wctool.getNewLineCount(readFile("testCase_5.txt", std)),
 				"4");
-
+	}
+	@Test
+	public void getNewLineCountTest_02() throws IOException {
 		String[] args2 = { "-l", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
 		assertEquals("\t4\ttestCase_1.txt\n", wctool2.execute(null, null));
-		wctool2 = null;
-
+	}
+	
+	@Test
+	public void getNewLineCountTest_03() throws IOException {
 		String[] args3 = { "-l", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals("\t3\ttestCase_2.txt\n", wctool3.execute(null, null));
-		wctool3 = null;
-
+	}
+	
+	@Test
+	public void getNewLineCountTest_04() throws IOException {
 		String[] args4 = { "-l", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
 		assertEquals("\t5\ttestCase_3.txt\n", wctool4.execute(null, null));
