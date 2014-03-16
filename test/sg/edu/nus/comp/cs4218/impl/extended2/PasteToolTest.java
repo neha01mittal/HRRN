@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.extended2;
 
-/*
+/**
+ * @Corrected
  * Changes Made
  * 
  * Separated functions so that each one has only one assert statement
@@ -70,6 +71,9 @@ public class PasteToolTest {
 
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	// test the functionality of pasting in serial for the single method and the
 	// execute which calls the single method
 	@Test
@@ -77,9 +81,11 @@ public class PasteToolTest {
 		// assertEquals(pastetool.pasteSerial(fileArray1),
 		// "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\t");
 		assertEquals(pastetool.pasteSerial(fileArray1), "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis");
-
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteSerialTest2() {
 		// assertEquals(pastetool.pasteSerial(fileArray2),
@@ -88,6 +94,9 @@ public class PasteToolTest {
 		assertEquals(pastetool.pasteSerial(fileArray2), "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis\n" + "gek1517\tACC1002X\tsw2104\tpc1141");
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteSerialTest3() {
 		// assertEquals(pastetool.pasteSerial(fileArray3),
@@ -97,6 +106,9 @@ public class PasteToolTest {
 				+ "a\tb\tb\tc\tc\tc");
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteSerialTest4() {
 		// assertEquals(pastetool.pasteSerial(fileArray4),
@@ -107,6 +119,9 @@ public class PasteToolTest {
 
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteSerialTest5() {
 		String[] args2 = { "-s", "testCase_1.txt" };
@@ -116,6 +131,9 @@ public class PasteToolTest {
 			assertEquals(pastetool2.execute(f, null), "1. IBM\t2. Symantec\t3. Palantir\t10. hp\t11. ihis");
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteSerialTest6() {
 		String[] args3 = { "-s", "testCase_1.txt", "testCase_2.txt" };
@@ -127,6 +145,9 @@ public class PasteToolTest {
 
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteSerialTest7() {
 		pastetool3 = new PasteTool(null);
@@ -156,6 +177,9 @@ public class PasteToolTest {
 						+ "apple\tban\tbanana\tcarrot\tcarro\tc");
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	// test the functionality of pasting with specified delimiter for the single
 	// method and
 	// the execute which calls the single method
@@ -166,6 +190,9 @@ public class PasteToolTest {
 		assertEquals(pastetool.pasteUseDelimiter(" $ ", fileArray1), "1. IBM\n2. Symantec\n" + "3. Palantir\n10. hp\n11. ihis");
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteUseDelimeterTest2() {
 		// assertEquals(pastetool.pasteUseDelimiter(" @ ", fileArray2),
@@ -176,6 +203,9 @@ public class PasteToolTest {
 				+ "10. hp @ pc1141\n" + "11. ihis");
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteUseDelimeterTest3() {
 		// assertEquals(pastetool.pasteUseDelimiter(" $ ", fileArray3),
@@ -185,9 +215,11 @@ public class PasteToolTest {
 		// + " a $ b $ b $ c $ c $ c $ ");
 		assertEquals(pastetool.pasteUseDelimiter(" $ ", fileArray3), "1. IBM $ gek1517 $ a\n" + "2. Symantec $ ACC1002X $ b\n" + "3. Palantir $ sw2104 $ b\n"
 				+ "10. hp $ pc1141 $ c\n" + "11. ihis $ c\n" + "c");
-
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteUseDelimeterTest4() {
 		// assertEquals(pastetool.pasteUseDelimiter(" $ ", fileArray4),
@@ -200,6 +232,9 @@ public class PasteToolTest {
 				+ "3. Palantir $ sw2104 $ b $ banana\n" + "10. hp $ pc1141 $ c $ carrot\n" + "11. ihis $ c $ carro\n" + "c $ c");
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteUseDelimeterTest5() {
 		String[] args2 = { "-d", " $ ", "testCase_1.txt" };
@@ -209,6 +244,9 @@ public class PasteToolTest {
 		assertEquals(pastetool2.execute(null, null), "1. IBM\n2. Symantec\n" + "3. Palantir\n10. hp\n11. ihis");
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteUseDelimeterTest6() {
 		String[] args3 = { "-d", " @ ", "testCase_1.txt", "testCase_2.txt" };
@@ -220,6 +258,9 @@ public class PasteToolTest {
 				+ "11. ihis");
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteUseDelimeterTest7() {
 		// assertEquals(pastetool.execute(f,
@@ -235,6 +276,9 @@ public class PasteToolTest {
 
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void pasteUseDelimeterTest8() {
 		// assertEquals(pastetool.execute(f,
@@ -253,6 +297,9 @@ public class PasteToolTest {
 
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	// test the functionality of printing help message
 	@Test
 	public void getHelpTest() {
@@ -286,6 +333,9 @@ public class PasteToolTest {
 
 	}
 
+	/**
+	 * @Corrected Reasons on top of file
+	 */
 	@Test
 	public void validationTest2() {
 
@@ -297,6 +347,9 @@ public class PasteToolTest {
 		assertEquals(pastetool3.execute(null, null), "Error: No such file or directory");
 	}
 
+	/**
+	 * piping is implemented now
+	 */
 	@Test
 	public void validationTest3() {
 		String[] args4 = { "-d", "/", "-" };

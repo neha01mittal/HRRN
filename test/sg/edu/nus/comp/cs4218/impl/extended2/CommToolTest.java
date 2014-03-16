@@ -232,22 +232,6 @@ public class CommToolTest {
 		assertEquals(commTool.getStatusCode(), 1);
 
 	}
-	
-//	/**
-//	 * @NewCaseAdded
-//	 */
-//	@Test
-//	public void executeCheckSortTest5() {
-//		String[] args = { "-c", "testCase_1.txt", "testCase_5.txt" };
-//		commTool = new CommTool(args);
-//		String workingDir = System.getProperty("user.dir");
-//		String output = "bbb" + "\n\t\tccc" + "\n\t\t\t\tddd" + "\n\t\teee"
-//				+ "\nfff" + "\nNot Sorted!";
-//		File f = new File(workingDir);
-//		assertEquals(commTool.execute(f, null), output);
-//		assertEquals(commTool.getStatusCode(), 0);
-//
-//	}
 
 	@Test
 	public void executeCheckSortTest3() {
@@ -351,22 +335,6 @@ public class CommToolTest {
 		assertEquals(commTool.getStatusCode(), 0);
 	}
 
-//	/**
-//	 * @NEWCASEADDED
-//	 * @throws IOException
-//	 */
-//	@Test
-//	public void executeSameFileTest1() throws IOException {
-//		String[] args = { "-c", "commTestCase1b.txt", "commTestCase1b.txt" };
-//		commTool = new CommTool(args);
-//		String workingDir = System.getProperty("user.dir");
-//		String output = "\t\t\t\taaa" + "\n\t\t\t\tccc" + "\n\t\t\t\teee"
-//				+ "\n\t\t\t\tgggggg";
-//		File f = new File(workingDir);
-//		assertEquals(commTool.execute(f, null), output);
-//		assertEquals(commTool.getStatusCode(), 0);
-//	}
-//	
 	/**
 	 * @NEWCASEADDED
 	 * @throws IOException

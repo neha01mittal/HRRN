@@ -224,7 +224,11 @@ public class CutToolTest {
 
 	}
 
-	//CHANGES MADE: Giving negative line number is invalid.
+	/**
+	 * @Corrected
+	 * CHANGES MADE: Giving negative line number is invalid.
+	 * 
+	 */
 	@Test
 	public void cutSpecifiedCharactersUseDelimiterNegativeTest() {
 		String currentLine = "Executing.the.program";
@@ -237,7 +241,9 @@ public class CutToolTest {
 		assertEquals(cutTool.getStatusCode(), 1);
 	}
 	
-	//CHANGES MADE: Giving line number 0 is invalid.
+	/**
+	 * @CorrectedMADE: Giving line number 0 is invalid.
+	 */
 	@Test
 	public void cutSpecifiedCharactersUseDelimiter0Test() {
 		String currentLine = "Executing.the.program";
@@ -299,6 +305,10 @@ public class CutToolTest {
 		// assertEquals(cutTool.getStatusCode(), 0);
 	}
 
+	/**
+	 * @Corrected
+	 * the other team's user defined function - cannot test
+	 */
 	//User Defined Function
 	@Test
 	public void sortAndRemoveDuplicateNumbersUnsortedOverlapTest() {
@@ -307,6 +317,10 @@ public class CutToolTest {
 		// assertEquals(cutTool.getStatusCode(), 0);
 	}
 
+	/**
+	 * @Corrected
+	 * the other team's user defined function - cannot test
+	 */
 	//User Defined Function
 	@Test
 	public void sortAndRemoveDuplicateNumbersUnsortedOverlapTest2() {
@@ -315,6 +329,10 @@ public class CutToolTest {
 		// assertEquals(cutTool.getStatusCode(), 0);
 	}
 
+	/**
+	 * @Corrected
+	 * the other team's user defined function - cannot test
+	 */
 	//User Defined Function
 	@Test
 	public void sortAndRemoveDuplicateNumbersUnsortedOverlapTest3() {
