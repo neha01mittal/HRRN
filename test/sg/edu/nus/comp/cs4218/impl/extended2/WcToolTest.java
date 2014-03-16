@@ -37,23 +37,32 @@ public class WcToolTest {
 	// characters in a file and the execute to call the method
 	@Test
 	public void getCharacterCountTest() throws IOException {
-		// assertEquals(wctool.getCharacterCount(readFile("testCase_1.txt",
-		// std)), "50");
-		assertEquals("33", wctool.getCharacterCount(readFile("testCase_2.txt", std)));
-		assertEquals("16", wctool.getCharacterCount(readFile("testCase_3.txt", std)));
-		assertEquals("38", wctool.getCharacterCount(readFile("testCase_4.txt", std)));
-		assertEquals("31", wctool.getCharacterCount(readFile("testCase_5.txt", std)));
+		assertEquals("30",
+				wctool.getCharacterCount(readFile("testCase_2.txt", std)));
+		assertEquals("11",
+				wctool.getCharacterCount(readFile("testCase_3.txt", std)));
+		assertEquals("32",
+				wctool.getCharacterCount(readFile("testCase_4.txt", std)));
+		assertEquals("27",
+				wctool.getCharacterCount(readFile("testCase_5.txt", std)));
+	}
 
+	@Test
+	public void getCharacterCountTest_02() throws IOException {
 		String[] args2 = { "-m", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
 		assertEquals("\t46\ttestCase_1.txt\n", wctool2.execute(null, null));
-		
-		wctool2 = null;
+	}
+
+	@Test
+	public void getCharacterCountTest_03() throws IOException {
 		String[] args3 = { "-m", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals("\t33\ttestCase_2.txt\n", wctool3.execute(null, null));
-		wctool3 = null;
+	}
 
+	@Test
+	public void getCharacterCountTest_04() throws IOException {
 		String[] args4 = { "-m", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
 		assertEquals("\t16\ttestCase_3.txt\n", wctool4.execute(null, null));
@@ -68,17 +77,25 @@ public class WcToolTest {
 		assertEquals("6", wctool.getWordCount(readFile("testCase_3.txt", std)));
 		assertEquals("6", wctool.getWordCount(readFile("testCase_4.txt", std)));
 		assertEquals("5", wctool.getWordCount(readFile("testCase_5.txt", std)));
+	}
 
+	@Test
+	public void getWordCountTest_02() throws IOException {
 		String[] args2 = { "-w", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
 		assertEquals("\t10\ttestCase_1.txt\n", wctool2.execute(null, null));
-		wctool2 = null;
+	}
 
+	@Test
+	public void getWordCountTest_03() throws IOException {
 		String[] args3 = { "-w", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals("\t4\ttestCase_2.txt\n", wctool3.execute(null, null));
 		wctool3 = null;
+	}
 
+	@Test
+	public void getWordCountTest_04() throws IOException {
 		String[] args4 = { "-w", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
 		assertEquals("\t6\ttestCase_3.txt\n", wctool4.execute(null, null));
@@ -98,17 +115,23 @@ public class WcToolTest {
 				"6");
 		assertEquals(wctool.getNewLineCount(readFile("testCase_5.txt", std)),
 				"4");
-
+	}
+	@Test
+	public void getNewLineCountTest_02() throws IOException {
 		String[] args2 = { "-l", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
 		assertEquals("\t4\ttestCase_1.txt\n", wctool2.execute(null, null));
-		wctool2 = null;
-
+	}
+	
+	@Test
+	public void getNewLineCountTest_03() throws IOException {
 		String[] args3 = { "-l", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals("\t3\ttestCase_2.txt\n", wctool3.execute(null, null));
-		wctool3 = null;
-
+	}
+	
+	@Test
+	public void getNewLineCountTest_04() throws IOException {
 		String[] args4 = { "-l", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
 		assertEquals("\t5\ttestCase_3.txt\n", wctool4.execute(null, null));
@@ -122,6 +145,10 @@ public class WcToolTest {
 				+ " -l : Print only the newline counts\t"
 				+ " -help : Brief information about supported options");
 
+	}
+
+	@Test
+	public void getHelpTest_02() {
 		String[] args2 = { "-help" };
 		wctool2 = new WcTool(args2);
 		assertEquals(wctool2.execute(null, null),
@@ -130,9 +157,13 @@ public class WcToolTest {
 						+ " -l : Print only the newline counts\t"
 						+ " -help : Brief information about supported options");
 		wctool2 = null;
+	}
 
-		wctool = new WcTool(args2);
-		assertEquals(wctool.execute(f, "-help"),
+	@Test
+	public void getHelpTest_03() {
+		String[] args = { "-help" };
+		wctool = new WcTool(args);
+		assertEquals(wctool.execute(f, ""),
 				"-m : Print only the character counts\t"
 						+ " -w : Print only the word counts\t"
 						+ " -l : Print only the newline counts\t"
@@ -148,19 +179,28 @@ public class WcToolTest {
 		assertEquals(wctool2.execute(null, null),
 				"word count: open failed: notExist.txt: No such file or directory.");
 		wctool2 = null;
+	}
 
+	@Test
+	public void validationTest_02() {
 		String[] args3 = { "-l", "notExist.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals(wctool3.execute(null, null),
 				"word count: open failed: notExist.txt: No such file or directory.");
 		wctool3 = null;
+	}
 
+	@Test
+	public void validationTest_03() {
 		String[] args4 = { "-w", "notExist.txt" };
 		wctool4 = new WcTool(args4);
 		assertEquals(wctool4.execute(null, null),
 				"word count: open failed: notExist.txt: No such file or directory.");
 		wctool4 = null;
+	}
 
+	@Test
+	public void validationTest_04() {
 		String[] args5 = { "-x", "testCase_1.txt" };
 		wctool5 = new WcTool(args5);
 		assertEquals(wctool5.execute(null, null), "Invalid arguments.");
@@ -192,40 +232,41 @@ public class WcToolTest {
 		String expected = "\t14";
 		assertEquals(expected, result);
 	}
-	
+
 	@Test
 	public void testGeneralOption() {
-		String[] args = {"testCase_5.txt"};
+		String[] args = { "testCase_5.txt" };
 		WcTool wt = new WcTool(args);
 		String result = wt.execute(null, "");
 		String expected = "\t4\t5\t31\ttestCase_5.txt\n";
 		assertEquals(expected, result);
 	}
-	
+
 	@Test
 	public void testRelativePath() {
-		String[] args = {"-l", "data/unitTest/file1.txt"};
+		String[] args = { "-l", "data/unitTest/file1.txt" };
 		WcTool wt = new WcTool(args);
 		String result = wt.execute(null, "");
 		String expected = "\t302\tdata/unitTest/file1.txt\n";
 		assertEquals(expected, result);
 	}
-	
+
 	@Test
 	public void testMultipleOptions() {
-		String[] args = {"-w", "-l", "testCase_1.txt"};
+		String[] args = { "-w", "-l", "testCase_1.txt" };
 		WcTool wt = new WcTool(args);
 		String result = wt.execute(null, "");
 		String expected = "\t10\t4\ttestCase_1.txt\n";
 		assertEquals(expected, result);
 	}
-	
+
 	@Test
 	public void testMultipleOptions_02() {
-		String[] args = {"-w", "-l", "testCase_1.txt", "testCase_2.txt"};
+		String[] args = { "-w", "-l", "testCase_1.txt", "testCase_2.txt" };
 		WcTool wt = new WcTool(args);
 		String result = wt.execute(null, "");
-		String expected = "\t10\t4\ttestCase_1.txt\n"+"\t4\t3\ttestCase_2.txt\n";
+		String expected = "\t10\t4\ttestCase_1.txt\n"
+				+ "\t4\t3\ttestCase_2.txt\n";
 		assertEquals(expected, result);
 	}
 
@@ -241,7 +282,9 @@ public class WcToolTest {
 						+ fileName;
 
 			byte[] encoded = Files.readAllBytes(Paths.get(filePath));
-			return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+			String result = encoding.decode(ByteBuffer.wrap(encoded))
+					.toString();
+			return result.replace("\r", "");
 		} catch (IOException e) {
 			throw new IOException(fileName);
 		}

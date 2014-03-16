@@ -33,15 +33,6 @@ public class WcToolIntegrationTest {
 	}
 
 	@Test
-	public void testLs() {
-		String commandline = "ls | wc -l";
-		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
-		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "\t22";
-		assertEquals(expectedOutput, output);
-	}
-
-	@Test
 	public void testEcho() {
 		String commandline = "echo \"aoihoq asdjqowij\" | wc -m";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
