@@ -27,20 +27,20 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
  * @options grep -A NUM filename: Print NUM lines of trailing context after
  *          matching lines grep -B NUM filename: Print NUM lines of leading
  *          context before matching lines grep -C NUM filename: Print NUM lines
- *          of output context grep -c �pattern� filename : Print a count of
- *          matching lines with pattern grep -c ��pattern�� filename : Print a
- *          count of matching lines with �pattern�(pattern surrounded by double
- *          quotes) grep -c �pattern� file1 file2 : Print a count of matching
- *          lines containing pattern for both files grep -o �pattern� filename:
+ *          of output context grep -c ���pattern��� filename : Print a count of
+ *          matching lines with pattern grep -c ������pattern������ filename : Print a
+ *          count of matching lines with ���pattern���(pattern surrounded by double
+ *          quotes) grep -c ���pattern��� file1 file2 : Print a count of matching
+ *          lines containing pattern for both files grep -o ���pattern��� filename:
  *          Show only the part of a matching line that matches PATTERN grep -v
- *          �pattern� filename: Select non-matching (instead of matching) lines
+ *          ���pattern��� filename: Select non-matching (instead of matching) lines
  *          grep -help : Brief information about supported options grep -o -v
- *          �pattern filename: Provides the conjunction of results from both
- *          options grep -<any option> �pattern� filename: Provides the same
+ *          ���pattern filename: Provides the conjunction of results from both
+ *          options grep -<any option> ���pattern��� filename: Provides the same
  *          output as compared to pattern surrounded by double quotes grep -<any
  *          option> <pattern with one word> filename: Provides the same output
  *          even without surrounding quotes if the pattern consists of one word
- *          grep -<any option> �pattern� file1 file2: Provides the output after
+ *          grep -<any option> ���pattern��� file1 file2: Provides the output after
  *          executing the command on both files grep filename: Prints the
  *          command since no option was provided
  * @note
@@ -449,7 +449,7 @@ public class GrepToolTest {
 	}
 
 	@Test
-	public void testPipingWithGrepFullOption_02() {
+	public void testPipingWithGrepFullOption02() {
 		String input = "cat testCase_3.txt | grep -A 2 -B 3 b";
 		String[] tokens = input.split(" ");
 
