@@ -235,7 +235,56 @@ uniq -help : Brief information about supported options
 path not exist
 path is not file
 
+13. Cut
 
+Returns characters at specified positions from every line in a file
+@usage
+cut [options] [character_positions] [path]
+cut [path]: prints all the file contents on the console
+@options
+cut -c 1,2-4,5 [path] : prints all the characters at positions from each line.
+cut -d delim -f 1,2-4,5 [path]: separates characters by delimiter and prints    
+command1 | cut : The output of command1 is treated as file contents to be used by cut
+command1 | cut [options] : stdin used as file contents
+command1 | cut - : "-" is replaced by file contents
+command1 | cut -c [character_positions] - 
+command1 | cut -d "," -f [character_positions]
+@note
+[path] could be either an absolute file or a relative path. Stdin must  be denoted as “-” when using with other file names, otherwise stdin is not entertained. 
+@success
+    returns the corresponding result as differed by functions.
+@exceptions
+    Invalid command
+path does not exist
+invalid options
+	No arguments and no standard input.
+missing arguments and stdin
+
+14. Paste
+
+returns contents of files in parallel on the console
+@usage
+paste [options] [file1 ..]
+
+@options
+paste -d delim [file1 ..]: file content printed in parallel separated by delimiter.
+paste -s [file1 ..] : paste appends the data in serial rather than in parallel.
+command1 | paste : The output of command1 is treated as file contents to be used by paste
+command1 | paste [options] : stdin used as file contents
+command1 | paste - [file1 ..] : "-" is replaced by file contents
+command1 | paste [file1 ..] - : "-" is replaced by file contents
+command1 | paste -s - [file1 ..] 
+command1 | paste -d "," [file1 ..] - 
+@note
+[path] could be either an absolute file or a relative path. Stdin must  be denoted as “-” when using with other file names, otherwise stdin is not entertained. 
+@success
+    returns the corresponding result as differed by functions.
+@exceptions
+    Wrong command
+invalid options
+	Error: No such file or directory
+path does not exist
+	
 
 
 
