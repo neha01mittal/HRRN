@@ -205,7 +205,7 @@ sort [path] :   sort the file and paste out the result.
 sort -c  [path] :    check if the file is sorted or not, if not show the un-sorted line.
 sort  -help : Brief information about supported options
 @note
-[path] could be either an absolute file or a relative path. If multiple path is given as arguments, they will be append together and sort as one file. Stdin must  be denoted as “-” when using with other file names, otherwise stdin is not entertained.
+[path] could be either an absolute file or a relative path. If multiple path is given as arguments, they will be append together and sort as one file. Stdin must  be denoted as “-” when using with other file names, otherwise stdin is not entertained. You cannot use two "-" in the command.
 @success
     returns the corresponding result as differed by functions.
 @exceptions
@@ -227,7 +227,7 @@ uniq -i [path]  : Ignore differences in case when comparing lines.
 uniq -f [NUM]  [path] :  Skips NUM fields on each line before checking for uniqueness. Use a null string for comparison if a line has fewer than n fields. Fields are sequences of non-space non-tab characters that are separated from each other by at least one space or tab.
 uniq -help : Brief information about supported options
 @note
-[path] could be either an absolute file or a relative path. If multiple path is given as arguments, they will be append together and sort as one file. Stdin must  be denoted as “-” when using with other file names, otherwise stdin is not entertained.
+[path] could be either an absolute file or a relative path. If multiple path is given as arguments, they will be append together and sort as one file. Stdin must  be denoted as “-” when using with other file names, otherwise stdin is not entertained. You can only use either a file or stdin. It does not work for multiple files.
 @success
     returns the corresponding result as differed by functions.
 @exceptions
