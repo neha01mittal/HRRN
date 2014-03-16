@@ -125,17 +125,6 @@ public class CopyToolTest {
 		assertEquals (copyTool.getStatusCode(), 0);
 	}
 
-	// Test file name with two extensions (.txt.txt)
-	@Test
-	public void testCopyFileWithTwoExtensions() {
-		copyTool = new CopyTool(null);
-		file1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt.txt");
-		create(file1.toString(), "Something");
-		file2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test2.txt");
-		copyTool.copy(file1, file2);
-		assertFalse (compare(file1, file2));
-	}
-
 	// Test file name with invalid characters
 	@Test
 	public void testCopyFileWithInvalidCharacters() {
@@ -155,7 +144,7 @@ public class CopyToolTest {
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
 
-		assertEquals( copyTool.getStatusCode(), 1);
+		assertEquals(copyTool.getStatusCode(), 1);
 	}
 
 	// Test copying file into invalid path
@@ -183,17 +172,17 @@ public class CopyToolTest {
 	// Test copying file into an existing file
 	@Test
 	public void testCopyAndReplaceExistingFile() {
-		copyTool = new CopyTool(null);
 		file1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt");
 		file2 = new File(testDirectoryListAbsoluteString.get(1));
 		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt", "something");
-
-		copyTool.copy(file1, file2);
+		create(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt", "random value");
+		String[] a = { file1.toString(), file2.toString() };
+		copyTool = new CopyTool(a);
+		copyTool.execute(rootDirectory.toFile(), "");
 
 		file2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
-
+		assertEquals(0,copyTool.getStatusCode());
 		assertTrue (compare(file1, file2));
-		
 	}
 
 	// // Test copying folder into file
@@ -222,10 +211,11 @@ public class CopyToolTest {
 	@Test
 	public void testCopyFolderIntoParentFolder() {
 		copyTool = new CopyTool(null);
-		String[] a = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(0) + "//.." };
+		String[] a = { testDirectoryListAbsoluteString.get(0), rootDirectoryString };
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
-		assertEquals(0, copyTool.getStatusCode());
+		assertEquals(1, copyTool.getStatusCode());
+		// no copy performed since folder was empty. So status code will be set to 1
 
 	}
 
