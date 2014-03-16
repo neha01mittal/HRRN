@@ -148,7 +148,7 @@ public class CopyToolTest {
 	}
 
 	// Test copying file into invalid path
-	// @Test
+	@Test
 	public void testCopyFileIntoInvalidPath() {
 		copyTool = new CopyTool(null);
 		create(file1.toString(), "Something");

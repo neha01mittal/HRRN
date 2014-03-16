@@ -121,7 +121,7 @@ public class GrepIntegrationTest {
 	}
 
 	@Test
-	public void testRegex_02() {
+	public void testRegex02() {
 		String commandline = "cat testCase_5.txt | grep ^$";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
