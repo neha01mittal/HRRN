@@ -321,12 +321,12 @@ wc -help [path]: Brief information about supported options
 wc -m - : stdin used as file contents
 wc -w - : stdin used as file contents
 wc -l - : stdin used as file contents
+@assumption:wc -l gives the number of new line characters.
 @note
 [path] could be either an absolute file or a relative path. When no file is present (denoted by "-"), standard input is used.
+Since pipe adds an extra new line, cat file1 | wc -l - results in 1 + actual lines in stdin
 @success
     returns the corresponding result as differed by functions. 
 @exceptions
 	No such file or directory
 invalid options
-
-
