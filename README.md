@@ -18,9 +18,10 @@ If any error occurs where status code not equal to zero, the error will print th
 
 @usage  cat [ - ] [string | path]
 @options
-Cat [filename]          contents of file
-Cat [filename1] [filename2] contents of both files
-Cat - “text text”       output- text text, Anything preceded by ‘-’ is printed as it is
+cat [filename] : contents of file
+cat [filename1] [filename2] : contents of both files
+cat - filename : prints stdin followed by file's content when used with pipe
+cat -  : prints stdin when used with pipe
 @note
 If files extensions are such that they not readable properly (eg: pdf), it might display garbage values. ls | cat and ls | cat - will print as expected (contents of that directory or in other words standard input it receives from the ‘from’ tool). Prioritizes args over stdin i.e. if there are args in front, it will execute them and ignore stdin
 eg: ls | cat file1.txt
@@ -244,11 +245,11 @@ cut [path]: prints all the file contents on the console
 @options
 cut -c 1,2-4,5 [path] : prints all the characters at positions from each line.
 cut -d delim -f 1,2-4,5 [path]: separates characters by delimiter and prints    
-command1 | cut : The output of command1 is treated as file contents to be used by cut
-command1 | cut [options] : stdin used as file contents
-command1 | cut - : "-" is replaced by file contents
-command1 | cut -c [character_positions] - 
-command1 | cut -d "," -f [character_positions]
+cut : stdin, if it exists, is treated as file contents to be used by cut
+cut [options] : stdin used as file contents
+cut - : "-" is replaced by stdin
+cut -c [character_positions] - : "-" is replaced by stdin
+cut -d "," -f [character_positions] : "-" is replaced by stdin
 @note
 [path] could be either an absolute file or a relative path. Stdin must  be denoted as “-” when using with other file names, otherwise stdin is not entertained. 
 @success
@@ -264,17 +265,16 @@ missing arguments and stdin
 
 returns contents of files in parallel on the console
 @usage
-paste [options] [file1 ..]
-
+paste [options] [file ..]
 @options
 paste -d delim [file1 ..]: file content printed in parallel separated by delimiter.
 paste -s [file1 ..] : paste appends the data in serial rather than in parallel.
-command1 | paste : The output of command1 is treated as file contents to be used by paste
-command1 | paste [options] : stdin used as file contents
-command1 | paste - [file1 ..] : "-" is replaced by file contents
-command1 | paste [file1 ..] - : "-" is replaced by file contents
-command1 | paste -s - [file1 ..] 
-command1 | paste -d "," [file1 ..] - 
+paste : Stdin treated as file contents to be used by paste
+paste [options] : stdin, if it exists, is used as file contents
+paste - [file2 ..] : "-" is replaced by stdin which contains file contents
+paste [file1 ..] - : "-" is replaced by stdin
+paste -s - [file2 ..] : "-" is replaced by stdin
+paste -d "," [file1 ..] - : "-" is replaced by stdin
 @note
 [path] could be either an absolute file or a relative path. Stdin must  be denoted as “-” when using with other file names, otherwise stdin is not entertained. 
 @success
@@ -285,8 +285,48 @@ invalid options
 	Error: No such file or directory
 path does not exist
 	
+15. Comm
 
+compares two sorted files line by line
+@usage
+comm [path1] [path2]
+@options
+comm -c file1 file2 : check that the file1 and file2 contents are correctly sorted, even if all input lines are pairable. Terminates if any of the file contents are unsorted.
+comm -d file1 file2 : does not check that the input is correctly sorted 
+comm - file2 : compares file2 with contents received from stdin
+comm file1 - : compares file1 with contents received from stdin
+comm -c - file2  
+comm -d file1 - 
+comm -help : Brief information about supported options
+comm - -c -help : help gets priority over other options
+@note
+[path] could be either an absolute file or a relative path. When no file is present (denoted by "-"), standard input is used.
+@success
+    returns the corresponding result as differed by functions. 
+@exceptions
+comm - -
+	Wrong command
+invalid options
 
+16. Wc
 
+prints the number of bytes, words, and lines in given files 
+@usage
+wc [options] [path] 
+@options
+wc -m [path] : Prints only the character counts 
+wc -w [path]: Print only the word counts 
+wc -l [path]: Print only the newline counts 
+wc -help [path]: Brief information about supported options
+wc -m - : stdin used as file contents
+wc -w - : stdin used as file contents
+wc -l - : stdin used as file contents
+@note
+[path] could be either an absolute file or a relative path. When no file is present (denoted by "-"), standard input is used.
+@success
+    returns the corresponding result as differed by functions. 
+@exceptions
+	No such file or directory
+invalid options
 
 
