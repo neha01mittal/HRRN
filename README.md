@@ -11,7 +11,7 @@ The input arguments or path can be relative or absolute, in quotes or without qu
 @success
 It will print the returning string, or nothing if returned null, or a blank line if returned empty string.
 @exceptions
-If any error occurs where status code not equal to zero, the error will print through stderr stream
+If any error occurs where status code not equal to zero, the error will print through stderr stream.
 
 
 2. Cat
