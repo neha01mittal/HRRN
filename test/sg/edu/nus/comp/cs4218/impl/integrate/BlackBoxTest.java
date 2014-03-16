@@ -19,6 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.Shell;
+import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
 public class BlackBoxTest {
 
@@ -39,6 +40,7 @@ public class BlackBoxTest {
 		originalStdin = System.in;
 		originalStdout = System.out;
 		originalStderr = System.err;
+		TestUtils t = new TestUtils();
 
 		testDirString = originalDirString + File.separator + "data" + File.separator + "integrationTest2";
 
