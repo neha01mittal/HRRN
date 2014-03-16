@@ -1,5 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.integrate;
 
+import static org.junit.Assert.*;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -62,7 +64,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "ls | copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 	
 	@Test
@@ -70,7 +72,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "pwd | copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -78,7 +80,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "pwd rubbishvalue | copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -86,7 +88,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "cd .. | copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -94,7 +96,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "cd "+f2+"| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -102,7 +104,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "move " + file1 + " " + f2 + "| copy " + f2 + File.separator + file1 + " " + file2; 
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -110,7 +112,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "move " + file1 +  "| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -118,7 +120,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "copy  | copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -126,7 +128,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "copy " + file2 + " " + file1 + " | copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -134,14 +136,14 @@ public class CopyToolIntegrationTest {
 		String commandline = "delete " + file2 + "| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 	@Test
 	public void testDelete2() {
 		String commandline = "delete testFolder2 | copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 		f2.mkdirs();
 	}
 
@@ -150,7 +152,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "echo This is test| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -158,7 +160,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "echo | copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -166,7 +168,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "cat " + file1 + "| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -174,7 +176,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "cat -" + file1 + "| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 	
 	@Test
@@ -182,7 +184,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "wc -l "+file1+"| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -190,7 +192,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "wc -x test1.txt | copy " + file1 + " " + file2; 
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -198,7 +200,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "uniq -f "+file1+"| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -206,7 +208,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "uniq -f -l "+file1+" | copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -214,7 +216,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "paste " + file1 + " " + file2 + "| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	} 
 
 	@Test
@@ -222,7 +224,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "paste " + file1 + "| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -230,7 +232,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "cut -c 1,2 "+file1+ "| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -238,7 +240,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "cut -f -c "+file1+ "| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -246,14 +248,14 @@ public class CopyToolIntegrationTest {
 		String commandline = "sort -c " + file1 + "| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 	@Test
 	public void testSort2() {
 		String commandline = "sort | copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -261,7 +263,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "comm "+file1+" "+file2+"| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 
 	@Test
@@ -269,7 +271,7 @@ public class CopyToolIntegrationTest {
 		String commandline = "comm -d "+file1+" "+file2+"| copy " + file1 + " " + file2;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (compare(file1, file2));
+		assertTrue (compare(file1, file2));
 	}
 	
 	public void create(String filename, String content) {
