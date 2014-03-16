@@ -90,7 +90,9 @@ public class WcTool extends ATool implements IWcTool {
 		
 		for (int i = 0; i < args.length; i++) {
 	        String arg = args[i];
-	        if (arg.startsWith("-") && arg.compareTo("-m") != 0
+	        if (arg.compareTo("-") == 0)
+	        	content = stdin;
+	        else if (arg.startsWith("-") && arg.compareTo("-m") != 0
 	        		&& arg.compareTo("-w") != 0 && arg.compareTo("-l") != 0
 	        		&& arg.compareTo("-help") != 0) {
 	        	result.append("Invalid arguments.");
