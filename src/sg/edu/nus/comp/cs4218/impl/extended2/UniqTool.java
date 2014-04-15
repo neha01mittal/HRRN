@@ -28,9 +28,12 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class UniqTool extends ATool implements IUniqTool {
 
-	public String				currentLine	= "";
-	private int					inputFlag	= 0;	// 1 for file, 2 for string
-	private int					skipNum		= 0;	// 1 for file, 2 for string
+	public String				currentLine		= "";
+	public String				previousLine	= "";
+	private int					inputFlag		= 0;	// 1 for file, 2 for
+														// string
+	private int					skipNum			= 0;	// 1 for file, 2 for
+														// string
 	private final List<String>	argList;
 	private final List<String>	inputList;
 	private final List<String>	uniqueList;
@@ -45,7 +48,6 @@ public class UniqTool extends ATool implements IUniqTool {
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-
 		boolean inputFlag2 = false;
 		// split arguments and inputs
 		for (int i = 0; i < args.length; i++) {
@@ -143,38 +145,6 @@ public class UniqTool extends ATool implements IUniqTool {
 		return fullText;
 	}
 
-	private boolean checkContainsIn(List<String> lst, String str) {
-		for (String s : lst) {
-			if (s.equals(str))
-				return true;
-		}
-		return false;
-	}
-
-	private boolean checkContainsIgnoreCaseIn(List<String> lst, String str) {
-		for (String s : lst) {
-			if (s.equalsIgnoreCase(str))
-				return true;
-		}
-		return false;
-	}
-
-	private boolean checkContainsInSkip(List<String> lst, int num, String str) {
-		for (String s : lst) {
-			if (compareStringSkip(s, str, num))
-				return true;
-		}
-		return false;
-	}
-
-	private boolean checkContainsIgnoreCaseInSkip(List<String> lst, int num, String str) {
-		for (String s : lst) {
-			if (compareStringIgnoreCaseSkip(s, str, num))
-				return true;
-		}
-		return false;
-	}
-
 	private boolean compareStringSkip(String str1, String str2, int num) {
 		String[] array1 = str1.split("\\s+");
 		String[] array2 = str2.split("\\s+");
@@ -210,14 +180,16 @@ public class UniqTool extends ATool implements IUniqTool {
 	@Override
 	public String getUnique(boolean checkCase, String input) {
 		if (checkCase) {
-			if (!checkContainsIn(uniqueList, input)) {
+			if (!previousLine.equals(input)) {
+				previousLine = input;
 				uniqueList.add(input);
 			}
 			if (!currentLine.equals(input)) {
 				currentLine += "\n" + input;
 			}
 		} else {
-			if (!checkContainsIgnoreCaseIn(uniqueList, input)) {
+			if (!previousLine.equalsIgnoreCase(input)) {
+				previousLine = input;
 				uniqueList.add(input);
 			}
 			if (!currentLine.equalsIgnoreCase(input)) {
@@ -231,25 +203,23 @@ public class UniqTool extends ATool implements IUniqTool {
 	public String getUniqueSkipNum(int num, boolean checkCase, String input) {
 		num = (num < 0) ? 0 : num;
 		if (checkCase) {
-			if (!checkContainsInSkip(uniqueList, num, input)) {
+			if (!compareStringSkip(previousLine, input, num)) {
+				previousLine = input;
 				uniqueList.add(input);
 			}
 			if (!compareStringSkip(currentLine, input, num)) {
 				currentLine += "\n" + input;
 			}
 		} else {
-			if (!checkContainsIgnoreCaseInSkip(uniqueList, num, input)) {
+			if (!compareStringIgnoreCaseSkip(previousLine, input, num)) {
+				previousLine = input;
 				uniqueList.add(input);
 			}
 			if (!compareStringIgnoreCaseSkip(currentLine, input, num)) {
 				currentLine += "\n" + input;
 			}
 		}
-		if (num >= input.split("\\s+").length) {
-			return "";
-		} else {
-			return currentLine;
-		}
+		return currentLine;
 	}
 
 	@Override
