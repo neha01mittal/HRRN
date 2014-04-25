@@ -27,11 +27,20 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  * @exceptions
  **/
 public class CatTool extends ATool implements ICatTool {
-
+	/**
+	 * Constructor 
+	 * @param arguments The filename or folder path sent as args  to print
+	 */
 	public CatTool(String[] arguments) {
 		super(arguments);
 	}
 
+	/**
+	 * Executes the tool with args provided in the constructor 
+	 * @param workingDir The working directory on which the tool will operate on 
+	 * @param stdin Input on stdin. Can be null. If args are missing, stdin is used (and printed directly. It is not considered as a file path)
+	 * @return Output on stdout
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		File file;
@@ -61,7 +70,14 @@ public class CatTool extends ATool implements ICatTool {
 		}
 		return "Error: No input receieved";
 	}
-
+	/**
+	 * 
+	 * Reads the contents of the file path and returns it as a string
+	 * 
+	 * @param toRead The file path whose content will be displayed on console
+	 * 
+	 * @return The content of file
+	 */
 	@Override
 	public String getStringForFile(File toRead) {
 		BufferedReader br;

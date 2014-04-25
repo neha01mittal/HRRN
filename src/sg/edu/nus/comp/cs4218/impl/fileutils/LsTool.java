@@ -33,14 +33,23 @@ public class LsTool extends ATool implements ILsTool {
 
 	private final List<String>	argList;
 	private final List<String>	inputList;
-
+	/**
+	 * Constructor 
+	 * @param arguments The path sent as args  to change the directory 
+	 */
 	public LsTool(String[] arguments) {
 		super(arguments);
 		setStatusCode(1);
 		argList = new ArrayList<String>();
 		inputList = new ArrayList<String>();
 	}
-
+	
+	/**
+	 * Executes the tool with args provided in the constructor 
+	 * @param workingDir The working directory on which the tool will operate on 
+	 * @param stdin Stdin is not used 
+	 * @return Output on stdout
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// check for argument number
@@ -87,6 +96,15 @@ public class LsTool extends ATool implements ILsTool {
 		return "ls: Error: retrieve file list error";
 	}
 
+	/**
+	 * 
+	 * Retrieves the contents (list of folders and files) in the path
+	 * 
+	 * @param directory The directory whose contents need to be retieved 
+	 * 
+	 * @return List of file/folder paths  
+	 * 
+	 */
 	@Override
 	public List<File> getFiles(File directory) {
 		// Error Handling
@@ -112,6 +130,17 @@ public class LsTool extends ATool implements ILsTool {
 		return fileList;
 	}
 
+	/**
+	 * 
+	 * Returns the sting with all the file names 
+	 * For option -R: List of files (absolute path) in the directory and subdirectories
+	 * For -a : List of all files including hidden file
+	 * 
+	 * @param files List of files
+	 * 
+	 * @return String with all file names appended
+	 * 
+	 */
 	@Override
 	public String getStringForFiles(List<File> files) {
 		String result = "";

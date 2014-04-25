@@ -28,7 +28,10 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 public class DeleteTool extends ATool implements IDeleteTool {
 
 	private final List<String> inputList;
-
+	/**
+	 * Constructor 
+	 * @param arguments The filename or folder path sent as args  to delete
+	 */
 	public DeleteTool(String[] arguments) {
 		super(arguments);
 		// TODO Auto-generated constructor stub
@@ -36,6 +39,12 @@ public class DeleteTool extends ATool implements IDeleteTool {
 		inputList = new ArrayList<String>();
 	}
 
+	/**
+	 * Executes the tool with args provided in the constructor 
+	 * @param workingDir The working directory on which the tool will operate on 
+	 * @param stdin Stdin is not used
+	 * @return Output on stdout
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
@@ -69,6 +78,14 @@ public class DeleteTool extends ATool implements IDeleteTool {
 
 	}
 
+	/**
+	 * Delete a file or folder if it exists
+	 * 
+	 * @param toDelete 	Source path of the file/folder
+	 * 
+	 * @return Outcome of the delete operation
+	 * 
+	 */
 	@Override
 	public boolean delete(File toDelete) {
 		// TODO Auto-generated method stub
@@ -79,7 +96,13 @@ public class DeleteTool extends ATool implements IDeleteTool {
 		}
 		return true;
 	}
-
+	
+	/**
+	 * Deletes files recursively in case path is a folder
+	 * 
+	 * @param file 	path of the file/folder to be deleted
+	 * 
+	 */
 	public void recursivedelete(File file) {
 		try {
 			if (file.isDirectory()) {

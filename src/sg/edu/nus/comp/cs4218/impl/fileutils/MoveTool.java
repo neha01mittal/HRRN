@@ -33,14 +33,22 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 public class MoveTool extends ATool implements IMoveTool {
 
 	private final List<String> inputList;
-
+	/**
+	 * Constructor 
+	 * @param arguments The filename or folder path sent as args  to move
+	 */
 	public MoveTool(String[] arguments) {
 		super(arguments);
 		// TODO Auto-generated constructor stub
 		setStatusCode(1);
 		inputList = new ArrayList<String>();
 	}
-
+	/**
+	 * Executes the tool with args provided in the constructor 
+	 * @param workingDir The working directory on which the tool will operate on 
+	 * @param stdin Stdin is not used
+	 * @return Output on stdout
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 
@@ -82,7 +90,16 @@ public class MoveTool extends ATool implements IMoveTool {
 		}
 		return null;
 	}
-
+	/**
+	 * Move a file to a given location, move a file to another existing file
+	 * In case of multiple paths, all the files are moved into the final path (if it exists)
+	 * 
+	 * @param from 	Source path of the file/folder
+	 * @param to Destination to be copied to
+	 * 
+	 * @return Outcome of the move operation
+	 * 
+	 */
 	@Override
 	public boolean move(File from, File to) {
 		// TODO Auto-generated method stub
@@ -90,6 +107,13 @@ public class MoveTool extends ATool implements IMoveTool {
 		return true;
 	}
 
+	/**
+	 * Moves files recursively to a location in case source path is a folder
+	 * 
+	 * @param from 	Source path of the file/folder
+	 * @param to Destination to be copied to
+	 * 
+	 */
 	public void recursivemove(File from, File to) {
 		try {
 			if (from.isDirectory()) {

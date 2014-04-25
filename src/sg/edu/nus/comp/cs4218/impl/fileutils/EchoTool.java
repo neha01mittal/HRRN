@@ -30,13 +30,22 @@ Removes the first enclosing (single and double) quotes pair- it finds the first 
 public class EchoTool extends ATool implements IEchoTool {
 
 	private final List<String> inputList;
-
+	/**
+	 * Constructor 
+	 * @param arguments The filename or folder path sent as args  to print
+	 */
 	public EchoTool(String[] arguments) {
 		super(arguments);
 		setStatusCode(1);
 		inputList = new ArrayList<String>();
 	}
 
+	/**
+	 * Executes the tool with args provided in the constructor 
+	 * @param workingDir The working directory on which the tool will operate on 
+	 * @param stdin Stdin is not used 
+	 * @return Output on stdout
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 
@@ -60,6 +69,14 @@ public class EchoTool extends ATool implements IEchoTool {
 		return userInput.trim();
 	}
 
+	/**
+	 * Inserts a space to the content that will be displayed
+	 * 
+	 * @param toEcho Content to be echoed
+	 * 
+	 * @return Returns the content with an extra space 
+	 * 
+	 */
 	@Override
 	public String echo(String toEcho) {
 		return toEcho + " ";
