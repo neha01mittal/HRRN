@@ -58,7 +58,7 @@ public class LsToolTest {
 	public static void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + "/lsToolTest";
+		rootDirectoryString = System.getProperty("user.dir") +  File.separator + "lsToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);

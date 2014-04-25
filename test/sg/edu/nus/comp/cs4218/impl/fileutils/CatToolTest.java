@@ -55,7 +55,7 @@ public class CatToolTest {
 	public static void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + "/catToolTest";
+		rootDirectoryString = System.getProperty("user.dir") +  File.separator + "catToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -70,7 +70,7 @@ public class CatToolTest {
 			try {
 				dirPath += "level-" + i;
 
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + "/" + dirPath);
+				Path temp = FileSystems.getDefault().getPath(rootDirectoryString +  File.separator + dirPath);
 				Files.createDirectory(temp);
 				File f = new File(temp + File.separator + "test" + i + EXTENSIONS[i]);
 				f.createNewFile();

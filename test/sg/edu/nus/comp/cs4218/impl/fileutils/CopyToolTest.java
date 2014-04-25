@@ -73,12 +73,12 @@ public class CopyToolTest {
 			try {
 				dirPath += "level" + i;
 
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + "/" + dirPath);
+				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + File.separator + dirPath);
 				Files.createDirectory(temp);
 
 				testDirectoryList.add(temp);
 				testDirectoryListRelativeString.add(dirPath);
-				testDirectoryListAbsoluteString.add(rootDirectoryString + "/" + dirPath);
+				testDirectoryListAbsoluteString.add(rootDirectoryString + File.separator + dirPath);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -63,7 +63,7 @@ public class CdToolTest {
 		String dirPath = "";
 		for (int i = 0; i < 3; i++) {
 			try {
-				dirPath += "/level-" + i;
+				dirPath += File.separator + "level-" + i;
 				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + dirPath);
 				Files.createDirectory(temp);
 				testDirectoryList.add(temp);
@@ -74,7 +74,7 @@ public class CdToolTest {
 			}
 		}
 		try {
-			String filePath = rootDirectoryString + "/testFile";
+			String filePath = rootDirectoryString + File.separator + "testFile";
 			testFile = new File(filePath);
 			testFile.createNewFile();
 		} catch (IOException e) {
@@ -118,7 +118,7 @@ public class CdToolTest {
 	@Test
 	public void testCdWithAFile() {
 		// Test error-handling 3
-		String[] args = new String[] { rootDirectoryString + "/testFile" };
+		String[] args = new String[] { rootDirectoryString + File.separator + "testFile" };
 		cdTool = new CdTool(args);
 		cdTool.execute(new File(rootDirectoryString), null);
 
@@ -187,5 +187,10 @@ public class CdToolTest {
 
 	public String normalizePath(String input) {
 		return input.replaceAll("\\\\", "/").toLowerCase();
+	}
+
+	@Override
+	public String toString() {
+		return "CdToolTest [cdTool=" + cdTool + "]";
 	}
 }

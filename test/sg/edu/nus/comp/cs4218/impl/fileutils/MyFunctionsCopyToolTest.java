@@ -38,7 +38,7 @@ public class MyFunctionsCopyToolTest {
 	public static void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + "/myCopyToolTest";
+		rootDirectoryString = System.getProperty("user.dir") +  File.separator +"myCopyToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -52,12 +52,12 @@ public class MyFunctionsCopyToolTest {
 			try {
 				dirPath += "level" + i;
 
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + "/" + dirPath);
+				Path temp = FileSystems.getDefault().getPath(rootDirectoryString +  File.separator + dirPath);
 				Files.createDirectory(temp);
 
 				testDirectoryList.add(temp);
 				testDirectoryListRelativeString.add(dirPath);
-				testDirectoryListAbsoluteString.add(rootDirectoryString + "/" + dirPath);
+				testDirectoryListAbsoluteString.add(rootDirectoryString +  File.separator + dirPath);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -117,7 +117,7 @@ public class MyFunctionsCopyToolTest {
 		create(testDirectoryListAbsoluteString.get(0) + File.separator +
 				"test.txt", "something");
 		String a[] = { f1.getPath().toString(),
-				testDirectoryListAbsoluteString.get(0) + "/blah/test.txt" };
+				testDirectoryListAbsoluteString.get(0) +  File.separator + "blah" +  File.separator + "test.txt" };
 		copyTool = new CopyTool(a);
 		copyTool.recursivecopy(rootDirectory.toFile(), f1);
 		f1.delete();
