@@ -52,7 +52,7 @@ public class MoveToolTest {
 	public void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + "/moveToolTest";
+		rootDirectoryString = System.getProperty("user.dir") + File.separator + "moveToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -66,12 +66,12 @@ public class MoveToolTest {
 			try {
 				dirPath += "level" + i;
 
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + "/" + dirPath);
+				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + File.separator + dirPath);
 				Files.createDirectory(temp);
 
 				testDirectoryList.add(temp);
 				testDirectoryListRelativeString.add(dirPath);
-				testDirectoryListAbsoluteString.add(rootDirectoryString + "/" + dirPath);
+				testDirectoryListAbsoluteString.add(rootDirectoryString + File.separator + dirPath);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -87,9 +87,9 @@ public class MoveToolTest {
 	@Test
 	public void testMoveFile() {
 		moveTool = new MoveTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator +"test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test2.txt");
 		moveTool.move(f1, f2);
 		assertFalse (f1.exists()) ;assertTrue( f2.exists());
 		f2.delete();
@@ -114,9 +114,9 @@ public class MoveToolTest {
 	@Test
 	public void testMoveIntoFileWithSameName() {
 		moveTool = new MoveTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test1.txt");
-		File f2 = new File(testDirectoryListAbsoluteString.get(1) + "//test1.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test1.txt", "something");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt");
+		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt", "something");
 
 		moveTool.move(f1, f2);
 
@@ -129,8 +129,8 @@ public class MoveToolTest {
 	public void testMoveToExistingFolder() {
 		moveTool = new MoveTool(null);
 		File from = new File(testDirectoryListAbsoluteString.get(1));
-		File f1 = new File(testDirectoryListAbsoluteString.get(1) + "//test1.txt");
-		create(testDirectoryListAbsoluteString.get(1) + "//test1.txt", "something");
+		File f1 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
+		create(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt", "something");
 
 		File to = new File(testDirectoryListAbsoluteString.get(0));
 
@@ -146,10 +146,10 @@ public class MoveToolTest {
 	@Test
 	public void testMoveToNewFolder() {
 		moveTool = new MoveTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(1) + "//test1.txt");
-		create(testDirectoryListAbsoluteString.get(1) + "//test1.txt", "something");
-		File to = new File(testDirectoryListAbsoluteString.get(1) + "//..//newfolder");
-		File f2 = new File(testDirectoryListAbsoluteString.get(1) + "//..//newfolder//test1.txt");
+		File f1 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
+		create(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt", "something");
+		File to = new File(testDirectoryListAbsoluteString.get(1) + File.separator + ".." + File.separator + "newfolder");
+		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + ".." + File.separator + "newfolder" + File.separator + "test1.txt");
 		moveTool.move(f1, to);
 		assertFalse (f1.exists()) ;assertTrue( to.exists());
 		f2.delete();
@@ -161,8 +161,8 @@ public class MoveToolTest {
 	@Test
 	public void testMoveFileIntoSameFolder() {
 		moveTool = new MoveTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", "something");
 		String a[] = { f1.getPath().toString(), testDirectoryListAbsoluteString.get(0) };
 		moveTool = new MoveTool(a);
 		moveTool.execute(rootDirectory.toFile(), "");
@@ -174,8 +174,8 @@ public class MoveToolTest {
 	@Test
 	public void testMoveFolderIntoFile() {
 
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", "something");
 		String a[] = { testDirectoryListAbsoluteString.get(0), f1.getPath().toString() };
 		moveTool = new MoveTool(a);
 		moveTool.execute(rootDirectory.toFile(), "");
@@ -197,7 +197,7 @@ public class MoveToolTest {
 	@Test
 	public void testMoveFolderIntoParentFolder() {
 		moveTool = new MoveTool(null);
-		String a[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(0) + "//.." };
+		String a[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(0) + File.separator  + ".." };
 		moveTool = new MoveTool(a);
 		moveTool.execute(rootDirectory.toFile(), "");
 		assertEquals (moveTool.getStatusCode(), 1);
@@ -208,16 +208,16 @@ public class MoveToolTest {
 	@Test
 	public void testMoveMultipleFiles() {
 		// moveTool = new MoveTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
-		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt", "something2");
+		String arg[] = { testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt", testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt",
 				testDirectoryListAbsoluteString.get(1) };
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
-		File f3 = new File(testDirectoryListAbsoluteString.get(1) + "//test.txt");
-		File f4 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
+		File f3 = new File(testDirectoryListAbsoluteString.get(1) + File.separator  + "test.txt");
+		File f4 = new File(testDirectoryListAbsoluteString.get(1) + File.separator  + "test2.txt");
 		assertFalse (f1.exists()) ;assertFalse( f2.exists());
 		assertTrue (f3.exists()) ;assertTrue( f4.exists());
 		f3.delete();
@@ -228,14 +228,14 @@ public class MoveToolTest {
 	// overwrites old contents
 	@Test
 	public void testMoveMultipleFilesintoExisitingFile() {
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
-		File f = new File(testDirectoryListAbsoluteString.get(1) + "//a.txt");
-		create(testDirectoryListAbsoluteString.get(1) + "//a.txt", "something33");
-		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
-				testDirectoryListAbsoluteString.get(1) + "//a.txt" };
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt", "something2");
+		File f = new File(testDirectoryListAbsoluteString.get(1) + File.separator  + "a.txt");
+		create(testDirectoryListAbsoluteString.get(1) + File.separator  + "a.txt", "something33");
+		String arg[] = { testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt",
+				testDirectoryListAbsoluteString.get(1) + File.separator  + "a.txt" };
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
 		assertFalse (f1.exists()) ;assertFalse( f2.exists());
@@ -247,9 +247,9 @@ public class MoveToolTest {
 	@Test
 	public void testMoveFileIntoInvalidPath() {
 		moveTool = new MoveTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		String a[] = { f1.getPath().toString(), testDirectoryListAbsoluteString.get(0) + "//blah//test.txt" };
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", "something");
+		String a[] = { f1.getPath().toString(), testDirectoryListAbsoluteString.get(0) + File.separator  + "blah//test.txt" };
 		moveTool = new MoveTool(a);
 		moveTool.execute(rootDirectory.toFile(), "");
 		f1.delete();
@@ -270,9 +270,9 @@ public class MoveToolTest {
 	@Test
 	public void testMoveFileWithTwoExtensions() {
 		moveTool = new MoveTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt.txt", "something");
-		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt");
 		moveTool.move(f1, f2);
 		assertFalse (f1.exists()) ;assertTrue( f2.exists());
 		f2.delete();
@@ -281,8 +281,8 @@ public class MoveToolTest {
 	// Test file name with invalid characters
 	@Test
 	public void testMoveFileWithInvalidCharacters() {
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test@#22.xt");
-		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test@#22.xt");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt");
 		String a[] = { f1.getPath().toString(), f2.getPath().toString() };
 		moveTool = new MoveTool(a);
 		moveTool.execute(rootDirectory.toFile(), "");
@@ -293,15 +293,15 @@ public class MoveToolTest {
 	// pipe
 	@Test
 	public void testMoveMultipleFilesintoNewFile() {
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
-		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
-				testDirectoryListAbsoluteString.get(1) + "//a.txt" };
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt", "something2");
+		String arg[] = { testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt",
+				testDirectoryListAbsoluteString.get(1) + File.separator  + "a.txt" };
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
-		File f = new File(testDirectoryListAbsoluteString.get(1) + "//a.txt");
+		File f = new File(testDirectoryListAbsoluteString.get(1) + File.separator  + "a.txt");
 		assertFalse (f1.exists()) ;assertFalse( f2.exists());
 		assertTrue (f.exists()) ;
 	}
@@ -310,13 +310,13 @@ public class MoveToolTest {
 	// with destination file name
 	@Test
 	public void testMoveMultipleFoldersintoFile() {
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		File f2 = new File(testDirectoryListAbsoluteString.get(1) + "//test2.txt");
-		create(testDirectoryListAbsoluteString.get(1) + "//test2.txt", "something2");
-		File f = new File(testDirectoryListAbsoluteString.get(2) + "//a.txt");
-		create(testDirectoryListAbsoluteString.get(2) + "//a.txt", "something33");
-		String arg[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(1), testDirectoryListAbsoluteString.get(2) + "//a.txt" };
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator  + "test2.txt");
+		create(testDirectoryListAbsoluteString.get(1) + File.separator  + "test2.txt", "something2");
+		File f = new File(testDirectoryListAbsoluteString.get(2) + File.separator  + "a.txt");
+		create(testDirectoryListAbsoluteString.get(2) + File.separator  + "a.txt", "something33");
+		String arg[] = { testDirectoryListAbsoluteString.get(0), testDirectoryListAbsoluteString.get(1), testDirectoryListAbsoluteString.get(2) + File.separator  + "a.txt" };
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
 		assertEquals (moveTool.getStatusCode() , 1);
@@ -329,11 +329,11 @@ public class MoveToolTest {
 	// Test moving multiple files into a folder where one file does not exist
 	@Test
 	public void testMoveMultipleFileWithOneInvalidFile() {
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		File f2 = new File(testDirectoryListAbsoluteString.get(2) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(2) + "//test.txt", "something33");
-		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(1) + "//test.txt",
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(2) + File.separator  + "test.txt");
+		create(testDirectoryListAbsoluteString.get(2) + File.separator  + "test.txt", "something33");
+		String arg[] = { testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", testDirectoryListAbsoluteString.get(1) + File.separator  + "test.txt",
 				testDirectoryListAbsoluteString.get(2) };
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
@@ -347,13 +347,13 @@ public class MoveToolTest {
 	@Test
 	public void testMoveMultipleFilesintoNewFolder() {
 		// moveTool = new MoveTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test.txt", "something");
-		File f2 = new File(testDirectoryListAbsoluteString.get(0) + "//test2.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test2.txt", "something2");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt", "something2");
 		File f = new File(rootDirectoryString + File.separator + "new");
 		f.mkdir();
-		String arg[] = { testDirectoryListAbsoluteString.get(0) + "//test.txt", testDirectoryListAbsoluteString.get(0) + "//test2.txt",
+		String arg[] = { testDirectoryListAbsoluteString.get(0) + File.separator  + "test.txt", testDirectoryListAbsoluteString.get(0) + File.separator  + "test2.txt",
 				rootDirectoryString + File.separator + "new" };
 		moveTool = new MoveTool(arg);
 		moveTool.execute(rootDirectory.toFile(), "");
@@ -374,8 +374,8 @@ public class MoveToolTest {
 		moveTool.execute(rootDirectory.toFile(), "");
 		File f1 = new File(testDirectoryListAbsoluteString.get(0));
 		File f2 = new File(testDirectoryListAbsoluteString.get(1));
-		File f3 = new File(testDirectoryListAbsoluteString.get(2) + "//level0");
-		File f4 = new File(testDirectoryListAbsoluteString.get(2) + "//level0level1");
+		File f3 = new File(testDirectoryListAbsoluteString.get(2) + File.separator  + "level0");
+		File f4 = new File(testDirectoryListAbsoluteString.get(2) + File.separator  + "level0level1");
 
 		assertFalse (f1.exists()) ;assertFalse( f2.exists());
 		assertTrue (f3.exists()) ;assertTrue( f4.exists());

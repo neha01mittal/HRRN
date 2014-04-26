@@ -47,7 +47,7 @@ public class DeleteToolTest {
 	public void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + "/deleteToolTest";
+		rootDirectoryString = System.getProperty("user.dir") +  File.separator + "deleteToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -61,12 +61,12 @@ public class DeleteToolTest {
 			try {
 				dirPath += "level-" + i;
 
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + "/" + dirPath);
+				Path temp = FileSystems.getDefault().getPath(rootDirectoryString +  File.separator + dirPath);
 				Files.createDirectory(temp);
 
 				testDirectoryList.add(temp);
 				testDirectoryListRelativeString.add(dirPath);
-				testDirectoryListAbsoluteString.add(rootDirectoryString + "/" + dirPath);
+				testDirectoryListAbsoluteString.add(rootDirectoryString +  File.separator + dirPath);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -83,8 +83,8 @@ public class DeleteToolTest {
 	public void testDeleteAbsolutePathFile() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test1.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test1.txt", "something");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) +  File.separator + "test1.txt");
+		create(testDirectoryListAbsoluteString.get(0) +  File.separator + "test1.txt", "something");
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
@@ -114,7 +114,7 @@ public class DeleteToolTest {
 	public void testDeleteNonExistingFile() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "//test1.txt");
+		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "test1.txt");
 		deleteTool.delete(f1);
 		assert (!f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 1);
@@ -135,7 +135,7 @@ public class DeleteToolTest {
 
 	@Test
 	public void testDeleteFolderWithContents() {
-		File f1 = new File(rootDirectoryString + File.separator + testDirectoryListRelativeString.get(0), "/new");
+		File f1 = new File(rootDirectoryString + File.separator + testDirectoryListRelativeString.get(0), "new");
 		f1.mkdir();
 		File f2 = new File(f1, "test1.txt");
 		try {
@@ -143,7 +143,7 @@ public class DeleteToolTest {
 		} catch (IOException e) {
 
 		}
-		create(testDirectoryListRelativeString.get(0) + "/new/test1.txt", "something");
+		create(testDirectoryListRelativeString.get(0) +  File.separator + "new" +  File.separator + "test1.txt", "something");
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
@@ -154,7 +154,7 @@ public class DeleteToolTest {
 
 	@Test
 	public void testDeleteNonExistingFolder() {
-		File f1 = new File(rootDirectoryString + File.separator + testDirectoryListRelativeString.get(0) + "/new");
+		File f1 = new File(rootDirectoryString + File.separator + testDirectoryListRelativeString.get(0) +  File.separator + "new");
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");

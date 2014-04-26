@@ -31,13 +31,22 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 public class CopyTool extends ATool implements ICopyTool {
 	private final List<String> inputList;
-
+	/**
+	 * Constructor 
+	 * @param arguments The filename or folder path sent as args  to copy
+	 */
 	public CopyTool(String[] arguments) {
 		super(arguments);
 		setStatusCode(1);
 		inputList = new ArrayList<String>();
 	}
 
+	/**
+	 * Executes the tool with args provided in the constructor 
+	 * @param workingDir The working directory on which the tool will operate on 
+	 * @param stdin Stdin is not used.
+	 * @return Output on stdout
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 
@@ -78,12 +87,29 @@ public class CopyTool extends ATool implements ICopyTool {
 		return null;
 	}
 
+	/**
+	 * Copy a file to a given location, copy a file to another existing file
+	 * In case of multiple paths, all the files are copied into the final path (if it exists)
+	 * 
+	 * @param from 	Source path of the file/folder
+	 * @param to Destination to be copied to
+	 * 
+	 * @return Outcome of the copy operation
+	 * 
+	 */
 	@Override
 	public boolean copy(File from, File to) {
 		recursivecopy(from, to);
 		return true;
 	}
 
+	/**
+	 * Copies files recursively in case source path is a folder
+	 * 
+	 * @param from 	Source path of the file/folder
+	 * @param to Destination to be copied to
+	 * 
+	 */
 	public void recursivecopy(File from, File to) {
 		try {
 			if (from.isDirectory()) {

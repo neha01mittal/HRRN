@@ -30,7 +30,10 @@ public class CdTool extends ATool implements ICdTool {
 
 	private final List<String> argList;
 	private final List<String> inputList;
-
+	/**
+	 * Constructor 
+	 * @param arguments The path sent as args  to change the directory 
+	 */
 	public CdTool(String[] arguments) {
 		super(arguments);
 		setStatusCode(1);
@@ -38,6 +41,12 @@ public class CdTool extends ATool implements ICdTool {
 		inputList = new ArrayList<String>();
 	}
 
+	/**
+	 * Executes the tool with args provided in the constructor 
+	 * @param workingDir The working directory on which the tool will operate on 
+	 * @param stdin Input on stdin. Can be null. If args are missing, stdin is used 
+	 * @return Output on stdout
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 
@@ -87,6 +96,12 @@ public class CdTool extends ATool implements ICdTool {
 		return "Error: No such directory or not directory: " + validInput;
 	}
 
+	/**
+	 * 
+	 * @param newDirectory The new working directory
+	 * 
+	 * @return Returns the new directory
+	 */
 	// String newDirectory must be an absolute path
 	@Override
 	public File changeDirectory(String newDirectory) {

@@ -31,7 +31,7 @@ public class MyFunctionsDeleteToolTest {
 	public void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") + "/deleteToolTest";
+		rootDirectoryString = System.getProperty("user.dir") +  File.separator + "deleteToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -45,12 +45,12 @@ public class MyFunctionsDeleteToolTest {
 			try {
 				dirPath += "level-" + i;
 
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + "/" + dirPath);
+				Path temp = FileSystems.getDefault().getPath(rootDirectoryString +  File.separator + dirPath);
 				Files.createDirectory(temp);
 
 				testDirectoryList.add(temp);
 				testDirectoryListRelativeString.add(dirPath);
-				testDirectoryListAbsoluteString.add(rootDirectoryString + "/" + dirPath);
+				testDirectoryListAbsoluteString.add(rootDirectoryString +  File.separator + dirPath);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -67,8 +67,8 @@ public class MyFunctionsDeleteToolTest {
 	public void testDeleteAbsolutePathFile() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + "//test1.txt");
-		create(testDirectoryListAbsoluteString.get(0) + "//test1.txt", "something");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0) +  File.separator + "test1.txt");
+		create(testDirectoryListAbsoluteString.get(0) +  File.separator + "test1.txt", "something");
 
 		deleteTool.recursivedelete(f1);
 		assert (!(f1.exists()));
@@ -78,8 +78,8 @@ public class MyFunctionsDeleteToolTest {
 	public void testDeleteRelativePathFile() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "//test1.txt");
-		create(testDirectoryListRelativeString.get(0) + "//test1.txt", "something");
+		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator +"test1.txt");
+		create(testDirectoryListRelativeString.get(0) +  File.separator + "test1.txt", "something"); 
 
 		deleteTool.recursivedelete(f1);
 		assert (!(f1.exists()));
@@ -89,7 +89,7 @@ public class MyFunctionsDeleteToolTest {
 	public void testDeleteNonExistingFile() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "//test1.txt");
+		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "test1.txt");
 		deleteTool.recursivedelete(f1);
 		deleteTool.recursivedelete(f1);
 		assert (f1.exists());
@@ -100,7 +100,7 @@ public class MyFunctionsDeleteToolTest {
 	public void testDeleteFolder() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "/new");
+		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "new");
 		deleteTool.recursivedelete(f1);
 		assert (!(f1.exists()));
 
@@ -110,9 +110,9 @@ public class MyFunctionsDeleteToolTest {
 	public void testDeleteFolderWithContents() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "/new");
-		File f2 = new File(testDirectoryListRelativeString.get(0) + "/new/test1.txt");
-		create(testDirectoryListRelativeString.get(0) + "/new/test1.txt", "something");
+		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "new");
+		File f2 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "new" + File.separator + "test1.txt");
+		create(testDirectoryListRelativeString.get(0) +  File.separator + "new" + File.separator + "test1.txt", "something");
 		deleteTool.recursivedelete(f1);
 		assert (!(f1.exists() || f2.exists()));
 
@@ -122,7 +122,7 @@ public class MyFunctionsDeleteToolTest {
 	public void testDeleteNonExistingFolder() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListRelativeString.get(0) + "/new");
+		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "new");
 		deleteTool.recursivedelete(f1);
 		deleteTool.recursivedelete(f1);
 		assert (f1.exists());

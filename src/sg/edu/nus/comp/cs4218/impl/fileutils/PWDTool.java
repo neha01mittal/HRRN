@@ -17,17 +17,34 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  * @exceptions Cannot find working directory
  */
 public class PWDTool extends ATool implements IPwdTool {
-
+	/**
+	 * Constructor 
+	 * 
+	 */
 	public PWDTool() {
 		super(null);
 		setStatusCode(1);
 	}
 
+	/**
+	 * Executes the tool with args provided in the constructor 
+	 * 
+	 * @param workingDir The working directory on which the tool will operate on
+	 * @param stdin Input on stdin. Can be null. If args are missing, stdin is used 
+	 * @return Output on stdout
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		return getStringForDirectory(workingDir);
 	}
 
+	/**
+	 * Checks if the path of working directory exists and is a directory
+	 * 
+	 * @param directory The working directory
+	 * 
+	 * @return Absolute path of the working directory as a string
+	 */
 	@Override
 	public String getStringForDirectory(File directory) {
 

@@ -390,7 +390,7 @@ public class UniqToolTest {
 		uniqTool.currentLine = "I thInk iT Will Work.";
 		String input = "I thInk iT Will Work.";
 
-		assertEquals(uniqTool.getUniqueSkipNum(num, checkCase, input), "");
+		assertEquals(uniqTool.getUniqueSkipNum(num, checkCase, input), "I thInk iT Will Work.\nI thInk iT Will Work.");
 
 	}
 
@@ -401,7 +401,7 @@ public class UniqToolTest {
 		uniqTool.currentLine = "I thInk iT Will Work.";
 		String input = "I thInk iT Will Work.";
 
-		assertEquals(uniqTool.getUniqueSkipNum(num, checkCase, input), "");
+		assertEquals(uniqTool.getUniqueSkipNum(num, checkCase, input), "I thInk iT Will Work.\nI thInk iT Will Work.");
 
 	}
 
@@ -456,7 +456,7 @@ public class UniqToolTest {
 		uniqTool.currentLine = "I THINK IT WILL WORK.";
 		String input = "I thInk iT Will Work.";
 
-		assertEquals(uniqTool.getUniqueSkipNum(num, checkCase, input), "");
+		assertEquals(uniqTool.getUniqueSkipNum(num, checkCase, input), "I THINK IT WILL WORK.\nI thInk iT Will Work.");
 
 	}
 
@@ -467,7 +467,7 @@ public class UniqToolTest {
 		uniqTool.currentLine = "I THINK IT WILL WORK.";
 		String input = "I thInk iT Will Work.";
 
-		assertEquals(uniqTool.getUniqueSkipNum(num, checkCase, input), "");
+		assertEquals(uniqTool.getUniqueSkipNum(num, checkCase, input), "I THINK IT WILL WORK.\nI thInk iT Will Work.");
 
 	}
 
@@ -491,6 +491,30 @@ public class UniqToolTest {
 
 		assertEquals(uniqTool.getUniqueSkipNum(num, checkCase, input), " \n");
 
+	}
+
+	@Test
+	public void getTestBugInHackthon1() {
+
+		String stdin = readFile("uniqTestCase3.txt");
+		uniqTool = new UniqTool(new String[] { "-i", "-" });
+		String workingDir = System.getProperty("user.dir");
+		String output = "a\nb\nc\na\nb\nc";
+		File f = new File(workingDir);
+		assertEquals(uniqTool.execute(f, stdin), output);
+		assertEquals(uniqTool.getStatusCode(), 0);
+	}
+
+	@Test
+	public void getTestBugInHackthon2() {
+
+		String stdin = readFile("uniqTestCase3.txt");
+		uniqTool = new UniqTool(new String[] { "-i", "-f", "1", "-" });
+		String workingDir = System.getProperty("user.dir");
+		String output = "a\na\nb\nc\na\nb\nc";
+		File f = new File(workingDir);
+		assertEquals(uniqTool.execute(f, stdin), output);
+		assertEquals(uniqTool.getStatusCode(), 0);
 	}
 
 	private String readFile(String path) {
