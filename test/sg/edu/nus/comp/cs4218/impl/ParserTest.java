@@ -456,4 +456,15 @@ public class ParserTest {
 			assertEquals(expected[i], results[i]);
 		}
 	}
+
+	@Test
+	public void testGetCmdWithEscapedSpaceInCut() throws IllegalArgumentException, IllegalAccessException {
+		String cmd = "cut -f 3 -d \" \" testCase_1.txt";
+		String[] expected = { "-f", "3", "-d", " ", "testCase_1.txt" };
+
+		String[] results = Shell.getArgsArray(cmd);
+		for (int i = 0; i < expected.length; i++) {
+			assertEquals(expected[i], results[i]);
+		}
+	}
 }
