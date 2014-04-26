@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//src/sg/edu/nus/comp/cs4218/impl/Shell.java=UTF-8
+encoding//src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java=UTF-8
+encoding//src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java=UTF-8
+encoding//test/sg/edu/nus/comp/cs4218/impl/extended1/GrepToolTest.java=UTF-8
+encoding//test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java=UTF-8
