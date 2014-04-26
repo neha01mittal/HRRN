@@ -591,7 +591,7 @@ public class GrepToolTest {
 		String[] args = new String[0];
 		GrepTool gt = new GrepTool(args);
 		int matchingLines = gt.getCountOfMatchingLines("", "");
-		assertEquals(1, matchingLines);
+		assertEquals(0, matchingLines);
 	}
 	
 	@Test
@@ -609,6 +609,6 @@ public class GrepToolTest {
 		GrepTool gt = new GrepTool(args);
 		String matchingLines = gt.getMatchingLinesOnlyMatchingPart("a",
 				"a a a b c d a");
-		assertEquals("a\na\na\na", matchingLines);
+		assertEquals("aaaa", matchingLines);
 	}
 }

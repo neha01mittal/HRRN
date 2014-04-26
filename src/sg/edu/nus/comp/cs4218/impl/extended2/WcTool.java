@@ -91,11 +91,12 @@ public class WcTool extends ATool implements IWcTool {
 
 		for (int i = 0; i < args.length; i++) {
 	        String arg = args[i];
-	        if (arg.compareTo("-") == 0)
+	        if (arg.compareTo("-") == 0 && i ==  args.length - 1)
 	        	content = stdin;
 	        else if (arg.startsWith("-") && arg.compareTo("-m") != 0
 	        		&& arg.compareTo("-w") != 0 && arg.compareTo("-l") != 0
 	        		&& arg.compareTo("-help") != 0) {
+	        	this.setStatusCode(1);
 	        	result.append("Invalid arguments.");
 	        	return result.toString();
 	        }
@@ -130,6 +131,7 @@ public class WcTool extends ATool implements IWcTool {
 				try {
 					processFile(result, args[i]);
 				} catch (IOException e1) {
+					this.setStatusCode(1);
 					result.append("word count: open failed: " + args[i]
 							+ ": No such file or directory.");
 				}
@@ -226,6 +228,7 @@ public class WcTool extends ATool implements IWcTool {
 			byte[] encoded = Files.readAllBytes(Paths.get(filePath));
 			return encoding.decode(ByteBuffer.wrap(encoded)).toString();
 		} catch (IOException e) {
+			this.setStatusCode(1);
 			throw new IOException(fileName);
 		}
 	}

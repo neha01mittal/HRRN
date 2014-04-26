@@ -65,14 +65,17 @@ public class GrepTool extends ATool implements IGrepTool {
 
 		Map<String, ArrayList<String>> parsed = parse();
 		String pattern = getPatternFromInput();
-		if (pattern.compareTo("") == 0)
+		if (pattern.compareTo("") == 0) {
+			this.setStatusCode(1);
 			return "Invalid command";
+		}
 		fileList = getFileListFromInput();
 		fileLength = new int[fileList.size()];
 
 		String fileContent;
 		if (stdin != null && stdin.compareTo("") != 0
-				&& getFileListFromInput().size() == 0)
+				&& getFileListFromInput().size() == 0
+				|| args[args.length - 1].compareTo("-") == 0)
 			fileContent = stdin;
 		else
 			fileContent = getFileContentFromInput(getFileListFromInput());
@@ -269,7 +272,7 @@ public class GrepTool extends ATool implements IGrepTool {
 
 		int i = 0;
 		while (i < args.length) {
-			if (args[i].startsWith("-")) {
+			if (args[i].startsWith("-") && args[i].compareTo("-") != 0) {
 				lastOpt = i;
 				String option = args[i].substring(1);
 				if (parsed.get(option) == null) {
@@ -492,7 +495,6 @@ public class GrepTool extends ATool implements IGrepTool {
 		while (m.find()) {
 			 result += m.group();
 		}
-		result = result.substring(0, result.length() - 1);
 		return result;
 	}
 

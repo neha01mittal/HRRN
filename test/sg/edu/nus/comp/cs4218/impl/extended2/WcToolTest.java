@@ -37,7 +37,7 @@ public class WcToolTest {
 	// characters in a file and the execute to call the method
 	@Test
 	public void getCharacterCountTest() throws IOException {
-		assertEquals("30",
+		assertEquals("31",
 				wctool.getCharacterCount(readFile("testCase_2.txt", std)));
 		assertEquals("11",
 				wctool.getCharacterCount(readFile("testCase_3.txt", std)));
@@ -58,7 +58,7 @@ public class WcToolTest {
 	public void getCharacterCountTest_03() throws IOException {
 		String[] args3 = { "-m", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
-		assertEquals("\t33\ttestCase_2.txt\n", wctool3.execute(null, null));
+		assertEquals("\t34\ttestCase_2.txt\n", wctool3.execute(null, null));
 	}
 
 	@Test
@@ -284,7 +284,7 @@ public class WcToolTest {
 		String[] args = {"-l", "emptyFile.txt"};
 		WcTool wt = new WcTool(args);
 		String result = wt.getWordCount("");
-		String expectedOutput = "1";
+		String expectedOutput = "0";
 		assertEquals(result, expectedOutput);
 	}
 
