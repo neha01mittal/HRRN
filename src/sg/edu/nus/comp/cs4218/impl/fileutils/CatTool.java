@@ -93,7 +93,6 @@ public class CatTool extends ATool implements ICatTool {
 				br = new BufferedReader(new FileReader(toRead));
 				String line = null;
 				try {
-					// content += "Reading file: " + toRead.getName() + ": ";
 					while ((line = br.readLine()) != null) {
 						content += line + "\n";
 					}

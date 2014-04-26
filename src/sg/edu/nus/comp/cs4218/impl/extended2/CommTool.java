@@ -26,18 +26,10 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 
 /**
- * Specifications: comm file1 file2
- * comm - file2
- * comm file2 -
- * comm -c - file2
- * comm -d file1 -
- * comm -c file1 file2
- * comm -d file1 file2
- * comm -help
- * comm - -c -help (help gets priority)
- * This will not work-> comm - -
- * @author neha01mittal
- *
+ * Specifications: comm file1 file2 comm - file2 comm file2 - comm -c - file2
+ * comm -d file1 - comm -c file1 file2 comm -d file1 file2 comm -help comm - -c
+ * -help (help gets priority) This will not work-> comm - -
+ * 
  */
 public class CommTool extends ATool implements ICommTool {
 
@@ -46,12 +38,27 @@ public class CommTool extends ATool implements ICommTool {
 	private boolean sortFlag = false;
 	String currentLine1 = "";
 	String currentLine2 = "";
+	String file1 = "";
+	String file2 = "";
+	boolean flag1 = false;
+	boolean flag2 = false;
 
-	// check this ^^^
+	/**
+	 * constructor for CommTool
+	 * 
+	 * @param arguments
+	 */
 	public CommTool(String[] arguments) {
 		super(arguments);
 	}
 
+	/**
+	 * Compares if the input1 is less than, equal to or greater than input3
+	 * 
+	 * @param input1
+	 *            input2
+	 * @return -1, 0 or 1
+	 */
 	@Override
 	public String compareFiles(String input1, String input2) {
 		// TODO Auto-generated method stub
@@ -59,13 +66,22 @@ public class CommTool extends ATool implements ICommTool {
 				: (input1.compareTo(input2) == 0) ? "0" : "1");
 	}
 
+	/**
+	 * This function is called when the comm command is used with -c option It
+	 * checks if
+	 * 
+	 * @param input1
+	 *            input 2
+	 * @return -1 or not sorted status depending on whether input 1 and input 2
+	 *         are sorted in comparison with currentline1 and currentline2
+	 */
 	@Override
 	public String compareFilesCheckSortStatus(String input1, String input2) {
 		// TODO Auto-generated method stub
 		if (input1 == null && input2 == null)
 			return "-1";
 		if (input1 == null) {
- 			if (input2.compareTo(currentLine2) >= 0)
+			if (input2.compareTo(currentLine2) >= 0)
 				return "-1";
 			else
 				return NOT_SORTED;
@@ -83,12 +99,26 @@ public class CommTool extends ATool implements ICommTool {
 		}
 	}
 
+	/**
+	 * compares input1 with input 2
+	 * 
+	 * @param input1
+	 *            input2
+	 * @return -1, 1 or 0
+	 */
 	@Override
 	public String compareFilesDoNotCheckSortStatus(String input1, String input2) {
 		// TODO Auto-generated method stub
 		return compareFiles(input1, input2);
 	}
 
+	/**
+	 * This function is called to view all the possible ways in which comm tool
+	 * can be used
+	 * 
+	 * @param
+	 * @return help menu
+	 */
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
@@ -107,13 +137,14 @@ public class CommTool extends ATool implements ICommTool {
 		return result;
 	}
 
+	/**
+	 * @param workingDir
+	 *            , stdin
+	 * @return the formatted output as expected by the original command input
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
-		String file1 = "";
-		String file2 = "";
-		boolean flag1 = false;
-		boolean flag2 = false;
 		String operation = parse();
 		if (operation.equals(INVALID_COMMAND))
 			return INVALID_COMMAND;
@@ -122,44 +153,7 @@ public class CommTool extends ATool implements ICommTool {
 			if (operation.equalsIgnoreCase("help")) {
 				return getHelp();
 			} else if (stdin != null && !stdin.equals("")) {
-				if (args.length == 2) {
-					if (operation.equals("f1")) {
-						flag1 = true;
-						file1 = stdin;
-						file2 = args[1];
-					}
-					if (operation.equals("f2")) {
-						flag2 = true;
-						file2 = stdin;
-						file1 = args[0];
-					}
-				}
-				if (args.length == 3) {
-					if (operation.equals("c:f2")) {
-						flag2 = true;
-						file2 = stdin;
-						file1 = args[1];
-						sortFlag = true;
-					}
-					if (operation.equals("c:f1")) {
-						flag1 = true;
-						file1 = stdin;
-						file2 = args[2];
-						sortFlag = true;
-					}
-					if (operation.equals("d:f2")) {
-						flag2 = true;
-						file2 = stdin;
-						file1 = args[1];
-						sortFlag = false;
-					}
-					if (operation.equals("d:f1")) {
-						flag1 = true;
-						file1 = stdin;
-						file2 = args[2];
-						sortFlag = false;
-					}
-				}
+				decodeParsedOperation(stdin, operation);
 			} else if (operation.equalsIgnoreCase("d") && args.length == 3) {
 				// do not care about sorting
 				file1 = args[1];
@@ -173,107 +167,203 @@ public class CommTool extends ATool implements ICommTool {
 				file1 = args[0];
 				file2 = args[1];
 			}
-
-			File f1 = new File(file1);
-			File f2 = new File(file2);
-
 			List<String> file1Data = new ArrayList<String>();
 			List<String> file2Data = new ArrayList<String>();
-
-			if (flag1) {
-				file1Data = Arrays.asList(stdin.split("\\r?\\n"));
-			} else {
-				file1Data = readFile(f1.isAbsolute() ? f1 : new File(
-						workingDir, file1));
-			}
-
-			if (flag2) {
-				file2Data = Arrays.asList(stdin.split("\\r?\\n"));
-			} else {
-				file2Data = readFile(f2.isAbsolute() ? f2 : new File(
-						workingDir, file2));
-			}
-
-			if (file1Data == null || file1Data.size() == 0 || file2Data == null
-					|| file2Data.size() == 0) {
+			file1Data = populateFileData(workingDir, stdin, file1, flag1,
+					new File(file1));
+			file2Data = populateFileData(workingDir, stdin, file2, flag2,
+					new File(file2));
+			if (isInvalidData(file1Data, file2Data)) {
 				return INVALID_COMMAND;
 			}
-
-			String line1 = "";
-			String line2 = "";
-			String expectedOutput = "";
-
-			int i = 0;
-			int j = 0;
-			while (i < file1Data.size() || j < file2Data.size()) {
-				if (i >= file1Data.size()) {
-					line2 = file2Data.get(j);
-					if (sortFlag
-							&& !compareFilesCheckSortStatus(null, line2)
-									.equals("-1")) {
-						expectedOutput += NOT_SORTED;
-						break;
-					}
-					currentLine2 = line2;
-					expectedOutput += "\t\t" + line2;
-					j++;
-				} else if (j >= file2Data.size()) {
-					line1 = file1Data.get(i);
-					if (sortFlag
-							&& !compareFilesCheckSortStatus(line1, null)
-									.equals("-1")) {
-						expectedOutput += NOT_SORTED;
-						break;
-					}
-					currentLine1 = line1;
-					expectedOutput += line1;
-					i++;
-				} else {
-					line1 = file1Data.get(i);
-					line2 = file2Data.get(j);
-					if (sortFlag) {
-						if (!compareFilesCheckSortStatus(line1, line2).equals(
-								"-1")) {
-							expectedOutput += NOT_SORTED;
-							setStatusCode(1);
-							break;
-						}
-						currentLine1 = line1;
-						currentLine2 = line2;
-					}
-					int comparison = Integer
-							.parseInt(compareFiles(line1, line2));
-					if (comparison == 0)
-						expectedOutput += "\t\t\t\t" + line1;
-					else if (comparison < 0)
-						expectedOutput += line1 + "\n\t\t" + line2;
-					else
-						expectedOutput += "\t\t" + line2 + "\n" + line1;
-					i++;
-					j++;
-
-				}
-
-				expectedOutput += "\n";
-			}
-			if (expectedOutput.endsWith("\n"))
-				expectedOutput = expectedOutput.substring(0,
-						expectedOutput.length() - 1);
-
-			setStatusCode(0);
-			return expectedOutput;
-
+			return processExpectedOutput(file1Data, file2Data);
 		}
 		return INVALID_COMMAND;
 	}
 
+	/**
+	 * decode the parsed string and accordingly populate files and flag values
+	 * 
+	 * @param stdin
+	 * @param operation
+	 */
+	private void decodeParsedOperation(String stdin, String operation) {
+		if (args.length == 2) {
+			if (operation.equals("f1")) {
+				flag1 = true;
+				file1 = stdin;
+				file2 = args[1];
+			}
+			if (operation.equals("f2")) {
+				flag2 = true;
+				file2 = stdin;
+				file1 = args[0];
+			}
+		}
+		if (args.length == 3) {
+			if (operation.equals("c:f2")) {
+				flag2 = true;
+				file2 = stdin;
+				file1 = args[1];
+				sortFlag = true;
+			}
+			if (operation.equals("c:f1")) {
+				flag1 = true;
+				file1 = stdin;
+				file2 = args[2];
+				sortFlag = true;
+			}
+			if (operation.equals("d:f2")) {
+				flag2 = true;
+				file2 = stdin;
+				file1 = args[1];
+				sortFlag = false;
+			}
+			if (operation.equals("d:f1")) {
+				flag1 = true;
+				file1 = stdin;
+				file2 = args[2];
+				sortFlag = false;
+			}
+		}
+	}
+
+	/**
+	 * check for null or empty values
+	 * 
+	 * @param file1Data
+	 * @param file2Data
+	 * @return
+	 */
+	private boolean isInvalidData(List<String> file1Data, List<String> file2Data) {
+		return file1Data == null || file1Data.size() == 0 || file2Data == null
+				|| file2Data.size() == 0;
+	}
+
+	/**
+	 * populate files with the right data
+	 * 
+	 * @param workingDir
+	 * @param stdin
+	 * @param file1
+	 * @param flag1
+	 * @param f1
+	 * @return
+	 */
+	private List<String> populateFileData(File workingDir, String stdin,
+			String file1, boolean flag1, File f1) {
+		List<String> file1Data;
+		if (flag1) {
+			file1Data = Arrays.asList(stdin.split("\\r?\\n"));
+		} else {
+			file1Data = readFile(f1.isAbsolute() ? f1 : new File(workingDir,
+					file1));
+		}
+		return file1Data;
+	}
+
+	/**
+	 * process data according to comparison reuslts
+	 * 
+	 * @param file1Data
+	 * @param file2Data
+	 * @return
+	 */
+	private String processExpectedOutput(List<String> file1Data,
+			List<String> file2Data) {
+		String line1, line2;
+		String expectedOutput = "";
+		int i = 0, j = 0;
+		while (i < file1Data.size() || j < file2Data.size()) {
+			if (i >= file1Data.size()) {
+				line2 = file2Data.get(j);
+				if (sortFlag
+						&& !compareFilesCheckSortStatus(null, line2).equals(
+								"-1")) {
+					expectedOutput += NOT_SORTED;
+					break;
+				}
+				currentLine2 = line2;
+				expectedOutput += "\t\t" + line2;
+				j++;
+			} else if (j >= file2Data.size()) {
+				line1 = file1Data.get(i);
+				if (sortFlag
+						&& !compareFilesCheckSortStatus(line1, null).equals(
+								"-1")) {
+					expectedOutput += NOT_SORTED;
+					break;
+				}
+				currentLine1 = line1;
+				expectedOutput += line1;
+				i++;
+			} else {
+				line1 = file1Data.get(i);
+				line2 = file2Data.get(j);
+				if (sortFlag) {
+					if (!compareFilesCheckSortStatus(line1, line2).equals("-1")) {
+						expectedOutput += NOT_SORTED;
+						setStatusCode(1);
+						break;
+					}
+					currentLine1 = line1;
+					currentLine2 = line2;
+				}
+				expectedOutput = formatOutput(line1, line2, expectedOutput);
+				i++;
+				j++;
+			}
+			expectedOutput += "\n";
+		}
+		expectedOutput = removeExtraNewLine(expectedOutput);
+		setStatusCode(0);
+		return expectedOutput;
+	}
+
+	/**
+	 * removes the last extrea new line from expected output
+	 * 
+	 * @param expectedOutput
+	 * @return
+	 */
+	private String removeExtraNewLine(String expectedOutput) {
+		if (expectedOutput.endsWith("\n"))
+			expectedOutput = expectedOutput.substring(0,
+					expectedOutput.length() - 1);
+		return expectedOutput;
+	}
+
+	/**
+	 * formats the console output depending on comparison results
+	 * 
+	 * @param line1
+	 * @param line2
+	 * @param expectedOutput
+	 * @return
+	 */
+	private String formatOutput(String line1, String line2,
+			String expectedOutput) {
+		int comparison = Integer.parseInt(compareFiles(line1, line2));
+		if (comparison == 0)
+			expectedOutput += "\t\t\t\t" + line1;
+		else if (comparison < 0)
+			expectedOutput += line1 + "\n\t\t" + line2;
+		else
+			expectedOutput += "\t\t" + line2 + "\n" + line1;
+		return expectedOutput;
+	}
+
+	/**
+	 * parses command by checking if command contains help which gets priority,
+	 * else checks number of arguments
+	 * 
+	 * @return
+	 */
 	public String parse() {
 		String parsed = "";
 		int count = 0;
 
 		int i = args.length - 1;
-		// if (args.length!=0&&args[0].equals("-"))
-		// return "stdin";
 		while (i >= 0) {
 			if (args[i].length() > 1 && args[i].startsWith("-")) {
 				// help gets priority // if not help, the first one gets
@@ -289,31 +379,51 @@ public class CommTool extends ATool implements ICommTool {
 			i--;
 		}
 
+		parsed = buildParseCode(parsed, count);
+		return parsed;
+	}
+
+	/**
+	 * Builds the parse code according to user input. Appends f1 if the arg is
+	 * treated as f1, f2 if treated as file2
+	 * 
+	 * @param parseCode
+	 * @param count
+	 * @return
+	 */
+	private String buildParseCode(String parseCode, int count) {
 		if (args.length > 3 || args.length < 2)
 			return INVALID_COMMAND;
-		
+
 		if (count > 1) { // cannot have comm - - or comm - -c -----
 			return INVALID_COMMAND;
 		}
 
 		if (count == 0 && args.length > 0 && args[0].equals("-")) {
-			parsed = "f1";
+			parseCode = "f1";
 		}
 
 		if (count == 0 && args.length > 1 && args[1].equals("-")) {
-			parsed = "f2";
+			parseCode = "f2";
 		}
 
 		if (count == 1 && args.length > 1 && args[1].equals("-")) {
-			parsed += ":f1";
+			parseCode += ":f1";
 		}
 
 		if (count == 1 && args.length > 2 && args[2].equals("-")) {
-			parsed += ":f2";
+			parseCode += ":f2";
 		}
-		return parsed;
+		return parseCode;
 	}
 
+	/**
+	 * reads the file and returns the content
+	 * 
+	 * @param File
+	 *            to be read
+	 * @return contents of the file
+	 */
 	public List<String> readFile(File f) {
 		List<String> expectedOutput = new ArrayList<String>();
 		if (f.isFile() && f.canRead()) {
