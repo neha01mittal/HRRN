@@ -225,7 +225,9 @@ public class GrepTool extends ATool implements IGrepTool {
 
 	private int getListOfMatchingLines(String pattern, String input) {
 		int result = 0;
-
+		if (input == null || input.compareTo("") == 0)
+			return 0;
+		
 		try {
 			String[] lines = input.split("\n");
 			ArrayList<String> matchingLines = new ArrayList<String>();
@@ -487,13 +489,10 @@ public class GrepTool extends ATool implements IGrepTool {
 		Pattern p = Pattern.compile(pattern);
 		Matcher m = p.matcher(line);
 		m.matches();
-		if (m.find()) {
-			int i = 0;
-			do {
-				result += m.group(i);
-				i++;
-			} while (i < m.groupCount());
+		while (m.find()) {
+			 result += m.group();
 		}
+		result = result.substring(0, result.length() - 1);
 		return result;
 	}
 

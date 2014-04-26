@@ -36,7 +36,7 @@ public class WcTool extends ATool implements IWcTool {
 
 	@Override
 	public String getCharacterCount(String input) {
-		if (input == null || readStatus == 1)
+		if (input == null || input.compareTo("") == 0 || readStatus == 1)
 			return "0";
 		int result = input.length();
 		setStatusCode(0);
@@ -45,9 +45,9 @@ public class WcTool extends ATool implements IWcTool {
 
 	@Override
 	public String getWordCount(String input) {
-		if (input == null || readStatus == 1)
+		if (input == null || input.compareTo("") == 0 || readStatus == 1)
 			return "0";
-
+		
 		String[] words = input.split("[ \\n]");
 		int result = words.length;
 		setStatusCode(0);
@@ -56,7 +56,7 @@ public class WcTool extends ATool implements IWcTool {
 
 	@Override
 	public String getNewLineCount(String input) {
-		if (input == null || readStatus == 1)
+		if (input == null || input.compareTo("") == 0 || readStatus == 1)
 			return "0";
 
 		int result = input.length() - input.replaceAll("\n", "").length();
@@ -85,7 +85,7 @@ public class WcTool extends ATool implements IWcTool {
 		}
 
 		String content = null;
-		if (stdin != null && stdin.compareTo("") != 0) {
+		if (stdin != null && stdin.compareTo("") != 0 || args[args.length - 1].compareTo("-") == 0) {
 			content = stdin;
 		}
 

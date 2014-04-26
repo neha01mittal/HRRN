@@ -259,6 +259,15 @@ public class WcToolTest {
 		String expected = "\t10\t4\ttestCase_1.txt\n";
 		assertEquals(expected, result);
 	}
+	
+	@Test
+	public void testMultipleOptions_03() {
+		String[] args = { "-l", "-w", "testCase_1.txt" };
+		WcTool wt = new WcTool(args);
+		String result = wt.execute(null, "");
+		String expected = "\t10\t4\ttestCase_1.txt\n";
+		assertEquals(expected, result);
+	}
 
 	@Test
 	public void testMultipleOptions_02() {
@@ -268,6 +277,15 @@ public class WcToolTest {
 		String expected = "\t10\t4\ttestCase_1.txt\n"
 				+ "\t4\t3\ttestCase_2.txt\n";
 		assertEquals(expected, result);
+	}
+	
+	@Test
+	public void wordCountTestEmpty() {
+		String[] args = {"-l", "emptyFile.txt"};
+		WcTool wt = new WcTool(args);
+		String result = wt.getWordCount("");
+		String expectedOutput = "1";
+		assertEquals(result, expectedOutput);
 	}
 
 	public String readFile(String fileName, Charset encoding)
