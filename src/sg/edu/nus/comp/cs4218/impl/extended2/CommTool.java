@@ -47,6 +47,7 @@ public class CommTool extends ATool implements ICommTool {
 	 * constructor for CommTool
 	 * 
 	 * @param arguments
+	 *            arguments or options passed by user as input
 	 */
 	public CommTool(String[] arguments) {
 		super(arguments);
@@ -56,7 +57,9 @@ public class CommTool extends ATool implements ICommTool {
 	 * Compares if the input1 is less than, equal to or greater than input3
 	 * 
 	 * @param input1
-	 *            input2
+	 *            first string to be compared
+	 * @param input2
+	 *            second string to be compared
 	 * @return -1, 0 or 1
 	 */
 	@Override
@@ -71,7 +74,9 @@ public class CommTool extends ATool implements ICommTool {
 	 * checks if
 	 * 
 	 * @param input1
-	 *            input 2
+	 *            the string from file 1 to be compared to currentLine1
+	 * @param input
+	 *            2 the string from file 2 to be compared to currentLine2
 	 * @return -1 or not sorted status depending on whether input 1 and input 2
 	 *         are sorted in comparison with currentline1 and currentline2
 	 */
@@ -103,7 +108,9 @@ public class CommTool extends ATool implements ICommTool {
 	 * compares input1 with input 2
 	 * 
 	 * @param input1
-	 *            input2
+	 *            first string to be compared
+	 * @param input2
+	 *            second string to be compared
 	 * @return -1, 1 or 0
 	 */
 	@Override
@@ -139,7 +146,9 @@ public class CommTool extends ATool implements ICommTool {
 
 	/**
 	 * @param workingDir
-	 *            , stdin
+	 *            current working directory
+	 * @param stdin
+	 *            input received from pipe
 	 * @return the formatted output as expected by the original command input
 	 */
 	@Override
@@ -185,7 +194,11 @@ public class CommTool extends ATool implements ICommTool {
 	 * decode the parsed string and accordingly populate files and flag values
 	 * 
 	 * @param stdin
+	 *            input received from pipe
 	 * @param operation
+	 *            varies depending on the command type- if it contains -c then
+	 *            it is c:f1 or c:f2, if it contains -d, it is d:f1 or d:f2,
+	 *            otherwise f1 or f2
 	 */
 	private void decodeParsedOperation(String stdin, String operation) {
 		if (args.length == 2) {
@@ -231,9 +244,9 @@ public class CommTool extends ATool implements ICommTool {
 	/**
 	 * check for null or empty values
 	 * 
-	 * @param file1Data
-	 * @param file2Data
-	 * @return
+	 * @param file1Data content of file 1
+	 * @param file2Data content of file 2 
+	 * @return false if file1data or file2data is null or empty 
 	 */
 	private boolean isInvalidData(List<String> file1Data, List<String> file2Data) {
 		return file1Data == null || file1Data.size() == 0 || file2Data == null
@@ -243,12 +256,12 @@ public class CommTool extends ATool implements ICommTool {
 	/**
 	 * populate files with the right data
 	 * 
-	 * @param workingDir
-	 * @param stdin
+	 * @param workingDir current working directory
+	 * @param stdin 
 	 * @param file1
 	 * @param flag1
 	 * @param f1
-	 * @return
+	 * @return 
 	 */
 	private List<String> populateFileData(File workingDir, String stdin,
 			String file1, boolean flag1, File f1) {
@@ -263,11 +276,11 @@ public class CommTool extends ATool implements ICommTool {
 	}
 
 	/**
-	 * process data according to comparison reuslts
+	 * process data according to comparison results
 	 * 
-	 * @param file1Data
-	 * @param file2Data
-	 * @return
+	 * @param file1Data contents of file1
+	 * @param file2Data contents of file2 d
+	 * @return expected output depending on the options passed in input
 	 */
 	private String processExpectedOutput(List<String> file1Data,
 			List<String> file2Data) {
@@ -323,8 +336,8 @@ public class CommTool extends ATool implements ICommTool {
 	/**
 	 * removes the last extrea new line from expected output
 	 * 
-	 * @param expectedOutput
-	 * @return
+	 * @param expectedOutput the current output with or without extra new line
+	 * @return output after removing last line
 	 */
 	private String removeExtraNewLine(String expectedOutput) {
 		if (expectedOutput.endsWith("\n"))
@@ -336,9 +349,9 @@ public class CommTool extends ATool implements ICommTool {
 	/**
 	 * formats the console output depending on comparison results
 	 * 
-	 * @param line1
-	 * @param line2
-	 * @param expectedOutput
+	 * @param line1 current line from file 1
+	 * @param line2 current line from file 2
+	 * @param expectedOutput formatted output depending on the comparison of the 2 lines
 	 * @return
 	 */
 	private String formatOutput(String line1, String line2,
@@ -357,7 +370,7 @@ public class CommTool extends ATool implements ICommTool {
 	 * parses command by checking if command contains help which gets priority,
 	 * else checks number of arguments
 	 * 
-	 * @return
+	 * @return the option which appears first in the user input command
 	 */
 	public String parse() {
 		String parsed = "";
@@ -378,7 +391,6 @@ public class CommTool extends ATool implements ICommTool {
 
 			i--;
 		}
-
 		parsed = buildParseCode(parsed, count);
 		return parsed;
 	}
@@ -387,9 +399,9 @@ public class CommTool extends ATool implements ICommTool {
 	 * Builds the parse code according to user input. Appends f1 if the arg is
 	 * treated as f1, f2 if treated as file2
 	 * 
-	 * @param parseCode
-	 * @param count
-	 * @return
+	 * @param parseCode string formed based on how args are interpreted 
+	 * @param count number of - in the command
+	 * @return well formed parse code depending on number and type of options passed by user
 	 */
 	private String buildParseCode(String parseCode, int count) {
 		if (args.length > 3 || args.length < 2)
@@ -420,8 +432,7 @@ public class CommTool extends ATool implements ICommTool {
 	/**
 	 * reads the file and returns the content
 	 * 
-	 * @param File
-	 *            to be read
+	 * @param f file to be read
 	 * @return contents of the file
 	 */
 	public List<String> readFile(File f) {

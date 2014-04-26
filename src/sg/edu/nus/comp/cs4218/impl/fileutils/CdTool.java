@@ -21,7 +21,7 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  *       Cd does not allow std, thus can not be pipe to. 
  *       Cd tool will always try to return the Canonical Path of the new directory which
  *       is the most simplified and recognizable. It does not allow user to use
- *       ‘~’ to denote home directory.
+ *       ���~��� to denote home directory.
  * @success returns an empty string, but will not create a new line in the
  *          output.
  * @exceptions invalid input path not exist path is not directory
@@ -30,6 +30,7 @@ public class CdTool extends ATool implements ICdTool {
 
 	private final List<String> argList;
 	private final List<String> inputList;
+	
 	/**
 	 * Constructor 
 	 * @param arguments The path sent as args  to change the directory 

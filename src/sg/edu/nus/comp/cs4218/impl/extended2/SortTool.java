@@ -26,16 +26,25 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class SortTool extends ATool implements ISortTool {
 
+	private static final String IN_ORDER = "In order.";
 	private final List<String>	argList;
 	private final List<String>	inputList;
 
+	/**
+	 * constructor for sort tool
+	 * @param arguments user defined 
+	 */
 	public SortTool(String[] arguments) {
 		super(arguments);
 		setStatusCode(1);
 		argList = new ArrayList<String>();
 		inputList = new ArrayList<String>();
 	}
-
+	
+	/**
+	 * @param workingDir current working directory for relative file browsing
+	 * @param stdin standard input received from pipe
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// check for argument number
@@ -62,12 +71,10 @@ public class SortTool extends ATool implements ISortTool {
 				inputFlag = true;
 			}
 		}
-
 		// help always get print first
 		if (argList.contains("-help")) {
 			return getHelp();
 		}
-
 		// help always get print first
 		if (inputList.size() == 0) {
 			inputList.add("-");
@@ -89,7 +96,15 @@ public class SortTool extends ATool implements ISortTool {
 			}
 		}
 		input = (input.length() > 1) ? input.substring(0, input.length() - 1) : input;
+		return processOptionC(input);
+	}
 
+	/**
+	 * 
+	 * @param input processed user input based on options
+	 * @return if args list contains -c then returns output after checking if it is sorted else sorts file normally an returns
+	 */
+	private String processOptionC(String input) {
 		if (argList.contains("-c")) {
 			return checkIfSorted(input);
 		} else {
@@ -97,6 +112,10 @@ public class SortTool extends ATool implements ISortTool {
 		}
 	}
 
+	/**
+	 * @param input processed user input based on options
+	 * @return sorted file contents
+	 */
 	@Override
 	public String sortFile(String input) {
 		String[] inputList = input.split("\n");
@@ -112,6 +131,10 @@ public class SortTool extends ATool implements ISortTool {
 		return result;
 	}
 
+	/**
+	 * @param input processed user input based on options
+	 * @return status if it in order or not
+	 */
 	@Override
 	public String checkIfSorted(String input) {
 		String[] inputList = input.split("\n");
@@ -124,9 +147,12 @@ public class SortTool extends ATool implements ISortTool {
 			head = inputList[i];
 		}
 		setStatusCode(0);
-		return "In order.";
+		return IN_ORDER;
 	}
 
+	/**
+	 * @return help menu with all available options
+	 */
 	@Override
 	public String getHelp() {
 		setStatusCode(0);
@@ -134,6 +160,12 @@ public class SortTool extends ATool implements ISortTool {
 				+ " diagnostic containing the first line that is out of order\n" + " -help : Brief information about supported options";
 	}
 
+	/**
+	 * 
+	 * @param workingDir current working directory 
+	 * @param path path of the file to be read
+	 * @return reads the contents of the file and returns the full text 
+	 */
 	private String readFile(File workingDir, String path) {
 		File newFile = new File(path);
 		if (!newFile.isAbsolute()) {

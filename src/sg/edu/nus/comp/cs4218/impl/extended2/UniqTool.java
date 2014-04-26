@@ -28,16 +28,22 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class UniqTool extends ATool implements IUniqTool {
 
-	public String				currentLine		= "";
-	public String				previousLine	= "";
-	private int					inputFlag		= 0;	// 1 for file, 2 for
-														// string
-	private int					skipNum			= 0;	// 1 for file, 2 for
-														// string
-	private final List<String>	argList;
-	private final List<String>	inputList;
-	private final List<String>	uniqueList;
+	private static final String INVALID_COMMAND = "Invalid command";
+	public String currentLine = "";
+	public String previousLine = "";
+	private int inputFlag = 0; // 1 for file, 2 for
+								// string
+	private int skipNum = 0; // 1 for file, 2 for
+								// string
+	private final List<String> argList;
+	private final List<String> inputList;
+	private final List<String> uniqueList;
 
+	/**
+	 * constructor for Uniq tool
+	 * 
+	 * @param arguments
+	 */
 	public UniqTool(String[] arguments) {
 		super(arguments);
 		setStatusCode(1);
@@ -46,6 +52,13 @@ public class UniqTool extends ATool implements IUniqTool {
 		uniqueList = new ArrayList<String>();
 	}
 
+	/**
+	 * @param workingDir
+	 *            current working directory
+	 * @param stdin
+	 *            input received from pipe
+	 * @return expected string with unique elements
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		boolean inputFlag2 = false;
@@ -59,7 +72,7 @@ public class UniqTool extends ATool implements IUniqTool {
 					try {
 						skipNum = Integer.parseInt(args[++i]);
 					} catch (Exception e) {
-						return "Invalid command";
+						return INVALID_COMMAND;
 					}
 				}
 			} else if (args[i].equals("-")) {
@@ -77,25 +90,32 @@ public class UniqTool extends ATool implements IUniqTool {
 				inputFlag2 = true;
 			}
 		}
-
 		// help always get print first
 		if (argList.contains("-help")) {
 			return getHelp();
 		}
-
 		// note for flags
 		if (inputFlag == 1 && inputList.size() > 0) {
 			if (readAndProcessFile(workingDir, inputList.get(0)) == null) {
-				return "Invalid command";
+				return INVALID_COMMAND;
 			}
 		} else if (inputFlag == 2 || inputList.size() == 0) {
 			if (stdin == null)
-				return "Invalid command";
+				return INVALID_COMMAND;
 			readAndProcessString(stdin);
 		} else {
-			return "Invalid command";
+			return INVALID_COMMAND;
 		}
+		return buildResultFromUniqList();
+	}
 
+	/**
+	 * This function builds result from the uniq list items. This is the final
+	 * output to the user
+	 * 
+	 * @return
+	 */
+	private String buildResultFromUniqList() {
 		String result = "";
 		for (int i = 0; i < uniqueList.size(); i++) {
 			result += uniqueList.get(i);
@@ -106,10 +126,19 @@ public class UniqTool extends ATool implements IUniqTool {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param workingDir
+	 *            current working directory
+	 * @param path
+	 *            file's path
+	 * @return process the input file depending on options like -f and -i
+	 */
 	private String readAndProcessFile(File workingDir, String path) {
 		File newFile = new File(path);
 		if (!newFile.isAbsolute()) {
-			newFile = new File(workingDir.getAbsolutePath() + File.separator + path);
+			newFile = new File(workingDir.getAbsolutePath() + File.separator
+					+ path);
 		}
 
 		String fullText = "";
@@ -119,7 +148,8 @@ public class UniqTool extends ATool implements IUniqTool {
 			while ((sCurrentLine = br.readLine()) != null) {
 
 				if (argList.contains("-f")) {
-					getUniqueSkipNum(skipNum, !argList.contains("-i"), sCurrentLine);
+					getUniqueSkipNum(skipNum, !argList.contains("-i"),
+							sCurrentLine);
 				} else {
 					getUnique(!argList.contains("-i"), sCurrentLine);
 				}
@@ -132,6 +162,14 @@ public class UniqTool extends ATool implements IUniqTool {
 		return fullText;
 	}
 
+	/**
+	 * This function reads input from input list, process it according to
+	 * options and returns the correct full text
+	 * 
+	 * @param input
+	 *            content of the file which is checked for
+	 * @return full text formed after processing the input
+	 */
 	private String readAndProcessString(String input) {
 		String fullText = "";
 		String[] inputList = input.split("\n");
@@ -145,23 +183,38 @@ public class UniqTool extends ATool implements IUniqTool {
 		return fullText;
 	}
 
-	private boolean compareStringSkip(String str1, String str2, int num) {
-		String[] array1 = str1.split("\\s+");
-		String[] array2 = str2.split("\\s+");
+	/**
+	 * 
+	 * @param string1 first string to be compared
+	 * @param string2 second string to be compared
+	 * @param num this is an integer that checks for the array size limit 
+	 * @return compares string1 and string 2 and returns the boolean result
+	 */
+	private boolean compareStringSkip(String string1, String string2, int count) {
+		String[] array1 = string1.split("\\s+");
+		String[] array2 = string2.split("\\s+");
 		if (array1.length != array2.length) {
 			return false;
 		}
-		if (array1.length <= num) {
+		if (array1.length <= count) {
 			return false;
 		}
-		for (int i = num; i < array2.length; i++) {
+		for (int i = count; i < array2.length; i++) {
 			if (!array2[i].equals(array1[i]))
 				return false;
 		}
 		return true;
 	}
 
-	private boolean compareStringIgnoreCaseSkip(String str1, String str2, int num) {
+	/**
+	 * 
+	 * @param str1 string1 first string to be compared
+	 * @param str2 string2 second string to be compared
+	 * @param num this is an integer that checks for the array size limit 
+	 * @return compares string1 and string 2 ignoring their case and returns the boolean result
+	 */
+	private boolean compareStringIgnoreCaseSkip(String str1, String str2,
+			int num) {
 		String[] array1 = str1.split("\\s+");
 		String[] array2 = str2.split("\\s+");
 		if (array1.length != array2.length) {
@@ -177,6 +230,11 @@ public class UniqTool extends ATool implements IUniqTool {
 		return true;
 	}
 
+	/**
+	 * @param checkCase the value returned decides if the case needs to be checked or not
+	 * @param input the current line which is processed 
+	 * This functions eliminates repeated lines and outputs the correct unique result
+	 */
 	@Override
 	public String getUnique(boolean checkCase, String input) {
 		if (checkCase) {
@@ -199,6 +257,12 @@ public class UniqTool extends ATool implements IUniqTool {
 		return currentLine;
 	}
 
+	/**
+	 * @param num this is an integer that checks for the array size limit 
+	 * @param checkCase the value returned decides if the case needs to be checked or not
+	 * @param input the current line which is processed 
+	 * @return this function returns appends the input string to the current line if it is not the same as the current line to avoid duplicates
+	 */
 	@Override
 	public String getUniqueSkipNum(int num, boolean checkCase, String input) {
 		num = (num < 0) ? 0 : num;
@@ -222,6 +286,9 @@ public class UniqTool extends ATool implements IUniqTool {
 		return currentLine;
 	}
 
+	/**
+	 * @return displays the entire menu for uniq tool
+	 */
 	@Override
 	public String getHelp() {
 		setStatusCode(0);
