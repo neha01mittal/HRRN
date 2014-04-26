@@ -25,15 +25,24 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 
 public class WcTool extends ATool implements IWcTool {
-	private int		readStatus	= -1;
-	private int		fileIndex	= -1;
-	private File	workingDir;
-	Vector<String>	argList		= new Vector<String>();
+	private int readStatus = -1;
+	private int fileIndex = -1;
+	private File workingDir;
+	Vector<String> argList = new Vector<String>();
 
+	/**
+	 * constructor for WcTool
+	 * 
+	 * @param args
+	 */
 	public WcTool(String[] args) {
 		super(args);
 	}
 
+	/**
+	 * @input the string whose characters are counted
+	 * @return returns the character count of the input string
+	 */
 	@Override
 	public String getCharacterCount(String input) {
 		if (input == null || input.compareTo("") == 0 || readStatus == 1)
@@ -43,6 +52,11 @@ public class WcTool extends ATool implements IWcTool {
 		return Integer.toString(result);
 	}
 
+	/**
+	 * @param input
+	 *            the string whose words are counted
+	 * @return returns the word count of the input string
+	 */
 	@Override
 	public String getWordCount(String input) {
 		if (input == null || input.compareTo("") == 0 || readStatus == 1)
@@ -54,6 +68,11 @@ public class WcTool extends ATool implements IWcTool {
 		return Integer.toString(result);
 	}
 
+	/**
+	 * @param input
+	 *            string whose lines are counted
+	 * @return gets the new line count of input string
+	 */
 	@Override
 	public String getNewLineCount(String input) {
 		if (input == null || input.compareTo("") == 0 || readStatus == 1)
@@ -64,6 +83,9 @@ public class WcTool extends ATool implements IWcTool {
 		return Integer.toString(result);
 	}
 
+	/**
+	 * displays the menu with options supported by WCTool
+	 */
 	@Override
 	public String getHelp() {
 		String help = "-m : Print only the character counts\t"
@@ -74,6 +96,11 @@ public class WcTool extends ATool implements IWcTool {
 		return help;
 	}
 
+	/**
+	 * @param workingDir
+	 *            current working directory
+	 * @stdin input received from pipe
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		// TODO Auto-generated method stub
@@ -83,12 +110,8 @@ public class WcTool extends ATool implements IWcTool {
 			result.append("No arguments and no standard input.");
 			return result.toString();
 		}
-
-		String content = null;
-		if (stdin != null && stdin.compareTo("") != 0 || args[args.length - 1].compareTo("-") == 0) {
-			content = stdin;
-		}
-
+		String content = populateContent(stdin);
+		
 		for (int i = 0; i < args.length; i++) {
 	        String arg = args[i];
 	        if (arg.compareTo("-") == 0 && i ==  args.length - 1)
@@ -101,26 +124,27 @@ public class WcTool extends ATool implements IWcTool {
 	        	return result.toString();
 	        }
 	    }
-		for (int i = 0; i < args.length; i++) {
-			if (args[i] == null || !args[i].startsWith("-")) {
-				fileIndex = i;
-				break;
-			}
-			if (args[i].compareTo("-w") == 0)
-				argList.add("-w");
-			if (args[i].compareTo("-m") == 0)
-				argList.add("-m");
-			if (args[i].compareTo("-l") == 0)
-				argList.add("-l");
-			if (args[i].compareTo("-help") == 0)
-				argList.add("-help");
-		}
+		addOptionsToArgList();
 
 		if (argList.contains("-help")) {
 			result.append(getHelp());
 			return result.toString();
 		}
 
+		return processOutput(result, content);
+	}
+
+	/**
+	 * 
+	 * @param result
+	 *            the resulting string formed after the execute function is
+	 *            executed
+	 * @param content
+	 *            file content to be processed
+	 * @return This function appends the content to result (or error message in
+	 *         case of exception) and returns it to the console
+	 */
+	private String processOutput(StringBuilder result, String content) {
 		if (fileIndex == -1)
 			try {
 				processString(result, content);
@@ -140,45 +164,108 @@ public class WcTool extends ATool implements IWcTool {
 		return result.toString();
 	}
 
-	private void processString(StringBuilder sb, String content) throws IOException {
-		if (this.argList.contains("-m")) {
-			sb.append("\t");
-			characterCount(sb, content);
+	/**
+	 * This function populates the argList with options sent by the user as
+	 * input
+	 */
+	private void addOptionsToArgList() {
+		for (int i = 0; i < args.length; i++) {
+			if (args[i] == null || !args[i].startsWith("-")) {
+				fileIndex = i;
+				break;
+			}
+			if (args[i].compareTo("-w") == 0)
+				argList.add("-w");
+			if (args[i].compareTo("-m") == 0)
+				argList.add("-m");
+			if (args[i].compareTo("-l") == 0)
+				argList.add("-l");
+			if (args[i].compareTo("-help") == 0)
+				argList.add("-help");
 		}
-		if (this.argList.contains("-w")) {
-			sb.append("\t");
-			wordCount(sb, content);
-		}
-		if (this.argList.contains("-l")) {
-			sb.append("\t");
-			lineCount(sb, content);
-		}
-		if (this.argList.isEmpty())
-			generalCount(sb, content);
 	}
 
-	private void processFile(StringBuilder sb, String fileName) throws IOException {
+	/**
+	 * 
+	 * @param stdin
+	 *            standard input
+	 * @return this method populates the content with stdin if it is not null or
+	 *         empty
+	 */
+	private String populateContent(String stdin) {
+		String content = null;
+		if (stdin != null && stdin.compareTo("") != 0 || args[args.length - 1].compareTo("-") == 0) {
+			content = stdin;
+		}
+		return content;
+	}
+
+	/**
+	 * 
+	 * @param stringbuilder
+	 *            the string builder to which the new strings are attached
+	 * @param content
+	 *            content of the file
+	 * @throws IOException
+	 *             This function formats the string and appends the right
+	 *             character/ word/ line count depending on the option specified
+	 *             by the user
+	 */
+	private void processString(StringBuilder stringbuilder, String content)
+			throws IOException {
+		if (this.argList.contains("-m")) {
+			stringbuilder.append("\t");
+			characterCount(stringbuilder, content);
+		}
+		if (this.argList.contains("-w")) {
+			stringbuilder.append("\t");
+			wordCount(stringbuilder, content);
+		}
+		if (this.argList.contains("-l")) {
+			stringbuilder.append("\t");
+			lineCount(stringbuilder, content);
+		}
+		if (this.argList.isEmpty())
+			generalCount(stringbuilder, content);
+	}
+
+	/**
+	 * 
+	 * @param stringBuilder the string to which every new string is appended
+	 * @param fileName the file which is being read
+	 * @throws IOException
+	 * This function reads the file contents and append them to the string builder according to options input by the user
+	 */
+	private void processFile(StringBuilder stringBuilder, String fileName)
+			throws IOException {
 		// TODO Auto-generated method stub
 		String fileContent = readFile(fileName, Charset.forName("UTF-8"));
 		if (this.argList.contains("-m")) {
-			sb.append("\t");
-			characterCount(sb, fileContent);
+			stringBuilder.append("\t");
+			characterCount(stringBuilder, fileContent);
 		}
 		if (this.argList.contains("-w")) {
-			sb.append("\t");
-			wordCount(sb, fileContent);
+			stringBuilder.append("\t");
+			wordCount(stringBuilder, fileContent);
 		}
 		if (this.argList.contains("-l")) {
-			sb.append("\t");
-			lineCount(sb, fileContent);
+			stringBuilder.append("\t");
+			lineCount(stringBuilder, fileContent);
 		}
 		if (this.argList.isEmpty()) {
-			generalCount(sb, fileContent);
+			generalCount(stringBuilder, fileContent);
 		}
-		sb.append("\t" + fileName);
-		sb.append("\n");
+		stringBuilder.append("\t" + fileName);
+		stringBuilder.append("\n");
 	}
 
+	/**
+	 * 
+	 * @param result the final string which is processed
+	 * @param content file content whose character, line and word count is appended to result
+	 * @throws IOException
+	 * This method appends the content's line, word and character count to the final result
+	 */
 	private void generalCount(StringBuilder result, String content)
 			throws IOException {
 		if (content != null) {
@@ -188,26 +275,49 @@ public class WcTool extends ATool implements IWcTool {
 		}
 	}
 
+	/**
+	 * 
+	 * @param result the final string which is processed
+	 * @param content file content whose line count is appended to result
+	 * @throws IOException
+	 * This method appends the content's line count to the final result
+	 */
 	private void lineCount(StringBuilder result, String content)
 			throws IOException {
 		if (content != null)
 			result.append(getNewLineCount(content));
 	}
 
+	/**
+	 * 
+	 * @param result the final string which is processed
+	 * @param content file content whose word count is appended to result
+	 * @throws IOException
+	 * This method appends the content's word count to the final result
+	 */
 	private void wordCount(StringBuilder result, String content)
 			throws IOException {
 		if (content != null)
 			result.append(getWordCount(content));
 	}
 
+	/**
+	 * 
+	 * @param result the final string which is processed
+	 * @param content file content whose character count is appended to result
+	 * @throws IOException
+	 * This method appends the content's character count to the final result
+	 */
 	private void characterCount(StringBuilder result, String content)
 			throws IOException {
 		if (content != null)
 			result.append(getCharacterCount(content));
 	}
 
-	/*
-	 * Read content from file
+	/**
+	 * @param filename name of the file
+	 * @param encoding byte encoding for decoding byte buffer
+	 * @return Read content from file
 	 */
 	public String readFile(String fileName, Charset encoding)
 			throws IOException {

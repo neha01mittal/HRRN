@@ -62,27 +62,27 @@ public class CopyTool extends ATool implements ICopyTool {
 		}
 		for (int i = 0; i < (inputList.size() - 1); i++) {
 
-			File f1 = new File(inputList.get(i));
-			File f2 = new File(inputList.get(inputList.size() - 1));
-			if (!(f1.isAbsolute())) {
-				f1 = new File(workingDir, inputList.get(i));
+			File from = new File(inputList.get(i));
+			File to = new File(inputList.get(inputList.size() - 1));
+			if (!(from.isAbsolute())) {
+				from = new File(workingDir, inputList.get(i));
 			}
-			if (!(f2.isAbsolute())) {
-				f2 = new File(workingDir, inputList.get(inputList.size() - 1));
+			if (!(to.isAbsolute())) {
+				to = new File(workingDir, inputList.get(inputList.size() - 1));
 			}
 			try {
-				f1 = new File(f1.getCanonicalPath());
-				f2 = new File(f2.getCanonicalPath());
+				from = new File(from.getCanonicalPath());
+				to = new File(to.getCanonicalPath());
 
 			} catch (IOException e) {
 				setStatusCode(1);
 			}
-			if (f1.isFile()) {
-				if (f2.isDirectory()) {
-					f2 = new File(inputList.get(inputList.size() - 1), f1.getName());
+			if (from.isFile()) {
+				if (to.isDirectory()) {
+					to = new File(inputList.get(inputList.size() - 1), from.getName());
 				}
 			}
-			copy(f1, f2);
+			copy(from, to);
 		}
 		return null;
 	}

@@ -125,14 +125,14 @@ public class MoveTool extends ATool implements IMoveTool {
 					if (!to.exists()) {
 						to.mkdirs();
 					}
-					File toto = new File(to.toString() + File.separator + from.getName());
-					toto.mkdir();
+					File toDirectory = new File(to.toString() + File.separator + from.getName());
+					toDirectory.mkdir();
 					// Create list of files and directories on the current
 					// source
 					String[] fList = from.list();
 
 					for (int index = 0; index < fList.length; index++) {
-						File dest = new File(toto, fList[index]);
+						File dest = new File(toDirectory, fList[index]);
 						File source = new File(from, fList[index]);
 
 						// Recursion call take place here

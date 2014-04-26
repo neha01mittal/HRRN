@@ -38,11 +38,23 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
 public class PipingTool extends ATool implements IPipingTool {
 	File	workingDir;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param arguments Arguments passed by shell -the different commands
+	 */
 	public PipingTool(String[] arguments) {
 		super(arguments);
 		setStatusCode(1);
 	}
 
+	/**
+	 * @param workingDir The working directory on which the tool will operate
+	 * @param stdin
+	 *            returns the final formatted string depending on the user
+	 *            options
+	 * @return stdout Content to be displayed
+	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
 		this.workingDir = workingDir;
@@ -74,6 +86,13 @@ public class PipingTool extends ATool implements IPipingTool {
 		return "Invalid arguments";
 	}
 
+	/**
+	 * Pipes the output of the first command as an input to the next
+	 * 
+	 * @param from First command
+	 * @param to Second command
+	 * @return Returned value of the first command
+	 */
 	@Override
 	public String pipe(ITool from, ITool to) {
 		if (from.getClass().getName().contains("CdTool")) {
@@ -90,6 +109,13 @@ public class PipingTool extends ATool implements IPipingTool {
 		return returnedValue;
 	}
 
+	/**
+	 * Pipes the output string as an input to the next
+	 * 
+	 * @param from Output string from the First command
+	 * @param to Second command
+	 * @return Returned value of the second command
+	 */
 	@Override
 	public String pipe(String stdout, ITool to) {
 		if (to.getClass().getName().contains("CdTool")) {
@@ -106,6 +132,12 @@ public class PipingTool extends ATool implements IPipingTool {
 		return returnedValue;
 	}
 
+	/**
+	 * Parses the command to check for the command type
+	 * 
+	 * @param commandline The entire command
+	 * @return The tool which handles the command
+	 */
 	public ITool parse(String commandline) {
 		commandline = commandline.trim();
 		String[] cmdSplit = commandline.split("\\s+");
