@@ -53,21 +53,21 @@ public class SortTool extends ATool implements ISortTool {
 	public String execute(File workingDir, String stdin) {
 		// check for argument number
 		if (args == null || args.length < 1) {
-			if (stdin == null)
-				return "Invalid: No arguments and no standard input.";
-			inputList.add("-");
+			// if (stdin == null)
+			return "Invalid: No arguments and no standard input.";
+			// inputList.add("-");
 		}
 
 		boolean inputFlag = false;
 		// split arguments and inputs
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-") && args[i].length() > 1) {
-				if (inputFlag)
-					return "Invalid: option found after input argument";
+				// if (inputFlag)
+				// return "Invalid: option found after input argument";
 				argList.add(args[i]);
 			} else if (args[i].equals("-")) {
-				if (stdin == null)
-					return "Invalid: no stdin";
+				// if (stdin == null)
+				// return "Invalid: no stdin";
 				inputList.add("-");
 				inputFlag = true;
 			} else if (args[i].trim().length() > 0) {
@@ -80,9 +80,9 @@ public class SortTool extends ATool implements ISortTool {
 			return getHelp();
 		}
 		// help always get print first
-		if (inputList.size() == 0) {
-			inputList.add("-");
-		}
+		// if (inputList.size() == 0) {
+		// inputList.add("-");
+		// }
 
 		// note for flags
 		int inputFlag2 = 0;
@@ -146,7 +146,7 @@ public class SortTool extends ATool implements ISortTool {
 	@Override
 	public String checkIfSorted(String input) {
 		String[] inputList = input.split("\n");
-		String head = (inputList.length > 0) ? inputList[0] : "";
+		String head = inputList[0];
 		for (int i = 0; i < inputList.length; i++) {
 			if (head.compareTo(inputList[i]) > 0) {
 				setStatusCode(0);
@@ -190,7 +190,7 @@ public class SortTool extends ATool implements ISortTool {
 				fullText += sCurrentLine + "\n";
 			}
 
-			fullText = (fullText.length() > 1) ? fullText.substring(0, fullText.length() - 1) : fullText;
+			fullText = fullText.substring(0, fullText.length() - 1);
 		} catch (IOException e) {
 			return null;
 		}

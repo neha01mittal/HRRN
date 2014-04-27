@@ -487,5 +487,4 @@ public class CommToolTest {
 		expected.add("gggggg");
 		assertEquals(expected, output);
 	}
-
 }

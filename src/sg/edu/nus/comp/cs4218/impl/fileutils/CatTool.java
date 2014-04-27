@@ -48,7 +48,7 @@ public class CatTool extends ATool implements ICatTool {
 		if ((args != null && args.length > 0) || (stdin != null)) {
 			String content = "";
 			if (args == null || args.length == 0) {
-				if (stdin != null && stdin != "") {
+				if (stdin != "") {
 					content = stdin;
 					setStatusCode(0);
 				}
@@ -85,10 +85,7 @@ public class CatTool extends ATool implements ICatTool {
 		if (!toRead.isFile()) { // checks for Exists and !isDirectory
 			content = "Error: No such file or directory\n";
 		}
-
-		else if (!toRead.canRead()) {
-			content = "Error: Unable to read this file type";
-		} else {
+		 else {
 			try {
 				br = new BufferedReader(new FileReader(toRead));
 				String line = null;
