@@ -18,7 +18,7 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 public class PWDTool extends ATool implements IPwdTool {
 	/**
-	 * Constructor 
+	 * Constructor
 	 * 
 	 */
 	public PWDTool() {
@@ -27,10 +27,13 @@ public class PWDTool extends ATool implements IPwdTool {
 	}
 
 	/**
-	 * Executes the tool with args provided in the constructor 
+	 * Executes the tool with args provided in the constructor
 	 * 
-	 * @param workingDir The working directory on which the tool will operate on
-	 * @param stdin Input on stdin. Can be null. If args are missing, stdin is used 
+	 * @param workingDir
+	 *            The working directory on which the tool will operate on
+	 * @param stdin
+	 *            Input on stdin. Can be null. If args are missing, stdin is
+	 *            used
 	 * @return Output on stdout
 	 */
 	@Override
@@ -41,7 +44,8 @@ public class PWDTool extends ATool implements IPwdTool {
 	/**
 	 * Checks if the path of working directory exists and is a directory
 	 * 
-	 * @param directory The working directory
+	 * @param directory
+	 *            The working directory
 	 * 
 	 * @return Absolute path of the working directory as a string
 	 */
@@ -49,7 +53,8 @@ public class PWDTool extends ATool implements IPwdTool {
 	public String getStringForDirectory(File directory) {
 
 		// Error Handling
-		if (directory == null || !directory.exists() || !directory.isDirectory()) {
+		if (directory == null || !directory.exists()
+				|| !directory.isDirectory()) {
 			return "Error: Cannot find working directory";
 		}
 		// Processing

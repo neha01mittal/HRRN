@@ -12,33 +12,43 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 /**
  * @usage cat [ - ] [string | path]
  * @options Cat [filename] contents of file Cat [filename1] [filename2] contents
- *          of both files Cat - ���������������������������text text��������������������������� output- text text, Anything
- *          preceded by ���������������������������-��������������������������� is printed as it is
+ *          of both files Cat - ���������������������������text
+ *          text��������������������������� output- text text, Anything preceded
+ *          by ���������������������������-��������������������������� is
+ *          printed as it is
  * @note If files extensions are such that they not readable properly (eg: pdf),
  *       it might display garbage values. ls | cat and ls | cat - will print as
  *       expected (contents of that directory or in other words standard input
- *       it receives from the ���������������������������from��������������������������� tool). Prioritizes args over stdin i.e.
- *       if there are args in front, it will execute them and ignore stdin eg:
- *       ls | cat file1.txt will print the contents of file1 and not the
- *       contents of current directory@note
- *       can also use both stdin and arg. Eg: echo test1 | cat - filename
- *       prints stdin followed by file's content
+ *       it receives from the
+ *       ���������������������������from��������������������������� tool).
+ *       Prioritizes args over stdin i.e. if there are args in front, it will
+ *       execute them and ignore stdin eg: ls | cat file1.txt will print the
+ *       contents of file1 and not the contents of current directory@note can
+ *       also use both stdin and arg. Eg: echo test1 | cat - filename prints
+ *       stdin followed by file's content
  * @success
  * @exceptions
  **/
 public class CatTool extends ATool implements ICatTool {
 	/**
-	 * Constructor 
-	 * @param arguments The filename or folder path sent as args  to print
+	 * Constructor
+	 * 
+	 * @param arguments
+	 *            The filename or folder path sent as args to print
 	 */
 	public CatTool(String[] arguments) {
 		super(arguments);
 	}
 
 	/**
-	 * Executes the tool with args provided in the constructor 
-	 * @param workingDir The working directory on which the tool will operate on 
-	 * @param stdin Input on stdin. Can be null. If args are missing, stdin is used (and printed directly. It is not considered as a file path)
+	 * Executes the tool with args provided in the constructor
+	 * 
+	 * @param workingDir
+	 *            The working directory on which the tool will operate on
+	 * @param stdin
+	 *            Input on stdin. Can be null. If args are missing, stdin is
+	 *            used (and printed directly. It is not considered as a file
+	 *            path)
 	 * @return Output on stdout
 	 */
 	@Override
@@ -70,11 +80,13 @@ public class CatTool extends ATool implements ICatTool {
 		}
 		return "Error: No input receieved";
 	}
+
 	/**
 	 * 
 	 * Reads the contents of the file path and returns it as a string
 	 * 
-	 * @param toRead The file path whose content will be displayed on console
+	 * @param toRead
+	 *            The file path whose content will be displayed on console
 	 * 
 	 * @return The content of file
 	 */
@@ -84,8 +96,7 @@ public class CatTool extends ATool implements ICatTool {
 		String content = "";
 		if (!toRead.isFile()) { // checks for Exists and !isDirectory
 			content = "Error: No such file or directory\n";
-		}
-		 else {
+		} else {
 			try {
 				br = new BufferedReader(new FileReader(toRead));
 				String line = null;

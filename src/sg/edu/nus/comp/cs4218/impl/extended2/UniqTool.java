@@ -28,20 +28,20 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class UniqTool extends ATool implements IUniqTool {
 
-	private static final String	INVALID_COMMAND	= "Invalid command";
-	public String				currentLine		= "";
-	public String				previousLine	= "";
-	private int					inputFlag		= 0;					// 1 for
-																		// file,
-																		// 2 for
-																		// string
-	private int					skipNum			= 0;					// 1 for
-																		// file,
-																		// 2 for
-																		// string
-	private final List<String>	argList;
-	private final List<String>	inputList;
-	private final List<String>	uniqueList;
+	private static final String INVALID_COMMAND = "Invalid command";
+	public String currentLine = "";
+	public String previousLine = "";
+	private int inputFlag = 0; // 1 for
+								// file,
+								// 2 for
+								// string
+	private int skipNum = 0; // 1 for
+								// file,
+								// 2 for
+								// string
+	private final List<String> argList;
+	private final List<String> inputList;
+	private final List<String> uniqueList;
 
 	/**
 	 * constructor for Uniq tool
@@ -141,8 +141,7 @@ public class UniqTool extends ATool implements IUniqTool {
 	private String readAndProcessFile(File workingDir, String path) {
 		File newFile = new File(path);
 		// if (!newFile.isAbsolute()) {
-		newFile = new File(workingDir.getAbsolutePath() + File.separator
-				+ path);
+		newFile = new File(workingDir.getAbsolutePath() + File.separator + path);
 		// }
 
 		String fullText = "";

@@ -287,7 +287,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		int result = 0;
 		if (input == null || input.compareTo("") == 0)
 			return 0;
-		
+
 		try {
 			String[] lines = input.split("\n");
 			ArrayList<String> matchingLines = new ArrayList<String>();
@@ -616,7 +616,7 @@ public class GrepTool extends ATool implements IGrepTool {
 		Matcher m = p.matcher(line);
 		m.matches();
 		while (m.find()) {
-			 result += m.group();
+			result += m.group();
 		}
 		return result;
 	}

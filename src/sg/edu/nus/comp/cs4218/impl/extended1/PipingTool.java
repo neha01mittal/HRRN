@@ -36,12 +36,13 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
  * execute anything
  */
 public class PipingTool extends ATool implements IPipingTool {
-	File	workingDir;
+	File workingDir;
 
 	/**
 	 * Constructor
 	 * 
-	 * @param arguments Arguments passed by shell -the different commands
+	 * @param arguments
+	 *            Arguments passed by shell -the different commands
 	 */
 	public PipingTool(String[] arguments) {
 		super(arguments);
@@ -49,7 +50,8 @@ public class PipingTool extends ATool implements IPipingTool {
 	}
 
 	/**
-	 * @param workingDir The working directory on which the tool will operate
+	 * @param workingDir
+	 *            The working directory on which the tool will operate
 	 * @param stdin
 	 *            returns the final formatted string depending on the user
 	 *            options
@@ -89,8 +91,10 @@ public class PipingTool extends ATool implements IPipingTool {
 	/**
 	 * Pipes the output of the first command as an input to the next
 	 * 
-	 * @param from First command
-	 * @param to Second command
+	 * @param from
+	 *            First command
+	 * @param to
+	 *            Second command
 	 * @return Returned value of the first command
 	 */
 	@Override
@@ -103,7 +107,7 @@ public class PipingTool extends ATool implements IPipingTool {
 		if (from.getStatusCode() != 0 && returnedValue != null) {
 			System.err.println(returnedValue);
 			return "";
-		} else if(returnedValue == null){
+		} else if (returnedValue == null) {
 			return "";
 		}
 		return returnedValue;
@@ -112,8 +116,10 @@ public class PipingTool extends ATool implements IPipingTool {
 	/**
 	 * Pipes the output string as an input to the next
 	 * 
-	 * @param from Output string from the First command
-	 * @param to Second command
+	 * @param from
+	 *            Output string from the First command
+	 * @param to
+	 *            Second command
 	 * @return Returned value of the second command
 	 */
 	@Override
@@ -126,7 +132,7 @@ public class PipingTool extends ATool implements IPipingTool {
 		if (to.getStatusCode() != 0 && returnedValue != null) {
 			System.err.println(returnedValue);
 			return "";
-		} else if(returnedValue == null){
+		} else if (returnedValue == null) {
 			return "";
 		}
 		return returnedValue;
@@ -135,7 +141,8 @@ public class PipingTool extends ATool implements IPipingTool {
 	/**
 	 * Parses the command to check for the command type
 	 * 
-	 * @param commandline The entire command
+	 * @param commandline
+	 *            The entire command
 	 * @return The tool which handles the command
 	 */
 	public ITool parse(String commandline) {
@@ -147,36 +154,36 @@ public class PipingTool extends ATool implements IPipingTool {
 			// Now we need to construct arguments
 			String[] args = Shell.getArgsArray(newCommandline);
 			switch (cmd) {
-				case "cat":
-					return new CatTool(args);
-				case "cd":
-					return new CdTool(args);
-				case "copy":
-					return new CopyTool(args);
-				case "delete":
-					return new DeleteTool(args);
-				case "echo":
-					return new EchoTool(args);
-				case "ls":
-					return new LsTool(args);
-				case "move":
-					return new MoveTool(args);
-				case "pwd":
-					return new PWDTool();
-				case "grep":
-					return new GrepTool(args);
-				case "comm":
-					return new CommTool(args);
-				case "cut":
-					return new CutTool(args);
-				case "sort":
-					return new SortTool(args);
-				case "paste":
-					return new PasteTool(args);
-				case "uniq":
-					return new UniqTool(args);
-				case "wc":
-					return new WcTool(args);
+			case "cat":
+				return new CatTool(args);
+			case "cd":
+				return new CdTool(args);
+			case "copy":
+				return new CopyTool(args);
+			case "delete":
+				return new DeleteTool(args);
+			case "echo":
+				return new EchoTool(args);
+			case "ls":
+				return new LsTool(args);
+			case "move":
+				return new MoveTool(args);
+			case "pwd":
+				return new PWDTool();
+			case "grep":
+				return new GrepTool(args);
+			case "comm":
+				return new CommTool(args);
+			case "cut":
+				return new CutTool(args);
+			case "sort":
+				return new SortTool(args);
+			case "paste":
+				return new PasteTool(args);
+			case "uniq":
+				return new UniqTool(args);
+			case "wc":
+				return new WcTool(args);
 			}
 		}
 		return null;

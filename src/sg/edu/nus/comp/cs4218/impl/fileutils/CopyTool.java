@@ -14,26 +14,29 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  * copy a file/folder to a given location
  * 
  * @usage copy [path1] [path2] … [path to folder]
- * @options 
- * copy file1 file2 Copies file1 contents into file2 
- * copy /../file1 file2  Copies file1 contents into file2 
- * copy "file1" "file2" Copies file1 contents into file2 
- * copy file1 newfile Creates newfile and copies file1 contents into newfile 
- * copy file1 folder Copies file1 contents into folder 
- * copy file1 newfolder Creates newfolder and copies file1 contents into newfolder 
- * copy folder1 folder2 Copies contents of folder1 into folder2 
- * copy folder1 newfolder Creates newfolder and copies folder1 contents into newfolder 
- * copy file1 file2 file3 folder1 Copies/Replaces file1, file2, file3 in folder1
- * copy folder1 folder2 file3 newfolder - Creates and copies folder1, folder2, file3 into newfolder
+ * @options copy file1 file2 Copies file1 contents into file2 copy /../file1
+ *          file2 Copies file1 contents into file2 copy "file1" "file2" Copies
+ *          file1 contents into file2 copy file1 newfile Creates newfile and
+ *          copies file1 contents into newfile copy file1 folder Copies file1
+ *          contents into folder copy file1 newfolder Creates newfolder and
+ *          copies file1 contents into newfolder copy folder1 folder2 Copies
+ *          contents of folder1 into folder2 copy folder1 newfolder Creates
+ *          newfolder and copies folder1 contents into newfolder copy file1
+ *          file2 file3 folder1 Copies/Replaces file1, file2, file3 in folder1
+ *          copy folder1 folder2 file3 newfolder - Creates and copies folder1,
+ *          folder2, file3 into newfolder
  * @note
  * @success
  * @exceptions
  */
 public class CopyTool extends ATool implements ICopyTool {
 	private final List<String> inputList;
+
 	/**
-	 * Constructor 
-	 * @param arguments The filename or folder path sent as args  to copy
+	 * Constructor
+	 * 
+	 * @param arguments
+	 *            The filename or folder path sent as args to copy
 	 */
 	public CopyTool(String[] arguments) {
 		super(arguments);
@@ -42,9 +45,12 @@ public class CopyTool extends ATool implements ICopyTool {
 	}
 
 	/**
-	 * Executes the tool with args provided in the constructor 
-	 * @param workingDir The working directory on which the tool will operate on 
-	 * @param stdin Stdin is not used.
+	 * Executes the tool with args provided in the constructor
+	 * 
+	 * @param workingDir
+	 *            The working directory on which the tool will operate on
+	 * @param stdin
+	 *            Stdin is not used.
 	 * @return Output on stdout
 	 */
 	@Override
@@ -77,7 +83,8 @@ public class CopyTool extends ATool implements ICopyTool {
 			}
 			if (from.isFile()) {
 				if (to.isDirectory()) {
-					to = new File(inputList.get(inputList.size() - 1), from.getName());
+					to = new File(inputList.get(inputList.size() - 1),
+							from.getName());
 				}
 			}
 			copy(from, to);
@@ -86,11 +93,14 @@ public class CopyTool extends ATool implements ICopyTool {
 	}
 
 	/**
-	 * Copy a file to a given location, copy a file to another existing file
-	 * In case of multiple paths, all the files are copied into the final path (if it exists)
+	 * Copy a file to a given location, copy a file to another existing file In
+	 * case of multiple paths, all the files are copied into the final path (if
+	 * it exists)
 	 * 
-	 * @param from 	Source path of the file/folder
-	 * @param to Destination to be copied to
+	 * @param from
+	 *            Source path of the file/folder
+	 * @param to
+	 *            Destination to be copied to
 	 * 
 	 * @return Outcome of the copy operation
 	 * 
@@ -104,8 +114,10 @@ public class CopyTool extends ATool implements ICopyTool {
 	/**
 	 * Copies files recursively in case source path is a folder
 	 * 
-	 * @param from 	Source path of the file/folder
-	 * @param to Destination to be copied to
+	 * @param from
+	 *            Source path of the file/folder
+	 * @param to
+	 *            Destination to be copied to
 	 * 
 	 */
 	public void recursivecopy(File from, File to) {
@@ -136,7 +148,8 @@ public class CopyTool extends ATool implements ICopyTool {
 			} else {
 				// Found a file. Copy it into the destination
 				if (from.exists()) {
-					Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(from.toPath(), to.toPath(),
+							StandardCopyOption.REPLACE_EXISTING);
 					setStatusCode(0);
 				} else {
 					setStatusCode(1);

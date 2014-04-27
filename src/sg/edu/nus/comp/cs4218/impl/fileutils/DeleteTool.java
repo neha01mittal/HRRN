@@ -10,27 +10,28 @@ import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
 /**
-* Delete a file or folder
-* @usage	delete [path]
-* @options
-* delete file1  - Deletes file1
-* delete relativepath1  - Converts relativepath to absolutepath and deletes file1
-* delete /../file1  - Deletes file1
-* delete "file1"  - Deletes file1
-* delete newfile - Does nothing
-* delete folder1 - Deletes folder and all its contents
-* @note
-* @success
-* @exceptions
-* 
+ * Delete a file or folder
+ * 
+ * @usage delete [path]
+ * @options delete file1 - Deletes file1 delete relativepath1 - Converts
+ *          relativepath to absolutepath and deletes file1 delete /../file1 -
+ *          Deletes file1 delete "file1" - Deletes file1 delete newfile - Does
+ *          nothing delete folder1 - Deletes folder and all its contents
+ * @note
+ * @success
+ * @exceptions
+ * 
  */
 
 public class DeleteTool extends ATool implements IDeleteTool {
 
 	private final List<String> inputList;
+
 	/**
-	 * Constructor 
-	 * @param arguments The filename or folder path sent as args  to delete
+	 * Constructor
+	 * 
+	 * @param arguments
+	 *            The filename or folder path sent as args to delete
 	 */
 	public DeleteTool(String[] arguments) {
 		super(arguments);
@@ -40,9 +41,12 @@ public class DeleteTool extends ATool implements IDeleteTool {
 	}
 
 	/**
-	 * Executes the tool with args provided in the constructor 
-	 * @param workingDir The working directory on which the tool will operate on 
-	 * @param stdin Stdin is not used
+	 * Executes the tool with args provided in the constructor
+	 * 
+	 * @param workingDir
+	 *            The working directory on which the tool will operate on
+	 * @param stdin
+	 *            Stdin is not used
 	 * @return Output on stdout
 	 */
 	@Override
@@ -75,7 +79,8 @@ public class DeleteTool extends ATool implements IDeleteTool {
 	/**
 	 * Delete a file or folder if it exists
 	 * 
-	 * @param toDelete 	Source path of the file/folder
+	 * @param toDelete
+	 *            Source path of the file/folder
 	 * 
 	 * @return Outcome of the delete operation
 	 * 
@@ -90,11 +95,12 @@ public class DeleteTool extends ATool implements IDeleteTool {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Deletes files recursively in case path is a folder
 	 * 
-	 * @param file 	path of the file/folder to be deleted
+	 * @param file
+	 *            path of the file/folder to be deleted
 	 * 
 	 */
 	public void recursivedelete(File file) {
@@ -110,13 +116,13 @@ public class DeleteTool extends ATool implements IDeleteTool {
 				// Delete the source folders
 				for (int i = 0; i < fList.length; i++) {
 					File source = new File(file, fList[i]);
-					if (!Files.deleteIfExists(source.toPath())){
+					if (!Files.deleteIfExists(source.toPath())) {
 						setStatusCode(1);
 					}
 				}
-				if (Files.deleteIfExists(file.toPath())){
+				if (Files.deleteIfExists(file.toPath())) {
 					setStatusCode(0);
-				} 
+				}
 			} else {
 				// Found a file. Delete it
 				if (Files.deleteIfExists(file.toPath()))

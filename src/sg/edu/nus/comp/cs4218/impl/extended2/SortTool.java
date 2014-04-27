@@ -26,9 +26,9 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class SortTool extends ATool implements ISortTool {
 
-	private static final String	IN_ORDER	= "In order.";
-	private final List<String>	argList;
-	private final List<String>	inputList;
+	private static final String IN_ORDER = "In order.";
+	private final List<String> argList;
+	private final List<String> inputList;
 
 	/**
 	 * constructor for sort tool
@@ -94,12 +94,14 @@ public class SortTool extends ATool implements ISortTool {
 			} else {
 				String tempInput = readFile(workingDir, inputList.get(i));
 				if (tempInput == null) {
-					return "sort: open failed: " + inputList.get(0) + ": No such file or directory.";
+					return "sort: open failed: " + inputList.get(0)
+							+ ": No such file or directory.";
 				}
 				input += tempInput + "\n";
 			}
 		}
-		input = (input.length() > 1) ? input.substring(0, input.length() - 1) : input;
+		input = (input.length() > 1) ? input.substring(0, input.length() - 1)
+				: input;
 		return processOptionC(input);
 	}
 
@@ -126,7 +128,8 @@ public class SortTool extends ATool implements ISortTool {
 	@Override
 	public String sortFile(String input) {
 		String[] inputList = input.split("\n");
-		List<String> sortedList = new ArrayList<String>(Arrays.asList(inputList));
+		List<String> sortedList = new ArrayList<String>(
+				Arrays.asList(inputList));
 		Collections.sort(sortedList);
 		String result = "";
 		for (int i = 0; i < sortedList.size(); i++) {
@@ -165,7 +168,8 @@ public class SortTool extends ATool implements ISortTool {
 	public String getHelp() {
 		setStatusCode(0);
 		return "-c : Check whether the given file is already sorted, if it is not all sorted, print a\n"
-				+ " diagnostic containing the first line that is out of order\n" + " -help : Brief information about supported options";
+				+ " diagnostic containing the first line that is out of order\n"
+				+ " -help : Brief information about supported options";
 	}
 
 	/**
@@ -179,7 +183,8 @@ public class SortTool extends ATool implements ISortTool {
 	private String readFile(File workingDir, String path) {
 		File newFile = new File(path);
 		if (!newFile.isAbsolute()) {
-			newFile = new File(workingDir.getAbsolutePath() + File.separator + path);
+			newFile = new File(workingDir.getAbsolutePath() + File.separator
+					+ path);
 		}
 
 		String fullText = "";

@@ -27,8 +27,8 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 public class CdTool extends ATool implements ICdTool {
 
-	private final List<String>	argList;
-	private final List<String>	inputList;
+	private final List<String> argList;
+	private final List<String> inputList;
 
 	/**
 	 * Constructor
@@ -85,7 +85,8 @@ public class CdTool extends ATool implements ICdTool {
 		if (file.isAbsolute()) {
 			newdir = changeDirectory(validInput);
 		} else {
-			newdir = changeDirectory(workingDir.getAbsolutePath() + File.separator + validInput);
+			newdir = changeDirectory(workingDir.getAbsolutePath()
+					+ File.separator + validInput);
 		}
 
 		if (newdir != null) {

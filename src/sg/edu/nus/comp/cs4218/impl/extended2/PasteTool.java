@@ -15,19 +15,18 @@ import java.util.List;
 
 import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+
 /**
- * Specifications for Paste	
- * 	paste [options] [file1 ..]
- * 	paste file1 file2: prints contents of files in parallel on the console
- * 	paste -d delim file1 file2: file content printed in parallel separated by delimiter.
- * 	paste -s file1 file2 : paste appends the data in serial rather than in parallel.
- *  command1 | paste : The output of command1 is treated as file contents to be used by paste
- *  command1 | paste [options] : stdin used as file contents
- *  command1 | paste - [file1 ..] : "-" is replaced by file contents
- *  command1 | paste [file1 ..] - : "-" is replaced by file contents
- *  command1 | paste -s - [file1 ..] 
- *  command1 | paste -d "," [file1 ..] - 
- *
+ * Specifications for Paste paste [options] [file1 ..] paste file1 file2: prints
+ * contents of files in parallel on the console paste -d delim file1 file2: file
+ * content printed in parallel separated by delimiter. paste -s file1 file2 :
+ * paste appends the data in serial rather than in parallel. command1 | paste :
+ * The output of command1 is treated as file contents to be used by paste
+ * command1 | paste [options] : stdin used as file contents command1 | paste -
+ * [file1 ..] : "-" is replaced by file contents command1 | paste [file1 ..] - :
+ * "-" is replaced by file contents command1 | paste -s - [file1 ..] command1 |
+ * paste -d "," [file1 ..] -
+ * 
  */
 public class PasteTool extends ATool implements IPasteTool {
 
@@ -43,7 +42,8 @@ public class PasteTool extends ATool implements IPasteTool {
 	/**
 	 * Constructor
 	 * 
-	 * @param arguments Arguments pass from Shell
+	 * @param arguments
+	 *            Arguments pass from Shell
 	 */
 	public PasteTool(String[] arguments) {
 		super(arguments);
@@ -53,13 +53,14 @@ public class PasteTool extends ATool implements IPasteTool {
 		inputList = new ArrayList<String>();
 		directory = null;
 		stdinFile = new File("");
-		
+
 	}
 
 	/**
 	 * The method called when -s option is used
 	 * 
-	 * @param input File contents to be printed serially
+	 * @param input
+	 *            File contents to be printed serially
 	 * @return The output to console
 	 */
 	@Override
@@ -68,23 +69,23 @@ public class PasteTool extends ATool implements IPasteTool {
 		String content = "";
 		String[] listOfFileContents = new String[input.length];
 		int numFiles = 0;
-		try{
+		try {
 			for (numFiles = 0; numFiles < input.length; numFiles++) {
 				File file = new File(input[numFiles]);
 				if (!file.isAbsolute()) {
-					if (directory == null){
+					if (directory == null) {
 						setStatusCode(1);
 						return ERROR_NO_SUCH_FILE_OR_DIRECTORY;
-					}						
+					}
 					file = new File(directory, input[numFiles]);
 				}
 				listOfFileContents[numFiles] = getStringForFile(file);
-				if(getStatusCode() ==1){
+				if (getStatusCode() == 1) {
 					return ERROR_NO_SUCH_FILE_OR_DIRECTORY;
 				}
 			}
 			return extractCharacter(content, listOfFileContents);
-		}catch(Exception e){
+		} catch (Exception e) {
 			setStatusCode(1);
 			return WRONG_COMMAND;
 		}
@@ -93,8 +94,10 @@ public class PasteTool extends ATool implements IPasteTool {
 	/**
 	 * Extracts the characters specified in the options
 	 * 
-	 * @param content Content to be printed
-	 * @param listOfFileContents The list with each file's contents
+	 * @param content
+	 *            Content to be printed
+	 * @param listOfFileContents
+	 *            The list with each file's contents
 	 * @return Content to be printed
 	 */
 	private String extractCharacter(String content, String[] listOfFileContents) {
@@ -120,7 +123,8 @@ public class PasteTool extends ATool implements IPasteTool {
 	}
 
 	/**
-	 * @param input List of file contents
+	 * @param input
+	 *            List of file contents
 	 * @return Content to be printed on console
 	 */
 	@Override
@@ -130,8 +134,8 @@ public class PasteTool extends ATool implements IPasteTool {
 		int highest = 0;
 		int numFiles = 0;
 		String[] listOfFileContents = new String[input.length];
-		try{
-			
+		try {
+
 			for (numFiles = 0; numFiles < input.length; numFiles++) {
 				File file = new File(input[numFiles]);
 				if (!file.isAbsolute()) {
@@ -142,10 +146,10 @@ public class PasteTool extends ATool implements IPasteTool {
 					return ERROR_NO_SUCH_FILE_OR_DIRECTORY;
 				}
 			}
-	
+
 			return extractDelimitedPhrases(delim, content, highest, numFiles,
 					listOfFileContents);
-		}catch(Exception e){
+		} catch (Exception e) {
 			setStatusCode(1);
 			return WRONG_COMMAND;
 		}
@@ -154,11 +158,16 @@ public class PasteTool extends ATool implements IPasteTool {
 	/**
 	 * Extracts delimited phrases in file contents
 	 * 
-	 * @param delim Delimiter
-	 * @param content Content to be printed
-	 * @param highest Maximum number of lines
-	 * @param numFiles Number of files
-	 * @param listOfFileContents List of each file's contents
+	 * @param delim
+	 *            Delimiter
+	 * @param content
+	 *            Content to be printed
+	 * @param highest
+	 *            Maximum number of lines
+	 * @param numFiles
+	 *            Number of files
+	 * @param listOfFileContents
+	 *            List of each file's contents
 	 * @return Content to be printed to console
 	 */
 	private String extractDelimitedPhrases(String delim, String content,
@@ -205,18 +214,21 @@ public class PasteTool extends ATool implements IPasteTool {
 
 	/**
 	 * Prints help message
+	 * 
 	 * @return Help message content
 	 */
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
-		String helpString = "-s : paste one file at a time instead of in parallel\t" + " -d DELIM: Use characters from the DELIM instead of TAB character\t"
+		String helpString = "-s : paste one file at a time instead of in parallel\t"
+				+ " -d DELIM: Use characters from the DELIM instead of TAB character\t"
 				+ " -help : Brief information about supported options";
 		return helpString;
 	}
 
 	/**
-	 * @param workingDir The working directory on which the tool will operate
+	 * @param workingDir
+	 *            The working directory on which the tool will operate
 	 * @param stdin
 	 *            returns the final formatted string depending on the user
 	 *            options
@@ -230,19 +242,19 @@ public class PasteTool extends ATool implements IPasteTool {
 		checkForArgsAndStdin(stdin);
 		if (getStatusCode() == 1)
 			return NO_ARGUMENTS_AND_NO_STANDARD_INPUT;
-		
+
 		// split arguments and inputs
 		int x = 0;
 		int found = 0;
-		if(args!= null ){
-		for (String arg : args) {
-			found = buildListBasedOnOptions(stdin, x, arg);
-			if (getStatusCode() == 1)
-				return WRONG_COMMAND;
-			x++;
+		if (args != null) {
+			for (String arg : args) {
+				found = buildListBasedOnOptions(stdin, x, arg);
+				if (getStatusCode() == 1)
+					return WRONG_COMMAND;
+				x++;
+			}
 		}
-		}
-		if(inputList.size() == 0 && found == 0){
+		if (inputList.size() == 0 && found == 0) {
 			addFileContent(stdin);
 		}
 		if (argList.contains("-help")) {
@@ -277,13 +289,14 @@ public class PasteTool extends ATool implements IPasteTool {
 	 * Deletes the temporary file which stores the stdin contents
 	 */
 	private void deleteTemporaryFile() {
-		if(stdinFile.exists()){
+		if (stdinFile.exists()) {
 			stdinFile.delete();
 		}
 	}
 
 	/**
 	 * It returns the names of all the files passed in arguments
+	 * 
 	 * @return Names of all files
 	 */
 	private String[] getFileNames() {
@@ -297,9 +310,12 @@ public class PasteTool extends ATool implements IPasteTool {
 	/**
 	 * Adds all the valid options to a list
 	 * 
-	 * @param stdin Standard input
-	 * @param x Location of "-"
-	 * @param arg The argument passed
+	 * @param stdin
+	 *            Standard input
+	 * @param x
+	 *            Location of "-"
+	 * @param arg
+	 *            The argument passed
 	 * @return location of "-"
 	 */
 	private int buildListBasedOnOptions(String stdin, int x, String arg) {
@@ -307,11 +323,10 @@ public class PasteTool extends ATool implements IPasteTool {
 		if (arg.startsWith("-")) {
 			if (arg.equals("-s") || arg.equals("-d") || arg.equals("-help"))
 				argList.add(arg);
-			else if (arg.equals("-")){
+			else if (arg.equals("-")) {
 				found = 1;
 				addFileContent(stdin);
-			}
-			else {
+			} else {
 				setStatusCode(1);
 				deleteTemporaryFile();
 			}
@@ -325,41 +340,49 @@ public class PasteTool extends ATool implements IPasteTool {
 	/**
 	 * checks if args or stdin is null
 	 * 
-	 * @param stdin can be null. It is used with args or used instead of args if args is missing
+	 * @param stdin
+	 *            can be null. It is used with args or used instead of args if
+	 *            args is missing
 	 */
 	private void checkForArgsAndStdin(String stdin) {
 		if (args == null || args.length == 0) {
-			if (stdin == null ||  stdin == "") {
+			if (stdin == null || stdin == "") {
 				setStatusCode(1);
 				deleteTemporaryFile();
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds stdin to a temporary file
 	 * 
-	 * @param stdin Standard input
-	 * @param x Position of "-"
-	 * @param found If "-" was found or not
+	 * @param stdin
+	 *            Standard input
+	 * @param x
+	 *            Position of "-"
+	 * @param found
+	 *            If "-" was found or not
 	 */
 	private void addFileContent(String stdin) {
-		if(stdin != null && stdin != ""){
+		if (stdin != null && stdin != "") {
 			Writer writer = null;
 			try {
 				stdinFile = new File(directory, "StdinContentClass.txt");
-				writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(stdinFile.getAbsolutePath().toString()), "utf-8"));
+				writer = new BufferedWriter(new OutputStreamWriter(
+						new FileOutputStream(stdinFile.getAbsolutePath()
+								.toString()), "utf-8"));
 				writer.write(stdin);
 				writer.close();
 			} catch (IOException ex) {
 				// report
-			} 
+			}
 		}
 		inputList.add(stdinFile.getAbsolutePath());
 	}
 
 	/**
 	 * Call the help method
+	 * 
 	 * @return Help message
 	 */
 	private String helpOption() {
@@ -370,23 +393,25 @@ public class PasteTool extends ATool implements IPasteTool {
 
 	/**
 	 * Reading File contents
-	 * @param toRead The file to be read 
+	 * 
+	 * @param toRead
+	 *            The file to be read
 	 * @return The contents of the file
 	 */
 	public String getStringForFile(File toRead) {
 		BufferedReader br;
 		String content = "";
 		try {
-				br = new BufferedReader(new FileReader(toRead));
-				String line = null;
-				while ((line = br.readLine()) != null) {
-						content += line + "\n";
-					}
-					br.close();
-					setStatusCode(0);	
-			} catch (IOException e) {
-				setStatusCode(1);
+			br = new BufferedReader(new FileReader(toRead));
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				content += line + "\n";
 			}
+			br.close();
+			setStatusCode(0);
+		} catch (IOException e) {
+			setStatusCode(1);
+		}
 		return content;
 	}
 }

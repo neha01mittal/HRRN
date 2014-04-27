@@ -4,6 +4,7 @@ encoding//src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java=UTF-8
 encoding//src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java=UTF-8
 encoding//src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java=UTF-8
 encoding//src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java=UTF-8
+encoding//src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java=UTF-8
 encoding//test/sg/edu/nus/comp/cs4218/impl/extended1/GrepToolTest.java=UTF-8
 encoding//test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java=UTF-8
 encoding//test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java=UTF-8

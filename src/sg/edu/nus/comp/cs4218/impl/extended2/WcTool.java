@@ -45,7 +45,7 @@ public class WcTool extends ATool implements IWcTool {
 	 */
 	@Override
 	public String getCharacterCount(String input) {
-		if (input == null || input.compareTo("") == 0 || readStatus == 1){
+		if (input == null || input.compareTo("") == 0 || readStatus == 1) {
 			return "0";
 		}
 		int result = input.length();
@@ -60,7 +60,7 @@ public class WcTool extends ATool implements IWcTool {
 	 */
 	@Override
 	public String getWordCount(String input) {
-		if (input == null || input.compareTo("") == 0 || readStatus == 1){
+		if (input == null || input.compareTo("") == 0 || readStatus == 1) {
 			return "0";
 		}
 		String[] words = input.split("[ \\n]");
@@ -112,19 +112,19 @@ public class WcTool extends ATool implements IWcTool {
 			return result.toString();
 		}
 		String content = populateContent(stdin);
-		
+
 		for (int i = 0; i < args.length; i++) {
-	        String arg = args[i];
-	        if (arg.compareTo("-") == 0 && i ==  args.length - 1)
-	        	content = stdin;
-	        else if (arg.startsWith("-") && arg.compareTo("-m") != 0
-	        		&& arg.compareTo("-w") != 0 && arg.compareTo("-l") != 0
-	        		&& arg.compareTo("-help") != 0) {
-	        	this.setStatusCode(1);
-	        	result.append("Invalid arguments.");
-	        	return result.toString();
-	        }
-	    }
+			String arg = args[i];
+			if (arg.compareTo("-") == 0 && i == args.length - 1)
+				content = stdin;
+			else if (arg.startsWith("-") && arg.compareTo("-m") != 0
+					&& arg.compareTo("-w") != 0 && arg.compareTo("-l") != 0
+					&& arg.compareTo("-help") != 0) {
+				this.setStatusCode(1);
+				result.append("Invalid arguments.");
+				return result.toString();
+			}
+		}
 		addOptionsToArgList();
 
 		if (argList.contains("-help")) {
@@ -195,7 +195,8 @@ public class WcTool extends ATool implements IWcTool {
 	 */
 	private String populateContent(String stdin) {
 		String content = null;
-		if (stdin != null && stdin.compareTo("") != 0 || args[args.length - 1].compareTo("-") == 0) {
+		if (stdin != null && stdin.compareTo("") != 0
+				|| args[args.length - 1].compareTo("-") == 0) {
 			content = stdin;
 		}
 		return content;
@@ -232,10 +233,13 @@ public class WcTool extends ATool implements IWcTool {
 
 	/**
 	 * 
-	 * @param stringBuilder the string to which every new string is appended
-	 * @param fileName the file which is being read
+	 * @param stringBuilder
+	 *            the string to which every new string is appended
+	 * @param fileName
+	 *            the file which is being read
 	 * @throws IOException
-	 * This function reads the file contents and append them to the string builder according to options input by the user
+	 *             This function reads the file contents and append them to the
+	 *             string builder according to options input by the user
 	 */
 	private void processFile(StringBuilder stringBuilder, String fileName)
 			throws IOException {
@@ -262,10 +266,14 @@ public class WcTool extends ATool implements IWcTool {
 
 	/**
 	 * 
-	 * @param result the final string which is processed
-	 * @param content file content whose character, line and word count is appended to result
+	 * @param result
+	 *            the final string which is processed
+	 * @param content
+	 *            file content whose character, line and word count is appended
+	 *            to result
 	 * @throws IOException
-	 * This method appends the content's line, word and character count to the final result
+	 *             This method appends the content's line, word and character
+	 *             count to the final result
 	 */
 	private void generalCount(StringBuilder result, String content)
 			throws IOException {
@@ -278,10 +286,13 @@ public class WcTool extends ATool implements IWcTool {
 
 	/**
 	 * 
-	 * @param result the final string which is processed
-	 * @param content file content whose line count is appended to result
+	 * @param result
+	 *            the final string which is processed
+	 * @param content
+	 *            file content whose line count is appended to result
 	 * @throws IOException
-	 * This method appends the content's line count to the final result
+	 *             This method appends the content's line count to the final
+	 *             result
 	 */
 	private void lineCount(StringBuilder result, String content)
 			throws IOException {
@@ -291,10 +302,13 @@ public class WcTool extends ATool implements IWcTool {
 
 	/**
 	 * 
-	 * @param result the final string which is processed
-	 * @param content file content whose word count is appended to result
+	 * @param result
+	 *            the final string which is processed
+	 * @param content
+	 *            file content whose word count is appended to result
 	 * @throws IOException
-	 * This method appends the content's word count to the final result
+	 *             This method appends the content's word count to the final
+	 *             result
 	 */
 	private void wordCount(StringBuilder result, String content)
 			throws IOException {
@@ -304,10 +318,13 @@ public class WcTool extends ATool implements IWcTool {
 
 	/**
 	 * 
-	 * @param result the final string which is processed
-	 * @param content file content whose character count is appended to result
+	 * @param result
+	 *            the final string which is processed
+	 * @param content
+	 *            file content whose character count is appended to result
 	 * @throws IOException
-	 * This method appends the content's character count to the final result
+	 *             This method appends the content's character count to the
+	 *             final result
 	 */
 	private void characterCount(StringBuilder result, String content)
 			throws IOException {
@@ -316,8 +333,10 @@ public class WcTool extends ATool implements IWcTool {
 	}
 
 	/**
-	 * @param filename name of the file
-	 * @param encoding byte encoding for decoding byte buffer
+	 * @param filename
+	 *            name of the file
+	 * @param encoding
+	 *            byte encoding for decoding byte buffer
 	 * @return Read content from file
 	 */
 	public String readFile(String fileName, Charset encoding)
