@@ -27,7 +27,8 @@ public class GrepToolBugFixTest {
 	public void after() {
 	}
 	
-	/* Bug ID: 49
+	/**
+	 * Bug ID: 49
 	 * Fix location: GrepTool.java, line 228
 	 */
 	@Test
@@ -38,7 +39,8 @@ public class GrepToolBugFixTest {
 		assertEquals(0, matchingLines);
 	}
 
-	/* Bug ID: 48
+	/**
+	 *  Bug ID: 48
 	 * Fix location: GrepTool.java, line 618
 	 */
 	@Test
@@ -50,7 +52,8 @@ public class GrepToolBugFixTest {
 		assertEquals("a\na\na\nb\nb\nc\nz", matchingLines);
 	}
 	
-	/* Bug ID: 48
+	/**
+	 *  Bug ID: 48
 	 * Fix location: GrepTool.java, line 618
 	 */
 	@Test
@@ -62,7 +65,8 @@ public class GrepToolBugFixTest {
 		assertEquals("aaaa", matchingLines);
 	}
 
-	/* Bug ID: 72
+	/**
+	 *  Bug ID: 72
 	 * Fix location: GrepTool.java, line 91
 	 */
 	@Test

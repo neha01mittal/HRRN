@@ -27,7 +27,7 @@ public class UniqToolBugFixTest {
 		uniqTool = null;
 	}
 
-	/*
+	/**
 	 * 
 	 * @BUG_ID: 12
 	 * 
@@ -47,7 +47,7 @@ public class UniqToolBugFixTest {
 		assertEquals(uniqTool.getStatusCode(), 0);
 	}
 
-	/*
+	/**
 	 * 
 	 * @BUG_ID: 12
 	 * 

@@ -24,7 +24,7 @@ public class CutToolBugFixTest {
 		cutTool = null;
 	}
 
-	/*
+	/**
 	 * 
 	 * @BUG_ID: 21
 	 * 

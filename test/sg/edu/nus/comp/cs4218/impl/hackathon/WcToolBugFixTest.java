@@ -18,7 +18,8 @@ public class WcToolBugFixTest {
 	public void tearDown() throws Exception {
 	}
 
-	/* Bug ID: 42
+	/**
+	 *  Bug ID: 42
 	 * Fix locations: WcTool.java, line 62
 	 */
 	@Test
