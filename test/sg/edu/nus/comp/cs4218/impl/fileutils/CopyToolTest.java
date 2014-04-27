@@ -172,22 +172,6 @@ public class CopyToolTest {
 		assertEquals(0, copyTool.getStatusCode());
 	}
 
-	// Test copying file into an existing file
-	@Test
-	public void testCopyAndReplaceExistingFile() {
-		file1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt");
-		file2 = new File(testDirectoryListAbsoluteString.get(1));
-		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt", "something");
-		create(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt", "random value");
-		String[] a = { file1.toString(), file2.toString() };
-		copyTool = new CopyTool(a);
-		copyTool.execute(rootDirectory.toFile(), "");
-
-		file2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
-		assertEquals(0,copyTool.getStatusCode());
-		assertTrue (compare(file1, file2));
-	}
-
 	// // Test copying folder into file
 	@Test
 	public void testCopyFolderIntoFile() {
@@ -210,17 +194,6 @@ public class CopyToolTest {
 		assertEquals(1, copyTool.getStatusCode());
 	}
 
-	// Test copying folder into its parent folder (does it replace or rename)
-	@Test
-	public void testCopyFolderIntoParentFolder() {
-		copyTool = new CopyTool(null);
-		String[] a = { testDirectoryListAbsoluteString.get(0), rootDirectoryString };
-		copyTool = new CopyTool(a);
-		copyTool.execute(rootDirectory.toFile(), "");
-		assertEquals(1, copyTool.getStatusCode());
-		// no copy performed since folder was empty. So status code will be set to 1
-
-	}
 
 	// Test copying multiple files into a folder
 	@Test
