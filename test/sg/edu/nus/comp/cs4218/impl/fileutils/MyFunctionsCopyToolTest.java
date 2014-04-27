@@ -22,9 +22,6 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
-/**
- * @author Neha Mittal
- */
 public class MyFunctionsCopyToolTest {
 
 	private static CopyTool		copyTool;
