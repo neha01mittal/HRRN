@@ -18,9 +18,12 @@ public class WcToolBugFixTest {
 	public void tearDown() throws Exception {
 	}
 
+	/* Bug ID: 42
+	 * Fix locations: WcTool.java, line 62
+	 */
 	@Test
 	public void wordCountTestEmpty() {
-		String[] args = {"-l", "emptyFile.txt"};
+		String[] args = {"-w", "emptyFile.txt"};
 		WcTool wt = new WcTool(args);
 		String result = wt.getWordCount("");
 		String expectedOutput = "0";

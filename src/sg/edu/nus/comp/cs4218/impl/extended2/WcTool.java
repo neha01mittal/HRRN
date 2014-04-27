@@ -160,7 +160,7 @@ public class WcTool extends ATool implements IWcTool {
 							+ ": No such file or directory.");
 				}
 			}
-
+		this.setStatusCode(0);
 		return result.toString();
 	}
 

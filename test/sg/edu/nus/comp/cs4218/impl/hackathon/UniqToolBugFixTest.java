@@ -27,6 +27,14 @@ public class UniqToolBugFixTest {
 		uniqTool = null;
 	}
 
+	/*
+	 * 
+	 * @BUG_ID: 12
+	 * 
+	 * @fix location: UniqTool.java
+	 * 
+	 * class UniqTool line 255
+	 */
 	@Test
 	public void getTestBugInHackthon1() {
 
@@ -39,6 +47,14 @@ public class UniqToolBugFixTest {
 		assertEquals(uniqTool.getStatusCode(), 0);
 	}
 
+	/*
+	 * 
+	 * @BUG_ID: 12
+	 * 
+	 * @fix location: UniqTool.java
+	 * 
+	 * class UniqTool line 290
+	 */
 	@Test
 	public void getTestBugInHackthon2() {
 
