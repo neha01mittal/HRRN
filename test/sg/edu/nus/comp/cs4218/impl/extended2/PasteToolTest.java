@@ -400,14 +400,5 @@ public class PasteToolTest {
 		assertEquals(pastetool.execute(f, "1234\n1234"), "1234\n1234");
 	}
 	
-	/**
-	 * NEW Test - To cover branch coverage
-	 */
-	@Test
-	public void validationTestCheckNullDirectory() {
-		String[] args = { "-s", "testCase_1.txt" };
-		pastetool = new PasteTool(args);
-		assertEquals(pastetool.execute(null, null), "Error: No such file or directory\n");
-	}
 	
 }

@@ -10,6 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.impl.extended2.CommTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.CutTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.PasteTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
 
 public class BranchImprovementTest {
 
@@ -133,5 +136,39 @@ public class BranchImprovementTest {
 		String stdin = "This is text";
 		String result = commTool.buildParseCode("this is parsecode", 0);
 		assertEquals("f2",result);
+	}
+	
+	@Test
+	public void stdinValidationTest() {
+		CutTool cuttooltest = new CutTool(null);
+		String workingDir = System.getProperty("user.dir");
+		File f = new File(workingDir);
+		cuttooltest.execute(f, null);
+		assertEquals(cuttooltest.getStatusCode(), 1);
+	}
+	
+	@Test
+	public void validationTestCheckNullDirectory() {
+		String[] args = { "-s", "testCase_1.txt" };
+		PasteTool pastetool = new PasteTool(args);
+		assertEquals(pastetool.execute(null, null), "Error: No such file or directory\n");
+	}
+	
+	@Test
+	public void wordCountNullInput() {
+		String[] args = {"-l", "empty.txt"};
+		WcTool wt = new WcTool(args);
+		String result = wt.getWordCount(null);
+		String expectedOutput = "0";
+		assertEquals(result, expectedOutput);
+	}
+	
+	@Test
+	public void wordCountCharacterCountNullInput() {
+		String[] args = {"-m", "empty.txt"};
+		WcTool wt = new WcTool(args);
+		String result = wt.getCharacterCount(null);
+		String expectedOutput = "0";
+		assertEquals(result, expectedOutput);
 	}
 }
