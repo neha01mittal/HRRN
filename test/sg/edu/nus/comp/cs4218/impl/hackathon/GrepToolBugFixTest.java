@@ -27,6 +27,9 @@ public class GrepToolBugFixTest {
 	public void after() {
 	}
 	
+	/* Bug ID: 49
+	 * Fix location: GrepTool.java, line 228
+	 */
 	@Test
 	public void testCountLinesEmptyParas() {
 		String[] args = new String[0];
@@ -34,7 +37,10 @@ public class GrepToolBugFixTest {
 		int matchingLines = gt.getCountOfMatchingLines("", "");
 		assertEquals(0, matchingLines);
 	}
-	
+
+	/* Bug ID: 48
+	 * Fix location: GrepTool.java, line 618
+	 */
 	@Test
 	public void testMatchngLinesTrailingContextWithRegex() {
 		String[] args = new String[0];
@@ -44,6 +50,9 @@ public class GrepToolBugFixTest {
 		assertEquals("a\na\na\nb\nb\nc\nz", matchingLines);
 	}
 	
+	/* Bug ID: 48
+	 * Fix location: GrepTool.java, line 618
+	 */
 	@Test
 	public void testMatchingLinesOnly() {
 		String[] args = new String[0];
@@ -52,7 +61,10 @@ public class GrepToolBugFixTest {
 				"a a a b c d a");
 		assertEquals("aaaa", matchingLines);
 	}
-	
+
+	/* Bug ID: 72
+	 * Fix location: GrepTool.java, line 91
+	 */
 	@Test
 	public void testCatAndGrep() {
 		String[] commands = {"cat testCase_2.txt", "grep \"(g|e)\" -"};
