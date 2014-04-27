@@ -321,8 +321,9 @@ public class Shell implements IShell {
 				// Now we need to construct arguments
 				String[] args = getArgsArray(commandline);
 				for (int i = 0; i < args.length; i++) {
-					args[i] = args[i].trim().replace(dilimiter1, "|").replace(dilimiter2, "|");
+					args[i] = args[i].replace(dilimiter1, "|").replace(dilimiter2, "|");
 				}
+
 				switch (cmd) {
 					case "cat":
 						return new CatTool(args);

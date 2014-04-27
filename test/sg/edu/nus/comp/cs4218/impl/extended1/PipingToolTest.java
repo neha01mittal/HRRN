@@ -90,7 +90,7 @@ public class PipingToolTest {
 
 		String result = pipingTool.execute(new File(rootDirectoryString), null);
 
-		assertEquals("file1.txt\nfile2.txt\nfile3.txt", result);
+		assertEquals("file1.txt\nfile2.txt\nfile3.txt\nfile4.txt", result);
 	}
 
 	@Test
