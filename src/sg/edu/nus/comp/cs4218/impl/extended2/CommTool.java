@@ -35,13 +35,13 @@ public class CommTool extends ATool implements ICommTool {
 
 	private static final String INVALID_COMMAND = "Invalid command";
 	private static final String NOT_SORTED = "Not Sorted!";
-    boolean sortFlag = false;
-	String currentLine1 = "";
-	String currentLine2 = "";
-	String file1 = "";
-	String file2 = "";
-	boolean flag1 = false;
-	boolean flag2 = false;
+    public boolean sortFlag = false;
+	public String currentLine1 = "";
+	public String currentLine2 = "";
+	public String file1 = "";
+	public String file2 = "";
+	public boolean flag1 = false;
+	public boolean flag2 = false;
 
 	/**
 	 * constructor for CommTool
