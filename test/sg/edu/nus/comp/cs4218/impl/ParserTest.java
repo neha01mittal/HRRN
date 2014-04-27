@@ -164,24 +164,6 @@ public class ParserTest {
 	}
 
 	@Test
-	public void testParseCommandWithEscapedPipe1() throws IllegalArgumentException, IllegalAccessException {
-		String cmd = "echo \"one | \" two' | 'three four\\|";
-		ITool resultTool = shell.parse(cmd);
-
-		String[] expected = { "one |", "two | three", "four|" };
-		Field fields[] = resultTool.getClass().getSuperclass().getDeclaredFields();
-		for (Field field : fields) {
-			if (field.getName().equals("args")) {
-				field.setAccessible(true);
-				List<String> args = Arrays.asList((String[]) field.get(resultTool));
-				for (int i = 0; i < expected.length; i++) {
-					assertEquals(expected[i], args.get(i));
-				}
-			}
-		}
-	}
-
-	@Test
 	public void testParseCommandWithEscapedPipe2() throws IllegalArgumentException, IllegalAccessException {
 		String cmd = "cat testCase_3.txt | grep [a|b]";
 		ITool resultTool = shell.parse(cmd);

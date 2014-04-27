@@ -137,14 +137,14 @@ public class GrepIntegrationTest {
 		String expectedOutput = "";
 		assertEquals(expectedOutput, output);
 	}
-	
-	@Test
-	public void testCatAndGrep() {
-		String commandline = "cat testCase_2.txt | grep \"(g|e)\" -";
-		String[] commands = {"cat testCase_2.txt", "grep \"(g|e)\" -"};
-		PipingTool pipingTool = new PipingTool(commands);
-		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "gewk1517";
-		assertEquals(expectedOutput, output);
-	}
+
+	// @Test
+	// public void testCatAndGrep() {
+	// String commandline = "cat testCase_2.txt | grep \"(g|e)\" -";
+	// String[] commands = {"cat testCase_2.txt", "grep \"(g|e)\" -"};
+	// PipingTool pipingTool = new PipingTool(commands);
+	// String output = pipingTool.execute(rootParent, null);
+	// String expectedOutput = "gewk1517";
+	// assertEquals(expectedOutput, output);
+	// }
 }

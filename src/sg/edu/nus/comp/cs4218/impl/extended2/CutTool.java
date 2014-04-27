@@ -28,12 +28,12 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 public class CutTool extends ATool implements ICutTool {
 
-	private static final String NO_ARGUMENTS_AND_NO_STANDARD_INPUT = "No arguments and no standard input.";
-	private static final String INVALID_COMMAND = "Invalid command";
-	private final List<String> argList;
-	private final List<String> inputList;
-	private String delim;
-	private List<Integer> characterList = new ArrayList<Integer>();
+	private static final String	NO_ARGUMENTS_AND_NO_STANDARD_INPUT	= "No arguments and no standard input.";
+	private static final String	INVALID_COMMAND						= "Invalid command";
+	private final List<String>	argList;
+	private final List<String>	inputList;
+	private String				delim;
+	private final List<Integer>	characterList						= new ArrayList<Integer>();
 
 	/**
 	 * Constructor for cut tool
@@ -50,8 +50,10 @@ public class CutTool extends ATool implements ICutTool {
 	}
 
 	/**
-	 * @param list Character list
-	 * @param input File content 
+	 * @param list
+	 *            Character list
+	 * @param input
+	 *            File content
 	 * @return cuts specified characters with "" as the delimiter
 	 */
 	@Override
@@ -62,8 +64,10 @@ public class CutTool extends ATool implements ICutTool {
 	}
 
 	/**
-	 * @param list Character list
-	 * @param delim File content
+	 * @param list
+	 *            Character list
+	 * @param delim
+	 *            File content
 	 * @param inputs
 	 *            builds the cut string depending on the delimiter locations and
 	 *            returns the string if the input is valid else returns invalid
@@ -110,8 +114,10 @@ public class CutTool extends ATool implements ICutTool {
 	/**
 	 * adds tokens to the character list if the list is not empty
 	 * 
-	 * @param tokenList List of characters to be displayed
-	 * @param x Number corresponding to the character in the list
+	 * @param tokenList
+	 *            List of characters to be displayed
+	 * @param x
+	 *            Number corresponding to the character in the list
 	 */
 	private void modifyCharacterList(List<String> tokenList, int x) {
 		int num = Integer.parseInt(tokenList.get(x));
@@ -126,8 +132,10 @@ public class CutTool extends ATool implements ICutTool {
 	/**
 	 * populates character list with token list values
 	 * 
-	 * @param tokenList Adds numbers in the case of a range and removes duplicates
-	 * @param x Number corresponding to the character in the list
+	 * @param tokenList
+	 *            Adds numbers in the case of a range and removes duplicates
+	 * @param x
+	 *            Number corresponding to the character in the list
 	 */
 	private void populateCharacterList(List<String> tokenList, int x) {
 		List<String> firstList = Arrays.asList(tokenList.get(x).split("-"));
@@ -152,11 +160,16 @@ public class CutTool extends ATool implements ICutTool {
 	 * builds the final string to be returned to the console based on the
 	 * delimiter values and character list
 	 * 
-	 * @param delim Delimiter
-	 * @param input File content
-	 * @param escapeDelim Delimiter after it has been escaped
-	 * @param cutString Content to be displayed
-	 * @param characterList Character list
+	 * @param delim
+	 *            Delimiter
+	 * @param input
+	 *            File content
+	 * @param escapeDelim
+	 *            Delimiter after it has been escaped
+	 * @param cutString
+	 *            Content to be displayed
+	 * @param characterList
+	 *            Character list
 	 * @return Content to be displayed
 	 */
 	private String buildCutString(String delim, String input,
@@ -187,10 +200,14 @@ public class CutTool extends ATool implements ICutTool {
 	 * Overloaded function which builds cut string based on splitting done by
 	 * new line character
 	 * 
-	 * @param delim Delimiter
-	 * @param cutString Content to be displayed
-	 * @param characterList List of character positions
-	 * @param inputLineList Lines in the files
+	 * @param delim
+	 *            Delimiter
+	 * @param cutString
+	 *            Content to be displayed
+	 * @param characterList
+	 *            List of character positions
+	 * @param inputLineList
+	 *            Lines in the files
 	 * @return Content to be displayed
 	 */
 	private String buildCutString(String delim, String cutString,
@@ -211,8 +228,10 @@ public class CutTool extends ATool implements ICutTool {
 	/**
 	 * removes last delimiter if any present
 	 * 
-	 * @param delim Delimiter
-	 * @param cutString Content to be displayed
+	 * @param delim
+	 *            Delimiter
+	 * @param cutString
+	 *            Content to be displayed
 	 * @return Content to be displayed
 	 */
 	private String removeLastDelimiter(String delim, String cutString) {
@@ -226,7 +245,8 @@ public class CutTool extends ATool implements ICutTool {
 	/**
 	 * removes the extra new line at the end
 	 * 
-	 * @param cutString Content to be displayed
+	 * @param cutString
+	 *            Content to be displayed
 	 * @return Updated content to be displayed
 	 */
 	private String removeExtraNewLine(String cutString) {
@@ -258,7 +278,8 @@ public class CutTool extends ATool implements ICutTool {
 	}
 
 	/**
-	 * @param workingDir The working directory on which the tool will operate
+	 * @param workingDir
+	 *            The working directory on which the tool will operate
 	 * @param stdin
 	 *            returns the final formatted string depending on the user
 	 *            options
@@ -309,10 +330,14 @@ public class CutTool extends ATool implements ICutTool {
 	/**
 	 * creates the final string that is sent to stdout
 	 * 
-	 * @param stdin can be null. Otherwise, it has File contents
-	 * @param fileContents File contents
-	 * @param characterList List of character positions
-	 * @param found Boolean if '-' is found or not
+	 * @param stdin
+	 *            can be null. Otherwise, it has File contents
+	 * @param fileContents
+	 *            File contents
+	 * @param characterList
+	 *            List of character positions
+	 * @param found
+	 *            Boolean if '-' is found or not
 	 * @return Content to be displayed
 	 */
 	private String finalFormattedString(String stdin, String fileContents,
@@ -356,7 +381,9 @@ public class CutTool extends ATool implements ICutTool {
 	/**
 	 * checks if args or stdin is null
 	 * 
-	 * @param stdin can be null. It is used with args or used instead of args if args is missing
+	 * @param stdin
+	 *            can be null. It is used with args or used instead of args if
+	 *            args is missing
 	 */
 	private void checkForArgsAndStdin(String stdin) {
 		if (args == null || args.length == 0) {
@@ -371,11 +398,14 @@ public class CutTool extends ATool implements ICutTool {
 	/**
 	 * constructs string if it is valid
 	 * 
-	 * @param output 
-	 * @param stdin Standard input
-	 * @param x Position of "-"
-	 * @param found "-" if found or not 
-	 * @param result 
+	 * @param output
+	 * @param stdin
+	 *            Standard input
+	 * @param x
+	 *            Position of "-"
+	 * @param found
+	 *            "-" if found or not
+	 * @param result
 	 * @return Output string
 	 */
 	private String contructStringIfValid(String output, String stdin, int x,
@@ -395,12 +425,17 @@ public class CutTool extends ATool implements ICutTool {
 	/**
 	 * processes the character list based on delimiter values
 	 * 
-	 * @param characterList List of character positions
-	 * @param stdin Standard input
-	 * @param fileContents Contents of file
-	 * @param x position of "-"
-	 * @param found If "-" is found or not
-	 * @return  Content to be displayed
+	 * @param characterList
+	 *            List of character positions
+	 * @param stdin
+	 *            Standard input
+	 * @param fileContents
+	 *            Contents of file
+	 * @param x
+	 *            position of "-"
+	 * @param found
+	 *            If "-" is found or not
+	 * @return Content to be displayed
 	 */
 	private String processCharacterList(String characterList, String stdin,
 			String fileContents, int x, int found) {
@@ -422,9 +457,13 @@ public class CutTool extends ATool implements ICutTool {
 
 	/**
 	 * add content to file based on input
-	 * @param workingDir working directory
-	 * @param stdin standard input which might contain file contents
-	 * @param fileContents Contents of one file
+	 * 
+	 * @param workingDir
+	 *            working directory
+	 * @param stdin
+	 *            standard input which might contain file contents
+	 * @param fileContents
+	 *            Contents of one file
 	 * @return Contents of all files
 	 */
 	private String addFileContent(File workingDir, String stdin,
@@ -446,9 +485,13 @@ public class CutTool extends ATool implements ICutTool {
 
 	/**
 	 * construct file if if it is not absolute
-	 * @param workingDir Working directory
-	 * @param validInput Relative path
-	 * @param file File whose contents have to be displayed
+	 * 
+	 * @param workingDir
+	 *            Working directory
+	 * @param validInput
+	 *            Relative path
+	 * @param file
+	 *            File whose contents have to be displayed
 	 * @return
 	 */
 	private File checkForAbsoluteFile(File workingDir, String validInput,
@@ -461,10 +504,14 @@ public class CutTool extends ATool implements ICutTool {
 
 	/**
 	 * build list based on user input (options)
-	 * @param x position of the "-"
-	 * @param found If "-" is found or not
-	 * @param arg arguments sent by Shell
-	 * @return  If the "-" is found or not
+	 * 
+	 * @param x
+	 *            position of the "-"
+	 * @param found
+	 *            If "-" is found or not
+	 * @param arg
+	 *            arguments sent by Shell
+	 * @return If the "-" is found or not
 	 */
 	private int buildListBasedOnOptions(int x, int found, String arg) {
 		if (arg.startsWith("-")) {
@@ -484,7 +531,9 @@ public class CutTool extends ATool implements ICutTool {
 
 	/**
 	 * add tokens from token list to argument array
-	 * @param stdin Standard input
+	 * 
+	 * @param stdin
+	 *            Standard input
 	 */
 	private void populateArguments(String stdin) {
 		List<String> tokenList = Arrays.asList(stdin.split(" "));
@@ -496,7 +545,9 @@ public class CutTool extends ATool implements ICutTool {
 
 	/**
 	 * get file content
-	 * @param toRead File to be read
+	 * 
+	 * @param toRead
+	 *            File to be read
 	 * @return File contents
 	 */
 	public String getStringForFile(File toRead) {
