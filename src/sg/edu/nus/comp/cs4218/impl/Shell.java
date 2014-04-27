@@ -140,9 +140,10 @@ public class Shell implements IShell {
 				if (returnedValue != null && returnedValue.trim().length() > 0) {
 					if (tool.getStatusCode() == 0) {
 						System.out.println(returnedValue);
-					} else {
-						System.err.println(returnedValue);
 					}
+					// else {
+					// System.err.println(returnedValue);
+					// }
 				} else if (returnedValue != null) {
 					System.out.println();
 				}
@@ -180,9 +181,9 @@ public class Shell implements IShell {
 
 		if (!(future.isDone() || future.isCancelled())) {
 			boolean cancellable = future.cancel(true);
-			if (!cancellable) {
-				System.exit(1);
-			}
+			// if (!cancellable) {
+			// System.exit(1);
+			// }
 			executorService.shutdownNow();
 		}
 		return true;

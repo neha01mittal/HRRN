@@ -12,14 +12,13 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  * Changes directory to a given location
  * 
  * @usage cd [path]
- * @options cd Changes to the home directory. 
- * cd [path] : Changes current path to the new path. 
- * cd [.. | .] : Changes to parent directory or stay at current directory.
+ * @options cd Changes to the home directory. cd [path] : Changes current path
+ *          to the new path. cd [.. | .] : Changes to parent directory or stay
+ *          at current directory.
  * @note [path] could be either an absolute file or a relative path. If multiple
  *       path is given as arguments, only the first argument will be
- *       entertained. 
- *       Cd does not allow std, thus can not be pipe to. 
- *       Cd tool will always try to return the Canonical Path of the new directory which
+ *       entertained. Cd does not allow std, thus can not be pipe to. Cd tool
+ *       will always try to return the Canonical Path of the new directory which
  *       is the most simplified and recognizable. It does not allow user to use
  *       ���~��� to denote home directory.
  * @success returns an empty string, but will not create a new line in the
@@ -28,12 +27,14 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  */
 public class CdTool extends ATool implements ICdTool {
 
-	private final List<String> argList;
-	private final List<String> inputList;
-	
+	private final List<String>	argList;
+	private final List<String>	inputList;
+
 	/**
-	 * Constructor 
-	 * @param arguments The path sent as args  to change the directory 
+	 * Constructor
+	 * 
+	 * @param arguments
+	 *            The path sent as args to change the directory
 	 */
 	public CdTool(String[] arguments) {
 		super(arguments);
@@ -43,9 +44,13 @@ public class CdTool extends ATool implements ICdTool {
 	}
 
 	/**
-	 * Executes the tool with args provided in the constructor 
-	 * @param workingDir The working directory on which the tool will operate on 
-	 * @param stdin Input on stdin. Can be null. If args are missing, stdin is used 
+	 * Executes the tool with args provided in the constructor
+	 * 
+	 * @param workingDir
+	 *            The working directory on which the tool will operate on
+	 * @param stdin
+	 *            Input on stdin. Can be null. If args are missing, stdin is
+	 *            used
 	 * @return Output on stdout
 	 */
 	@Override
@@ -60,11 +65,11 @@ public class CdTool extends ATool implements ICdTool {
 
 			// split arguments and inputs
 			for (String arg : args) {
-				if (arg.startsWith("-")) {
-					argList.add(arg);
-				} else {
-					inputList.add(arg);
-				}
+				// if (arg.startsWith("-")) {
+				// argList.add(arg);
+				// } else {
+				inputList.add(arg);
+				// }
 			}
 
 			if (stdin != null && stdin.trim().length() > 1) {
@@ -99,7 +104,8 @@ public class CdTool extends ATool implements ICdTool {
 
 	/**
 	 * 
-	 * @param newDirectory The new working directory
+	 * @param newDirectory
+	 *            The new working directory
 	 * 
 	 * @return Returns the new directory
 	 */

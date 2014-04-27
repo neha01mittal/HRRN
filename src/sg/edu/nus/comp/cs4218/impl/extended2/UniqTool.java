@@ -28,16 +28,20 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class UniqTool extends ATool implements IUniqTool {
 
-	private static final String INVALID_COMMAND = "Invalid command";
-	public String currentLine = "";
-	public String previousLine = "";
-	private int inputFlag = 0; // 1 for file, 2 for
-								// string
-	private int skipNum = 0; // 1 for file, 2 for
-								// string
-	private final List<String> argList;
-	private final List<String> inputList;
-	private final List<String> uniqueList;
+	private static final String	INVALID_COMMAND	= "Invalid command";
+	public String				currentLine		= "";
+	public String				previousLine	= "";
+	private int					inputFlag		= 0;					// 1 for
+																		// file,
+																		// 2 for
+																		// string
+	private int					skipNum			= 0;					// 1 for
+																		// file,
+																		// 2 for
+																		// string
+	private final List<String>	argList;
+	private final List<String>	inputList;
+	private final List<String>	uniqueList;
 
 	/**
 	 * constructor for Uniq tool
@@ -65,8 +69,8 @@ public class UniqTool extends ATool implements IUniqTool {
 		// split arguments and inputs
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-") && args[i].length() > 1) {
-				if (inputFlag2)
-					return "Invalid: option found after input argument";
+				// if (inputFlag2)
+				// return "Invalid: option found after input argument";
 				argList.add(args[i]);
 				if (args[i].equals("-f")) {
 					try {
@@ -76,15 +80,15 @@ public class UniqTool extends ATool implements IUniqTool {
 					}
 				}
 			} else if (args[i].equals("-")) {
-				if (inputFlag != 0) {
-					return null;
-				}
+				// if (inputFlag != 0) {
+				// return null;
+				// }
 				inputFlag = 2;
 				inputFlag2 = true;
 			} else if (args[i].trim().length() > 0) {
-				if (inputFlag != 0) {
-					return null;
-				}
+				// if (inputFlag != 0) {
+				// return null;
+				// }
 				inputList.add(args[i]);
 				inputFlag = 1;
 				inputFlag2 = true;
@@ -95,11 +99,11 @@ public class UniqTool extends ATool implements IUniqTool {
 			return getHelp();
 		}
 		// note for flags
-		if (inputFlag == 1 && inputList.size() > 0) {
+		if (inputFlag == 1) {
 			if (readAndProcessFile(workingDir, inputList.get(0)) == null) {
 				return INVALID_COMMAND;
 			}
-		} else if (inputFlag == 2 || inputList.size() == 0) {
+		} else if (inputFlag == 2) {
 			if (stdin == null)
 				return INVALID_COMMAND;
 			readAndProcessString(stdin);
@@ -136,10 +140,10 @@ public class UniqTool extends ATool implements IUniqTool {
 	 */
 	private String readAndProcessFile(File workingDir, String path) {
 		File newFile = new File(path);
-		if (!newFile.isAbsolute()) {
-			newFile = new File(workingDir.getAbsolutePath() + File.separator
-					+ path);
-		}
+		// if (!newFile.isAbsolute()) {
+		newFile = new File(workingDir.getAbsolutePath() + File.separator
+				+ path);
+		// }
 
 		String fullText = "";
 		try (BufferedReader br = new BufferedReader(new FileReader(newFile))) {
@@ -185,9 +189,12 @@ public class UniqTool extends ATool implements IUniqTool {
 
 	/**
 	 * 
-	 * @param string1 first string to be compared
-	 * @param string2 second string to be compared
-	 * @param num this is an integer that checks for the array size limit 
+	 * @param string1
+	 *            first string to be compared
+	 * @param string2
+	 *            second string to be compared
+	 * @param num
+	 *            this is an integer that checks for the array size limit
 	 * @return compares string1 and string 2 and returns the boolean result
 	 */
 	private boolean compareStringSkip(String string1, String string2, int count) {
@@ -208,10 +215,14 @@ public class UniqTool extends ATool implements IUniqTool {
 
 	/**
 	 * 
-	 * @param str1 string1 first string to be compared
-	 * @param str2 string2 second string to be compared
-	 * @param num this is an integer that checks for the array size limit 
-	 * @return compares string1 and string 2 ignoring their case and returns the boolean result
+	 * @param str1
+	 *            string1 first string to be compared
+	 * @param str2
+	 *            string2 second string to be compared
+	 * @param num
+	 *            this is an integer that checks for the array size limit
+	 * @return compares string1 and string 2 ignoring their case and returns the
+	 *         boolean result
 	 */
 	private boolean compareStringIgnoreCaseSkip(String str1, String str2,
 			int num) {
@@ -231,9 +242,12 @@ public class UniqTool extends ATool implements IUniqTool {
 	}
 
 	/**
-	 * @param checkCase the value returned decides if the case needs to be checked or not
-	 * @param input the current line which is processed 
-	 * This functions eliminates repeated lines and outputs the correct unique result
+	 * @param checkCase
+	 *            the value returned decides if the case needs to be checked or
+	 *            not
+	 * @param input
+	 *            the current line which is processed This functions eliminates
+	 *            repeated lines and outputs the correct unique result
 	 */
 	@Override
 	public String getUnique(boolean checkCase, String input) {
@@ -258,10 +272,16 @@ public class UniqTool extends ATool implements IUniqTool {
 	}
 
 	/**
-	 * @param num this is an integer that checks for the array size limit 
-	 * @param checkCase the value returned decides if the case needs to be checked or not
-	 * @param input the current line which is processed 
-	 * @return this function returns appends the input string to the current line if it is not the same as the current line to avoid duplicates
+	 * @param num
+	 *            this is an integer that checks for the array size limit
+	 * @param checkCase
+	 *            the value returned decides if the case needs to be checked or
+	 *            not
+	 * @param input
+	 *            the current line which is processed
+	 * @return this function returns appends the input string to the current
+	 *         line if it is not the same as the current line to avoid
+	 *         duplicates
 	 */
 	@Override
 	public String getUniqueSkipNum(int num, boolean checkCase, String input) {
