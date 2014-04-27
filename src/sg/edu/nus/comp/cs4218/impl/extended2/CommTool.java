@@ -35,7 +35,7 @@ public class CommTool extends ATool implements ICommTool {
 
 	private static final String INVALID_COMMAND = "Invalid command";
 	private static final String NOT_SORTED = "Not Sorted!";
-	private boolean sortFlag = false;
+    boolean sortFlag = false;
 	String currentLine1 = "";
 	String currentLine2 = "";
 	String file1 = "";
@@ -158,7 +158,6 @@ public class CommTool extends ATool implements ICommTool {
 		if (operation.equals(INVALID_COMMAND))
 			return INVALID_COMMAND;
 
-		if (args != null && args.length > 0) {
 			if (operation.equalsIgnoreCase("help")) {
 				return getHelp();
 			} else if (stdin != null && !stdin.equals("")) {
@@ -186,8 +185,6 @@ public class CommTool extends ATool implements ICommTool {
 				return INVALID_COMMAND;
 			}
 			return processExpectedOutput(file1Data, file2Data);
-		}
-		return INVALID_COMMAND;
 	}
 
 	/**
@@ -200,7 +197,7 @@ public class CommTool extends ATool implements ICommTool {
 	 *            it is c:f1 or c:f2, if it contains -d, it is d:f1 or d:f2,
 	 *            otherwise f1 or f2
 	 */
-	private void decodeParsedOperation(String stdin, String operation) {
+	public void decodeParsedOperation(String stdin, String operation) {
 		if (args.length == 2) {
 			if (operation.equals("f1")) {
 				flag1 = true;
@@ -375,7 +372,9 @@ public class CommTool extends ATool implements ICommTool {
 	public String parse() {
 		String parsed = "";
 		int count = 0;
-
+		if(args==null) {
+			return 	INVALID_COMMAND;
+		}
 		int i = args.length - 1;
 		while (i >= 0) {
 			if (args[i].length() > 1 && args[i].startsWith("-")) {
@@ -403,7 +402,7 @@ public class CommTool extends ATool implements ICommTool {
 	 * @param count number of - in the command
 	 * @return well formed parse code depending on number and type of options passed by user
 	 */
-	private String buildParseCode(String parseCode, int count) {
+	public String buildParseCode(String parseCode, int count) {
 		if (args.length > 3 || args.length < 2)
 			return INVALID_COMMAND;
 
@@ -437,7 +436,7 @@ public class CommTool extends ATool implements ICommTool {
 	 */
 	public List<String> readFile(File f) {
 		List<String> expectedOutput = new ArrayList<String>();
-		if (f.isFile() && f.canRead()) {
+		if (f.isFile()) {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(f));
 				String line;
