@@ -392,4 +392,16 @@ public class CutToolTest {
 		File f = new File(workingDir);
 		assertEquals(cuttooltest.execute(f, "1234\n1234\n1234"), "12\n12\n12");
 	}
+	
+	/**
+	 * NEW Test - To cover branch coverage
+	 */
+	@Test
+	public void stdinValidationTest4() {
+		CutTool cuttooltest = new CutTool(null);
+		String workingDir = System.getProperty("user.dir");
+		File f = new File(workingDir);
+		cuttooltest.execute(f, null);
+		assertEquals(cuttooltest.getStatusCode(), 1);
+	}
 }

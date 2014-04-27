@@ -23,11 +23,10 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  * file contents command1 | cut -c [character_positions] - command1 | cut -d ","
  * -f [character_positions] -
  * 
- * @author ranjini
- * 
  */
 public class CutTool extends ATool implements ICutTool {
 
+	private static final String ERROR_NO_SUCH_FILE_OR_DIRECTORY = "Error: No such file or directory\n";
 	private static final String NO_ARGUMENTS_AND_NO_STANDARD_INPUT = "No arguments and no standard input.";
 	private static final String INVALID_COMMAND = "Invalid command";
 	private final List<String> argList;
@@ -502,13 +501,7 @@ public class CutTool extends ATool implements ICutTool {
 	public String getStringForFile(File toRead) {
 		BufferedReader br;
 		String content = "";
-		if (!toRead.isFile()) { // checks for Exists and !isDirectory
-			content = "Error: No such file or directory\n";
-		}
-
-		else if (!toRead.canRead()) {
-			content = "Error: Unable to read this file type";
-		} else {
+		if (toRead.isFile() && toRead.canRead()) { // checks for Exists and !isDirectory
 			try {
 				br = new BufferedReader(new FileReader(toRead));
 				String line = null;
@@ -520,11 +513,13 @@ public class CutTool extends ATool implements ICutTool {
 					br.close();
 					setStatusCode(0);
 				} catch (IOException e) {
-					e.printStackTrace();
+					content = ERROR_NO_SUCH_FILE_OR_DIRECTORY;
 				}
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				content = ERROR_NO_SUCH_FILE_OR_DIRECTORY;
 			}
+		}else{
+			content = ERROR_NO_SUCH_FILE_OR_DIRECTORY;
 		}
 		return content;
 	}
