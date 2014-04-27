@@ -71,6 +71,9 @@ public class Shell implements IShell {
 	private ExecutorService	executorService;
 	public boolean			executionFlag	= true;
 
+	/**
+	 * A class that starts the activity
+	 */
 	public void start() {
 		// Input scanner
 		in = new BufferedReader(new InputStreamReader(System.in));
@@ -85,17 +88,19 @@ public class Shell implements IShell {
 		}
 	}
 
-	// returm error message or null
+	/**
+	 * Return error message or null
+	 * 
+	 * @param input User input from console
+	 * @param isInteruptable If process is interruptable or not
+	 */
 	public void executeInput(String input, boolean isInteruptable) {
 		ITool itool = parse(input);
 		if (itool != null) {
-			// 3. Create a new thread to execute the command
-			executorService = Executors.newSingleThreadExecutor();
-			// 4. Execute the command on the newly created thread.
-			currentTool = itool;
-			Runnable toolExecution = execute(itool);
-			// 5. In the shell, wait for the thread to complete
-			while (true) {
+			executorService = Executors.newSingleThreadExecutor(); // Create a new thread to execute the command
+			currentTool = itool; 		
+			Runnable toolExecution = execute(itool); 	// Execute the command on the newly created thread.
+			while (true) { 								// Wait for the thread to complete
 				if (isInteruptable) {
 					try {
 						if (in.ready() && in.readLine().equals("ctrl-z")) {
@@ -115,7 +120,6 @@ public class Shell implements IShell {
 						e1.printStackTrace();
 					}
 				}
-
 				if (future.isCancelled() || future.isDone()) {
 					break;
 				}
@@ -126,6 +130,12 @@ public class Shell implements IShell {
 		}
 	}
 
+	/**
+	 * Execute function which calls the tool's execute function
+	 * 
+	 *  @param tool The tool whose execute function needs to be called
+	 *  @return runnable
+	 */
 	@Override
 	public Runnable execute(final ITool tool) {
 
@@ -154,14 +164,21 @@ public class Shell implements IShell {
 		return runnable;
 	}
 
+	/**
+	 * Stop a thread
+	 * 
+	 * @param toolExecution The process which needs to be stopped
+	 */
 	@Override
 	public void stop(Runnable toolExecution) {
 
 	}
 
-	//
-	// Test interfaces and testable functions
-	//
+	/**
+	 * Test interfaces and testable functions
+	 * @param tool Calls the run
+	 * @return future
+	 */
 	public Future<?> executeTest(final ITool tool) {
 
 		executorService = Executors.newSingleThreadExecutor();
@@ -177,6 +194,13 @@ public class Shell implements IShell {
 		return future = executorService.submit(runnable);
 	}
 
+	/**
+	 * Stop the testing of function
+	 * 
+	 * @param future 
+	 * @param currentTool The current tool which is running
+	 * @return If it is done or cancelled
+	 */
 	public boolean stopTest(Future<?> future, ITool currentTool) {
 
 		if (!(future.isDone() || future.isCancelled())) {
@@ -189,54 +213,37 @@ public class Shell implements IShell {
 		return true;
 	}
 
+	/**
+	 * Separates command into arguments
+	 * 
+	 * @param commandline User command
+	 * @return Array of strings which contains the arguments
+	 * 
+	 */
 	public static String[] getArgsArray(String commandline) {
 		String dilimiter1 = "::surrounded-space::";
 		String dilimiter2 = "::escaped-space::";
-
-		// Step 1. find the escape space between quotes
-		Pattern regex = Pattern.compile("[^'\"]*[^\\\\]\"([^\"]*)\"|[^'\"]*[^\\\\]'([^\']*)\'");
-		Matcher regexMatcher = regex.matcher(commandline);
-		while (regexMatcher.find()) {
-			if (regexMatcher.group(1) != null) {
-				String temp = regexMatcher.group(1);
-				String replaced = temp.replaceAll("\\s", dilimiter1);
-				commandline = commandline.replace("\"" + temp + "\"", "\"" + replaced + "\"");
-			}
-			if (regexMatcher.group(2) != null) {
-				String temp = regexMatcher.group(2);
-				String replaced = temp.replaceAll("\\s", dilimiter1);
-				commandline = commandline.replace("'" + temp + "'", "'" + replaced + "'");
-			}
-		}
-
-		// Step 2. remove all escape space
-		commandline = commandline.replaceAll("\\\\\\s", dilimiter2);
-		// System.out.println(commandline);
-
-		// Step 3. remove the first one and switch back delimiter
-		List<String> argList = new ArrayList<String>(Arrays.asList(commandline.split("\\s+")));
+		String newCommandline = commandline;
+		Pattern regex;
+		Matcher regexMatcher;
+		newCommandline = findEscapeSpaceBetweenQuotes(dilimiter1, newCommandline); 		// Step 1. find the escape space between quotes
+		newCommandline = newCommandline.replaceAll("\\\\\\s", dilimiter2); 		// Step 2. remove all escape space
+		List<String> argList = new ArrayList<String>(Arrays.asList(newCommandline.split("\\s+"))); 		// Step 3. remove the first one and switch back delimiter
 		for (int i = 0; i < argList.size(); i++) {
-			String newArg = argList.get(i);
-			newArg = " " + newArg;
-			// System.out.println(i + ". " + argList.get(i));
-			// Step 4. remove all the surround quotes
-			regex = Pattern.compile("[^'\"]*[^\\\\](\"[^\"]*\")|[^'\"]*[^\\\\]('[^']*')");
+			String newArg = " " + argList.get(i);
+			regex = Pattern.compile("[^'\"]*[^\\\\](\"[^\"]*\")|[^'\"]*[^\\\\]('[^']*')"); 	// Step 4. remove all the surround quotes
 			regexMatcher = regex.matcher(newArg);
 			List<String> quoteList = new ArrayList<String>();
 			while (regexMatcher.find()) {
 				if (regexMatcher.group(1) != null) {
 					String quoteText = regexMatcher.group(1);
 					String newquoteText = quoteText.substring(1, quoteText.length() - 1);
-					// System.out.println("group1: " + quoteText);
-					// Step 5. remove all escape word in "" $ ` " \ <newline>
-					Pattern regex2 = Pattern.compile("(\\\\[$\\\\\\`\"])+");
+					Pattern regex2 = Pattern.compile("(\\\\[$\\\\\\`\"])+"); 	// Step 5. remove all escape word in "" $ ` " \ <newline>
 					Matcher regexMatcher2 = regex2.matcher(quoteText);
 					while (regexMatcher2.find()) {
 						if (regexMatcher2.group(1) != null) {
 							String escapeChar = regexMatcher2.group(1);
-							// System.out.println("group1: " + escapeChar);
 							newquoteText = newquoteText.replace(escapeChar, escapeChar.substring(1));
-							// System.out.println("group1: " + quoteText);
 						}
 					}
 					newArg = newArg.replace(quoteText, "::quote-" + quoteList.size());
@@ -244,68 +251,83 @@ public class Shell implements IShell {
 				}
 				if (regexMatcher.group(2) != null) {
 					String quoteText = regexMatcher.group(2);
-					// System.out.println("group2: " + quoteText);
 					newArg = newArg.replace(quoteText, "::quote-" + quoteList.size());
 					quoteList.add(quoteText.substring(1, quoteText.length() - 1));
 				}
 			}
-
-			// System.out.println("No quote: " + newArg);
-			// Step 6. remove all escape word
-			// | & ; < > ( ) $ ` \ " ' <space> <tab> <newline> * ? [ # �� = %
-			regex = Pattern.compile("(\\\\[;$`\"'*?\\[#��=%\\|\\&\\<\\>\\(\\)\\\\\\s])+");
-			regexMatcher = regex.matcher(newArg);
-			while (regexMatcher.find()) {
-				if (regexMatcher.group(1) != null) {
-					String temp = regexMatcher.group(1);
-					// System.out.println("group1: " + temp);
-					newArg = newArg.replace(temp, temp.substring(1));
-					// System.out.println("group1: " + newArg);
-				}
-			}
-
-			// Step 7. set the value back
+			// Step 6. remove all escape word | & ; < > ( ) $ ` \ " ' <space> <tab> <newline> * ? [ # �� = %
+			newArg = removeEscapeWord(newArg);
 			for (int j = 0; j < quoteList.size(); j++) {
-				newArg = newArg.replace("::quote-" + j, quoteList.get(j));
+				newArg = newArg.replace("::quote-" + j, quoteList.get(j)); 	// Step 7. set the value back
 			}
 			newArg = newArg.trim().replace(dilimiter1, " ").replace(dilimiter2, " ");
 			argList.set(i, newArg);
 		}
-
-		// System.out.println(argList.toString());
 		argList.remove(0);
 		return argList.toArray(new String[argList.size()]);
 	}
 
-	@Override
-	public ITool parse(String commandline) {
-		String dilimiter1 = "::surrounded-pipe::";
-		String dilimiter2 = "::escaped-pipe::";
-
-		// Step 1. find the escape pipe between quotes
-		Pattern regex = Pattern.compile("[^'\"]*[^\\\\]\"([^\"]*)\"|[^'\"]*[^\\\\]'([^\']*)\'");
-		Matcher regexMatcher = regex.matcher(commandline);
+	/**
+	 * Remove all escape words
+	 * @param arg Initial argument
+	 * @return New argument
+	 */
+	private static String removeEscapeWord(String arg) {
+		Pattern regex;
+		Matcher regexMatcher;
+		String newArg = arg;
+		regex = Pattern.compile("(\\\\[;$`\"'*?\\[#��=%\\|\\&\\<\\>\\(\\)\\\\\\s])+");
+		regexMatcher = regex.matcher(newArg);
 		while (regexMatcher.find()) {
 			if (regexMatcher.group(1) != null) {
 				String temp = regexMatcher.group(1);
-				// System.out.println("group1: " + temp);
-				String replaced = temp.replaceAll("\\|", dilimiter1);
-				// System.out.println("group1: " + replaced);
-				commandline = commandline.replace("\"" + temp + "\"", "\"" + replaced + "\"");
+				newArg = newArg.replace(temp, temp.substring(1));
+			}
+		}
+		return newArg;
+	}
+
+	/**
+	 * Find the escape space between quotes
+	 *  
+	 * @param dilimiter1 The delimiter
+	 * @param commandline User command
+	 * @return new command
+	 */
+	private static String findEscapeSpaceBetweenQuotes(String dilimiter1,
+			String commandline) {
+		String newCommandline = commandline;
+		Pattern regex = Pattern.compile("[^'\"]*[^\\\\]\"([^\"]*)\"|[^'\"]*[^\\\\]'([^\']*)\'");
+		Matcher regexMatcher = regex.matcher(newCommandline);
+		while (regexMatcher.find()) {
+			if (regexMatcher.group(1) != null) {
+				String temp = regexMatcher.group(1);
+				String replaced = temp.replaceAll("\\s", dilimiter1);
+				newCommandline = newCommandline.replace("\"" + temp + "\"", "\"" + replaced + "\"");
 			}
 			if (regexMatcher.group(2) != null) {
 				String temp = regexMatcher.group(2);
-				// System.out.println("group2: " + temp);
-				String replaced = temp.replaceAll("\\|", dilimiter1);
-				// System.out.println("group2: " + replaced);
-				commandline = commandline.replace("'" + temp + "'", "'" + replaced + "'");
+				String replaced = temp.replaceAll("\\s", dilimiter1);
+				newCommandline = newCommandline.replace("'" + temp + "'", "'" + replaced + "'");
 			}
 		}
+		return newCommandline;
+	}
 
-		// Step 2. remove all escape pipe
-		commandline = commandline.replaceAll("\\\\\\|", dilimiter2);
-		// System.out.println(commandline);
-
+	/**
+	 * Parse the command
+	 * 
+	 * @param command User command
+	 * @return The tool that needs to handle the command
+	 * 
+	 */
+	@Override
+	public ITool parse(String command) {
+		String dilimiter1 = "::surrounded-pipe::";
+		String dilimiter2 = "::escaped-pipe::";
+		String commandline = command;
+		commandline = findEscapeBetweenQuotes(commandline, dilimiter1); 		// Step 1. find the escape pipe between quotes
+		commandline = commandline.replaceAll("\\\\\\|", dilimiter2);		// Step 2. remove all escape pipe
 		if (commandline.contains("|")) {
 			String[] args = commandline.split("\\|");
 			for (int i = 0; i < args.length; i++) {
@@ -316,51 +338,86 @@ public class Shell implements IShell {
 			commandline = commandline.trim();
 			String[] cmdSplit = commandline.split("\\s+");
 			if (commandline.length() > 0) {
-				// This guarantee valid
 				String cmd = cmdSplit[0].toLowerCase();
-				// Now we need to construct arguments
 				String[] args = getArgsArray(commandline);
 				for (int i = 0; i < args.length; i++) {
 					args[i] = args[i].replace(dilimiter1, "|").replace(dilimiter2, "|");
 				}
 
-				switch (cmd) {
-					case "cat":
-						return new CatTool(args);
-					case "cd":
-						return new CdTool(args);
-					case "copy":
-						return new CopyTool(args);
-					case "delete":
-						return new DeleteTool(args);
-					case "echo":
-						return new EchoTool(args);
-					case "ls":
-						return new LsTool(args);
-					case "move":
-						return new MoveTool(args);
-					case "pwd":
-						return new PWDTool();
-					case "grep":
-						return new GrepTool(args);
-					case "comm":
-						return new CommTool(args);
-					case "cut":
-						return new CutTool(args);
-					case "sort":
-						return new SortTool(args);
-					case "paste":
-						return new PasteTool(args);
-					case "uniq":
-						return new UniqTool(args);
-					case "wc":
-						return new WcTool(args);
-					default:
-						return null;
-				}
+				return returnCommandTool(cmd, args);
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Picks the tool corresponding to the command
+	 * 
+	 * @param cmd First word in user command
+	 * @param args Arguments to be passed to tool
+	 * @return Tool
+	 */
+	private ITool returnCommandTool(String cmd, String[] args) {
+		switch (cmd) {
+			case "cat":
+				return new CatTool(args);
+			case "cd":
+				return new CdTool(args);
+			case "copy":
+				return new CopyTool(args);
+			case "delete":
+				return new DeleteTool(args);
+			case "echo":
+				return new EchoTool(args);
+			case "ls":
+				return new LsTool(args);
+			case "move":
+				return new MoveTool(args);
+			case "pwd":
+				return new PWDTool();
+			case "grep":
+				return new GrepTool(args);
+			case "comm":
+				return new CommTool(args);
+			case "cut":
+				return new CutTool(args);
+			case "sort":
+				return new SortTool(args);
+			case "paste":
+				return new PasteTool(args);
+			case "uniq":
+				return new UniqTool(args);
+			case "wc":
+				return new WcTool(args);
+			default:
+				return null;
+		}
+	}
+
+	/**
+	 * 
+	 * Finds the space between quotes
+	 * @param command Command to be parsed
+	 * @param dilimiter1 Delimiter
+	 * @return
+	 */
+	private String findEscapeBetweenQuotes(String command, String dilimiter) {
+		String commandline = command;
+		Pattern regex = Pattern.compile("[^'\"]*[^\\\\]\"([^\"]*)\"|[^'\"]*[^\\\\]'([^\']*)\'");
+		Matcher regexMatcher = regex.matcher(commandline);
+		while (regexMatcher.find()) {
+			if (regexMatcher.group(1) != null) {
+				String temp = regexMatcher.group(1);
+				String replaced = temp.replaceAll("\\|", dilimiter);
+				commandline = commandline.replace("\"" + temp + "\"", "\"" + replaced + "\"");
+			}
+			if (regexMatcher.group(2) != null) {
+				String temp = regexMatcher.group(2);
+				String replaced = temp.replaceAll("\\|", dilimiter);
+				commandline = commandline.replace("'" + temp + "'", "'" + replaced + "'");
+			}
+		}
+		return commandline;
 	}
 
 	/**
@@ -370,6 +427,8 @@ public class Shell implements IShell {
 	 * Exit with the status code of the executed command 5. In the shell, wait
 	 * for the thread to complete execution 6. Report the exit status of the
 	 * command to the user
+	 * 
+	 * @param args
 	 */
 	public static void main(String[] args) {
 

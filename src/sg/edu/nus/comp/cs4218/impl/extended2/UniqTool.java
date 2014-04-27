@@ -285,21 +285,22 @@ public class UniqTool extends ATool implements IUniqTool {
 	 */
 	@Override
 	public String getUniqueSkipNum(int num, boolean checkCase, String input) {
-		num = (num < 0) ? 0 : num;
+		int newNum = num;
+		newNum = (newNum < 0) ? 0 : newNum;
 		if (checkCase) {
-			if (!compareStringSkip(previousLine, input, num)) {
+			if (!compareStringSkip(previousLine, input, newNum)) {
 				previousLine = input;
 				uniqueList.add(input);
 			}
-			if (!compareStringSkip(currentLine, input, num)) {
+			if (!compareStringSkip(currentLine, input, newNum)) {
 				currentLine += "\n" + input;
 			}
 		} else {
-			if (!compareStringIgnoreCaseSkip(previousLine, input, num)) {
+			if (!compareStringIgnoreCaseSkip(previousLine, input, newNum)) {
 				previousLine = input;
 				uniqueList.add(input);
 			}
-			if (!compareStringIgnoreCaseSkip(currentLine, input, num)) {
+			if (!compareStringIgnoreCaseSkip(currentLine, input, newNum)) {
 				currentLine += "\n" + input;
 			}
 		}

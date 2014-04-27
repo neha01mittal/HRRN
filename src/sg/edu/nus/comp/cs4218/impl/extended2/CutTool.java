@@ -161,25 +161,26 @@ public class CutTool extends ATool implements ICutTool {
 	private String buildCutString(String delim, String input,
 			String escapeDelim, String cutString, List<Integer> characterList) {
 		List<String> splitByNewLineList = Arrays.asList(input.split("\n"));
+		String newCutString = cutString;
 		if (escapeDelim == "") {
 			for (String line : splitByNewLineList) {
 				for (int character : characterList)
 					if (line.length() > character)
-						cutString = cutString
+						newCutString = newCutString
 								+ line.substring(character, character + 1);
-				cutString = cutString + "\n";
+				newCutString = newCutString + "\n";
 			}
 
 		} else {
 			for (String line : splitByNewLineList) {
 				List<String> inputLineList = Arrays.asList(line
 						.split(escapeDelim));
-				cutString = buildCutString(delim, cutString, characterList,
+				newCutString = buildCutString(delim, newCutString, characterList,
 						inputLineList);
 			}
 		}
-		cutString = removeExtraNewLine(cutString);
-		return cutString;
+		newCutString = removeExtraNewLine(newCutString);
+		return newCutString;
 	}
 
 	/**
@@ -194,17 +195,18 @@ public class CutTool extends ATool implements ICutTool {
 	 */
 	private String buildCutString(String delim, String cutString,
 			List<Integer> characterList, List<String> inputLineList) {
+		String newCutString = cutString;
 		for (int character : characterList) {
 			if (inputLineList.size() > character)
 				if (character == characterList.get(characterList.size() - 1))
-					cutString = cutString + inputLineList.get(character);
+					newCutString = newCutString + inputLineList.get(character);
 				else
-					cutString = cutString + inputLineList.get(character)
+					newCutString = newCutString + inputLineList.get(character)
 							+ delim;
 		}
-		cutString = removeLastDelimiter(delim, cutString);
-		cutString = cutString + "\n";
-		return cutString;
+		newCutString = removeLastDelimiter(delim, newCutString);
+		newCutString = newCutString + "\n";
+		return newCutString;
 	}
 
 	/**
@@ -215,11 +217,12 @@ public class CutTool extends ATool implements ICutTool {
 	 * @return Content to be displayed
 	 */
 	private String removeLastDelimiter(String delim, String cutString) {
-		if (cutString.endsWith(delim)) {
-			int size = cutString.length();
-			cutString = cutString.substring(0, size - 1);
+		String newCutString = cutString;
+		if (newCutString.endsWith(delim)) {
+			int size = newCutString.length();
+			newCutString = newCutString.substring(0, size - 1);
 		}
-		return cutString;
+		return newCutString;
 	}
 
 	/**
@@ -231,9 +234,10 @@ public class CutTool extends ATool implements ICutTool {
 	private String removeExtraNewLine(String cutString) {
 		if (cutString.endsWith("\n")) {
 			int size = cutString.length();
-			cutString = cutString.substring(0, size - 1);
+			return cutString.substring(0, size - 1);
+		}else{
+			return cutString;
 		}
-		return cutString;
 	}
 
 	/**
@@ -275,7 +279,7 @@ public class CutTool extends ATool implements ICutTool {
 		int x = 0;
 		int found = -1;
 		for (String arg : args) {
-			found = buildListBasedOnOptions(x, found, arg);
+			found = buildListBasedOnOptions(x, arg);
 			if (getStatusCode() == 1)
 				return INVALID_COMMAND;
 			x++;
@@ -298,7 +302,7 @@ public class CutTool extends ATool implements ICutTool {
 			return INVALID_COMMAND;
 		}
 		// Filename is the last one
-		fileContents = addFileContent(workingDir, stdin, fileContents);
+		fileContents = addFileContent(workingDir, stdin);
 		if (getStatusCode() == 1) {
 			return INVALID_COMMAND;
 		}
@@ -317,23 +321,24 @@ public class CutTool extends ATool implements ICutTool {
 	private String finalFormattedString(String stdin, String fileContents,
 			String finalString, int found) {
 		int x;
+		String newFinalString = finalString;
 		for (x = 0; x < argList.size(); x++) {
 
 			if (argList.get(x).equals("-c")) {
 				String result = cutSpecfiedCharacters(inputList.get(x),
 						fileContents);
-				finalString = contructStringIfValid(finalString, stdin, x, found,
+				newFinalString = contructStringIfValid(stdin, x, found,
 						result);
 				break;
 				
 
 			} else if (argList.get(x).equals("-f")) {
-				finalString = processCharacterList(finalString, stdin, fileContents,
+				newFinalString = processCharacterList(stdin, fileContents,
 						x, found);
 				break;
 			}
 		}
-		return finalString;
+		return newFinalString;
 	}
 
 	/**
@@ -373,38 +378,38 @@ public class CutTool extends ATool implements ICutTool {
 	/**
 	 * constructs string if it is valid
 	 * 
-	 * @param output 
 	 * @param stdin Standard input
 	 * @param x Position of "-"
 	 * @param found "-" if found or not 
 	 * @param result 
 	 * @return Output string
 	 */
-	private String contructStringIfValid(String output, String stdin, int x,
+	private String contructStringIfValid(String stdin, int x,
 			int found, String result) {
+		String newOutput = "";
 		if (result != INVALID_COMMAND)
 			setStatusCode(0);
 		if (stdin != null && stdin != "") {
 			if (x <= found)
-				output = result;
+				newOutput = result;
 		} else
-			output = result;
-		return output;
+			newOutput = result;
+		return newOutput;
 	}
 
 	/**
 	 * processes the character list based on delimiter values
 	 * 
-	 * @param characterList List of character positions
 	 * @param stdin Standard input
 	 * @param fileContents Contents of file
 	 * @param x position of "-"
 	 * @param found If "-" is found or not
 	 * @return  Content to be displayed
 	 */
-	private String processCharacterList(String characterList, String stdin,
+	private String processCharacterList(String stdin,
 			String fileContents, int x, int found) {
 		String result = "";
+		String characterList = "";
 		if (delim != null)
 			result = cutSpecifiedCharactersUseDelimiter(inputList.get(x),
 					delim, fileContents);
@@ -422,13 +427,11 @@ public class CutTool extends ATool implements ICutTool {
 	 * add content to file based on input
 	 * @param workingDir working directory
 	 * @param stdin standard input which might contain file contents
-	 * @param fileContents Contents of one file
 	 * @return Contents of all files
 	 */
-	private String addFileContent(File workingDir, String stdin,
-			String fileContents) {
+	private String addFileContent(File workingDir, String stdin) {
 		String validInput = inputList.get(inputList.size() - 1);
-
+		String fileContents = "";
 		File file = new File(validInput);
 		file = checkForAbsoluteFile(workingDir, validInput, file);
 		// Set file contents to a string
@@ -451,10 +454,11 @@ public class CutTool extends ATool implements ICutTool {
 	 */
 	private File checkForAbsoluteFile(File workingDir, String validInput,
 			File file) {
+		File newFile = file;
 		if (!(file.isAbsolute())) {
-			file = new File(workingDir, validInput);
+			newFile = new File(workingDir, validInput);
 		}
-		return file;
+		return newFile;
 	}
 
 	/**
@@ -464,7 +468,8 @@ public class CutTool extends ATool implements ICutTool {
 	 * @param arg arguments sent by Shell
 	 * @return  If the "-" is found or not
 	 */
-	private int buildListBasedOnOptions(int x, int found, String arg) {
+	private int buildListBasedOnOptions(int x, String arg) {
+		int found = -1;
 		if (arg.startsWith("-")) {
 			if (arg.equals("-c") || arg.equals("-d") || arg.equals("-f")
 					|| arg.equals("-help"))

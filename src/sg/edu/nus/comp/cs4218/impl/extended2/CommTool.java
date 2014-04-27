@@ -337,10 +337,12 @@ public class CommTool extends ATool implements ICommTool {
 	 * @return output after removing last line
 	 */
 	private String removeExtraNewLine(String expectedOutput) {
-		if (expectedOutput.endsWith("\n"))
-			expectedOutput = expectedOutput.substring(0,
+		if (expectedOutput.endsWith("\n")){
+			return expectedOutput.substring(0,
 					expectedOutput.length() - 1);
-		return expectedOutput;
+		}else{
+			return expectedOutput;
+		}
 	}
 
 	/**
@@ -355,12 +357,11 @@ public class CommTool extends ATool implements ICommTool {
 			String expectedOutput) {
 		int comparison = Integer.parseInt(compareFiles(line1, line2));
 		if (comparison == 0)
-			expectedOutput += "\t\t\t\t" + line1;
+			return expectedOutput + "\t\t\t\t" + line1;
 		else if (comparison < 0)
-			expectedOutput += line1 + "\n\t\t" + line2;
+			return expectedOutput + line1 + "\n\t\t" + line2;
 		else
-			expectedOutput += "\t\t" + line2 + "\n" + line1;
-		return expectedOutput;
+			return expectedOutput + "\t\t" + line2 + "\n" + line1;
 	}
 
 	/**
@@ -403,6 +404,8 @@ public class CommTool extends ATool implements ICommTool {
 	 * @return well formed parse code depending on number and type of options passed by user
 	 */
 	public String buildParseCode(String parseCode, int count) {
+		
+		String newParseCode = parseCode;
 		if (args.length > 3 || args.length < 2)
 			return INVALID_COMMAND;
 
@@ -411,21 +414,21 @@ public class CommTool extends ATool implements ICommTool {
 		}
 
 		if (count == 0 && args.length > 0 && args[0].equals("-")) {
-			parseCode = "f1";
+			newParseCode = "f1";
 		}
 
 		if (count == 0 && args.length > 1 && args[1].equals("-")) {
-			parseCode = "f2";
+			newParseCode = "f2";
 		}
 
 		if (count == 1 && args.length > 1 && args[1].equals("-")) {
-			parseCode += ":f1";
+			newParseCode += ":f1";
 		}
 
 		if (count == 1 && args.length > 2 && args[2].equals("-")) {
-			parseCode += ":f2";
+			newParseCode += ":f2";
 		}
-		return parseCode;
+		return newParseCode;
 	}
 
 	/**

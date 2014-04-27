@@ -83,8 +83,7 @@ public class CdToolTest {
 			testFile = new File(filePath);
 			testFile.createNewFile();
 		} catch (IOException e) {
-			Logger logger = Logger.getAnonymousLogger();
-			logger.log(Level.SEVERE, "an exception was thrown", e);
+			//catch
 		}
 	}
 
