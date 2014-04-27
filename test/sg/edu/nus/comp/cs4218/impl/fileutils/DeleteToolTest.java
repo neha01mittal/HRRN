@@ -38,18 +38,19 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
  */
 
 public class DeleteToolTest {
-	private DeleteTool		deleteTool;
-	private Path			rootDirectory;
-	private String			rootDirectoryString;
-	private List<Path>		testDirectoryList;
-	private List<String>	testDirectoryListRelativeString;
-	private List<String>	testDirectoryListAbsoluteString;
+	private DeleteTool deleteTool;
+	private Path rootDirectory;
+	private String rootDirectoryString;
+	private List<Path> testDirectoryList;
+	private List<String> testDirectoryListRelativeString;
+	private List<String> testDirectoryListAbsoluteString;
 
 	@Before
 	public void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") +  File.separator + "deleteToolTest";
+		rootDirectoryString = System.getProperty("user.dir") + File.separator
+				+ "deleteToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -63,14 +64,16 @@ public class DeleteToolTest {
 			try {
 				dirPath += "level-" + i;
 
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString +  File.separator + dirPath);
+				Path temp = FileSystems.getDefault().getPath(
+						rootDirectoryString + File.separator + dirPath);
 				Files.createDirectory(temp);
 
 				testDirectoryList.add(temp);
 				testDirectoryListRelativeString.add(dirPath);
-				testDirectoryListAbsoluteString.add(rootDirectoryString +  File.separator + dirPath);
+				testDirectoryListAbsoluteString.add(rootDirectoryString
+						+ File.separator + dirPath);
 			} catch (IOException e) {
-				//catch
+				// catch
 			}
 		}
 	}
@@ -85,12 +88,14 @@ public class DeleteToolTest {
 	public void testDeleteAbsolutePathFile() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) +  File.separator + "test1.txt");
-		create(testDirectoryListAbsoluteString.get(0) +  File.separator + "test1.txt", "something");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test1.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator
+				+ "test1.txt", "something");
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
-		assertFalse (f1.exists());
+		assertFalse(f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 0);
 	}
 
@@ -99,11 +104,12 @@ public class DeleteToolTest {
 		deleteTool = new DeleteTool(null);
 
 		File f1 = new File(testDirectoryListRelativeString.get(0), "test1.txt");
-		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt", "something");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator
+				+ "test1.txt", "something");
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
-		assertFalse (f1.exists());
+		assertFalse(f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 0);
 
 		// // Delete Again and Check for StatusCode = 1
@@ -116,9 +122,10 @@ public class DeleteToolTest {
 	public void testDeleteNonExistingFile() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "test1.txt");
+		File f1 = new File(testDirectoryListRelativeString.get(0)
+				+ File.separator + "test1.txt");
 		deleteTool.delete(f1);
-		assertFalse (f1.exists());
+		assertFalse(f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 1);
 	}
 
@@ -126,18 +133,20 @@ public class DeleteToolTest {
 	public void testDeleteFolder() {
 		deleteTool = new DeleteTool(null);
 
-		File f1 = new File(rootDirectoryString + File.separator + testDirectoryListRelativeString.get(0), "new");
+		File f1 = new File(rootDirectoryString + File.separator
+				+ testDirectoryListRelativeString.get(0), "new");
 		f1.mkdir();
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
-		assertFalse (f1.exists());
+		assertFalse(f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 0);
 	}
 
 	@Test
 	public void testDeleteFolderWithContents() {
-		File f1 = new File(rootDirectoryString + File.separator + testDirectoryListRelativeString.get(0), "new");
+		File f1 = new File(rootDirectoryString + File.separator
+				+ testDirectoryListRelativeString.get(0), "new");
 		f1.mkdir();
 		File f2 = new File(f1, "test1.txt");
 		try {
@@ -145,36 +154,41 @@ public class DeleteToolTest {
 		} catch (IOException e) {
 
 		}
-		create(testDirectoryListRelativeString.get(0) +  File.separator + "new" +  File.separator + "test1.txt", "something");
+		create(testDirectoryListRelativeString.get(0) + File.separator + "new"
+				+ File.separator + "test1.txt", "something");
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
-		assertFalse (f1.exists());
+		assertFalse(f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 0);
 
 	}
 
 	@Test
 	public void testDeleteNonExistingFolder() {
-		File f1 = new File(rootDirectoryString + File.separator + testDirectoryListRelativeString.get(0) +  File.separator + "new");
+		File f1 = new File(rootDirectoryString + File.separator
+				+ testDirectoryListRelativeString.get(0) + File.separator
+				+ "new");
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
-		assertFalse (f1.exists());
+		assertFalse(f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 0);
 	}
-	
+
 	@Test
 	public void testDeleteInvalidCommand() {
 		deleteTool = new DeleteTool(null);
 		deleteTool.execute(rootDirectory.toFile(), "");
 		assertEquals(deleteTool.getStatusCode(), 1);
 	}
+
 	public void create(String filename, String content) {
 		Writer writer = null;
 
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(filename), "utf-8"));
 			writer.write(content);
 			writer.close();
 		} catch (IOException ex) {

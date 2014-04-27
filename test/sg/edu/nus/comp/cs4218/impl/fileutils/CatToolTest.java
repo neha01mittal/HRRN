@@ -30,34 +30,35 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 /**
  * @usage cat [ - ] [string | path]
  * @options Cat [filename] contents of file Cat [filename1] [filename2] contents
- *          of both files Cat - “text text” output- text text, Anything preceded
- *          by ‘-’ is printed as it is
+ *          of both files Cat - ���text text��� output- text text, Anything
+ *          preceded by ���-��� is printed as it is
  * @note If files extensions are such that they not readable properly (eg: pdf),
  *       it might display garbage values. ls | cat and ls | cat - will print as
  *       expected (contents of that directory or in other words standard input
- *       it receives from the ‘from’ tool). Prioritizes args over stdin i.e. if
- *       there are args in front, it will execute them and ignore stdin eg: ls |
- *       cat file1.txt will print the contents of file1 and not the contents of
- *       current directory@note
+ *       it receives from the ���from��� tool). Prioritizes args over stdin i.e.
+ *       if there are args in front, it will execute them and ignore stdin eg:
+ *       ls | cat file1.txt will print the contents of file1 and not the
+ *       contents of current directory@note
  * @success
  * @exceptions
  **/
 public class CatToolTest {
 
-	private CatTool					catTool;
-	private static Path				rootDirectory;
-	private static String			rootDirectoryString;
-	private static List<String>		testFileListRelativeString;
-	private static List<String>		testFileListAbsoluteString;
-	private static File				root;
-	private static List<File>		testDirectories;
-	private static final String[]	EXTENSIONS	= { ".txt", ".doc" };
+	private CatTool catTool;
+	private static Path rootDirectory;
+	private static String rootDirectoryString;
+	private static List<String> testFileListRelativeString;
+	private static List<String> testFileListAbsoluteString;
+	private static File root;
+	private static List<File> testDirectories;
+	private static final String[] EXTENSIONS = { ".txt", ".doc" };
 
 	@BeforeClass
 	public static void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") +  File.separator + "catToolTest";
+		rootDirectoryString = System.getProperty("user.dir") + File.separator
+				+ "catToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -72,19 +73,24 @@ public class CatToolTest {
 			try {
 				dirPath += "level-" + i;
 
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString +  File.separator + dirPath);
+				Path temp = FileSystems.getDefault().getPath(
+						rootDirectoryString + File.separator + dirPath);
 				Files.createDirectory(temp);
-				File f = new File(temp + File.separator + "test" + i + EXTENSIONS[i]);
+				File f = new File(temp + File.separator + "test" + i
+						+ EXTENSIONS[i]);
 				f.createNewFile();
 				try {
-					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(f, true)));
-					out.println("I am present in file " + i + "\nThis is second (ine of #$ file");
+					PrintWriter out = new PrintWriter(new BufferedWriter(
+							new FileWriter(f, true)));
+					out.println("I am present in file " + i
+							+ "\nThis is second (ine of #$ file");
 					out.close();
 				} catch (IOException e) {
 					// exception handling left as an exercise for the reader
 				}
 				testDirectories.add(temp.toFile());
-				testFileListRelativeString.add(dirPath + File.separator + "test" + i + EXTENSIONS[i]);
+				testFileListRelativeString.add(dirPath + File.separator
+						+ "test" + i + EXTENSIONS[i]);
 				testFileListAbsoluteString.add(f.getAbsolutePath());
 			} catch (IOException e) {
 				Logger logger = Logger.getAnonymousLogger();
@@ -104,7 +110,7 @@ public class CatToolTest {
 	}
 
 	@Test
-	public void catWithAbsolutePath() {
+	public void testCatWithAbsolutePath() {
 		for (int i = 0; i < 2; i++) {
 			String[] filePath = { testFileListAbsoluteString.get(i) };
 			String expectedOutput = "";
@@ -120,7 +126,7 @@ public class CatToolTest {
 	}
 
 	@Test
-	public void catWithStdin() {
+	public void testCatWithStdin() {
 		String stdin = "This is stdin text";
 		catTool = new CatTool(null);
 		String actualOutput = catTool.execute(root, stdin);
@@ -129,7 +135,7 @@ public class CatToolTest {
 	}
 
 	@Test
-	public void catWithRelativePath() {
+	public void testCatWithRelativePath() {
 		for (int i = 0; i < 2; i++) {
 			String[] filePath = { testFileListRelativeString.get(0) };
 			String expectedOutput = "";
@@ -145,9 +151,10 @@ public class CatToolTest {
 	}
 
 	@Test
-	public void catWithMultipleArgs() {
+	public void testCatWithMultipleArgs() {
 		// reads the first file, ignores the rest
-		String[] filePath = { testFileListRelativeString.get(0), testFileListRelativeString.get(1) };
+		String[] filePath = { testFileListRelativeString.get(0),
+				testFileListRelativeString.get(1) };
 		String expectedOutput = "";
 		String expectedOutput2 = "";
 		catTool = new CatTool(filePath);
@@ -164,7 +171,7 @@ public class CatToolTest {
 	}
 
 	@Test
-	public void catWithInvalidArgs() {
+	public void testCatWithInvalidArgs() {
 		// reads the first file, ignores the rest
 		String[] filePath = { "rubbish", "NonExisitingFile" };
 		String expectedOutput = "Error: No such file or directory\n";
@@ -177,14 +184,14 @@ public class CatToolTest {
 	}
 
 	@Test
-	public void catWithNoArgs() {
+	public void testCatWithNoArgs() {
 		catTool = new CatTool(null);
 		catTool.execute(root, null);
 		assertNotEquals(0, catTool.getStatusCode());
 	}
 
 	@Test
-	public void getStringForFileTest() {
+	public void testGetStringForFile() {
 		// reads the first file, ignores the rest
 		String[] filePath = {};
 		String expectedOutput = "";

@@ -48,7 +48,7 @@ public class PwdToolIntegrationTest {
 		String expectedOutput = f1.getAbsolutePath();
 		assertEquals(expectedOutput, output);
 	}
-	
+
 	@Test
 	public void testPwd() {
 		String commandline = "pwd | pwd";
@@ -97,7 +97,7 @@ public class PwdToolIntegrationTest {
 
 	@Test
 	public void testMove2() {
-		String commandline = "move " + file1 +  "| pwd";
+		String commandline = "move " + file1 + "| pwd";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();
@@ -131,6 +131,7 @@ public class PwdToolIntegrationTest {
 		assertEquals(expectedOutput, output);
 		file1.mkdir();
 	}
+
 	@Test
 	public void testDelete2() {
 		String commandline = "delete testFolder2 | pwd";
@@ -170,16 +171,16 @@ public class PwdToolIntegrationTest {
 
 	@Test
 	public void testCat2() {
-		String commandline = "cat " + file1 + file2+"| pwd";
+		String commandline = "cat " + file1 + file2 + "| pwd";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();
 		assertEquals(expectedOutput, output);
 	}
-	
+
 	@Test
 	public void testWc() {
-		String commandline = "wc -l "+file1+"| pwd";
+		String commandline = "wc -l " + file1 + "| pwd";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();
@@ -197,7 +198,7 @@ public class PwdToolIntegrationTest {
 
 	@Test
 	public void testUniq() {
-		String commandline = "uniq -f "+file1+"| pwd";
+		String commandline = "uniq -f " + file1 + "| pwd";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();
@@ -206,7 +207,7 @@ public class PwdToolIntegrationTest {
 
 	@Test
 	public void testUniq2() {
-		String commandline = "uniq -f -l "+file1+" | pwd";
+		String commandline = "uniq -f -l " + file1 + " | pwd";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();
@@ -220,7 +221,7 @@ public class PwdToolIntegrationTest {
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();
 		assertEquals(expectedOutput, output);
-	} 
+	}
 
 	@Test
 	public void testPaste2() {
@@ -233,7 +234,7 @@ public class PwdToolIntegrationTest {
 
 	@Test
 	public void testCut() {
-		String commandline = "cut -f "+file1+ "| pwd";
+		String commandline = "cut -f " + file1 + "| pwd";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();
@@ -242,7 +243,7 @@ public class PwdToolIntegrationTest {
 
 	@Test
 	public void testCut2() {
-		String commandline = "cut -f -c "+file1+ "| pwd";
+		String commandline = "cut -f -c " + file1 + "| pwd";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();
@@ -257,6 +258,7 @@ public class PwdToolIntegrationTest {
 		String expectedOutput = f1.getAbsolutePath();
 		assertEquals(expectedOutput, output);
 	}
+
 	@Test
 	public void testSort2() {
 		String commandline = "sort | pwd";
@@ -268,7 +270,7 @@ public class PwdToolIntegrationTest {
 
 	@Test
 	public void testComm() {
-		String commandline = "comm "+file1+" "+file2+"| pwd";
+		String commandline = "comm " + file1 + " " + file2 + "| pwd";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();
@@ -277,7 +279,7 @@ public class PwdToolIntegrationTest {
 
 	@Test
 	public void testComm2() {
-		String commandline = "comm -d "+file1+" "+file2+"| pwd";
+		String commandline = "comm -d " + file1 + " " + file2 + "| pwd";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();

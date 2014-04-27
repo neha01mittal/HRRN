@@ -34,7 +34,7 @@ public class SortToolTest {
 	// test the functionality of checking if the content in a file is sorted for
 	// the single method and the execute which calls the single method
 	@Test
-	public void checkIfSortedTest() {
+	public void testCheckIfSortedTest() {
 		assertEquals(sorttool.checkIfSorted(readFile("testCase_1.txt")), "10. hp");
 		assertEquals(sorttool.checkIfSorted(readFile("testCase_2.txt")), "ACC1002X");
 		assertEquals(sorttool.checkIfSorted(readFile("testCase_3.txt")), "In order.");
@@ -66,7 +66,7 @@ public class SortToolTest {
 	// method and
 	// the execute which calls the single method
 	@Test
-	public void sortFileTest() {
+	public void testSortFileTest() {
 		assertEquals(sorttool.sortFile(readFile("testCase_1.txt")), "1. IBM\n10. hp\n11. ihis\n2. Symantec\n3. Palantir");
 		assertEquals(sorttool.sortFile(readFile("testCase_2.txt")), "ACC1002X\ngek1517\npc1141\nsw2104");
 		assertEquals(sorttool.sortFile(readFile("testCase_4.txt")), "apple\nban\nbanana\nc\ncarro\ncarrot");
@@ -103,7 +103,7 @@ public class SortToolTest {
 
 	// test if the invalid cases are being handled
 	@Test
-	public void validationTest() {
+	public void testValidation() {
 		String[] args2 = { "notExist.txt" };
 		sorttool2 = new SortTool(args2);
 		assertEquals(sorttool2.execute(f, null), "sort: open failed: notExist.txt: No such file or directory.");

@@ -17,8 +17,8 @@ import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 public class CommToolIntegrationTest {
 	// get two cases from pipe (aalr impl)
 
-	private PipingTool		pipingTool;
-	private static String	rootParent;
+	private PipingTool pipingTool;
+	private static String rootParent;
 
 	@BeforeClass
 	public static void init() {
@@ -66,7 +66,8 @@ public class CommToolIntegrationTest {
 		String commandline = "pwd | comm - commTestCase1a.txt";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(new File(rootParent), null);
-		String expectedOutput = rootParent + "\n\t\taaa\n\t\tccc\n\t\teee\n\t\tgggggg";
+		String expectedOutput = rootParent
+				+ "\n\t\taaa\n\t\tccc\n\t\teee\n\t\tgggggg";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -160,7 +161,8 @@ public class CommToolIntegrationTest {
 		String commandline = "echo aab | comm - commTestCase1b.txt";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(new File(rootParent), null);
-		String expectedOutput = "\t\taaa" + "\naab" + "\n\t\tbbb" + "\n\t\tffff";
+		String expectedOutput = "\t\taaa" + "\naab" + "\n\t\tbbb"
+				+ "\n\t\tffff";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -179,11 +181,8 @@ public class CommToolIntegrationTest {
 		String commandline = "wc -l testCase_3.txt | comm - testCase_2.txt";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(new File(rootParent), null);
-		String expectedOutput = "\t5\ttestCase_3.txt" +
-				"\n\t\tgek1517" +
-				"\n\t\tACC1002X" +
-				"\n\t\tsw2104" +
-				"\n\t\tpc1141";
+		String expectedOutput = "\t5\ttestCase_3.txt" + "\n\t\tgek1517"
+				+ "\n\t\tACC1002X" + "\n\t\tsw2104" + "\n\t\tpc1141";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -247,7 +246,8 @@ public class CommToolIntegrationTest {
 		Writer writer = null;
 
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(filename), "utf-8"));
 			writer.write(content);
 		} catch (IOException ex) {
 			// report

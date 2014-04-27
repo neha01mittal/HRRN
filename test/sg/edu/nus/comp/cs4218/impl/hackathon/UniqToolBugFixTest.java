@@ -15,7 +15,7 @@ import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 
 public class UniqToolBugFixTest {
 
-	private UniqTool	uniqTool;
+	private UniqTool uniqTool;
 
 	@Before
 	public void before() {
@@ -33,10 +33,10 @@ public class UniqToolBugFixTest {
 	 * 
 	 * @fix location: UniqTool.java
 	 * 
-	 * class UniqTool line 255
+	 *      class UniqTool line 255
 	 */
 	@Test
-	public void getTestBugInHackthon1() {
+	public void testUniqToolForBugInHackthon1() {
 
 		String stdin = readFile("uniqTestCase3.txt");
 		uniqTool = new UniqTool(new String[] { "-i", "-" });
@@ -53,10 +53,10 @@ public class UniqToolBugFixTest {
 	 * 
 	 * @fix location: UniqTool.java
 	 * 
-	 * class UniqTool line 290
+	 *      class UniqTool line 290
 	 */
 	@Test
-	public void getTestBugInHackthon2() {
+	public void testUniqToolforBugInHackthon2() {
 
 		String stdin = readFile("uniqTestCase3.txt");
 		uniqTool = new UniqTool(new String[] { "-i", "-f", "1", "-" });

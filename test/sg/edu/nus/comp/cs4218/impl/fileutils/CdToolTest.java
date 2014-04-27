@@ -33,27 +33,28 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
  *       entertained. Cd does not allow std, thus can not be pipe to. Cd tool
  *       will always try to return the Canonical Path of the new directory which
  *       is the most simplified and recognizable. It does not allow user to use
- *       ‘~’ to denote home directory.
+ *       ���~��� to denote home directory.
  * @success returns an empty string, but will not create a new line in the
  *          output.
  * @exceptions invalid input path not exist path is not directory
  */
 public class CdToolTest {
 
-	private static Path			rootDirectory;
-	private static String		rootDirectoryString;
-	private static List<Path>	testDirectoryList;
-	private static List<String>	tdRelativeString;
-	private static List<String>	tdAbsoluteString;
-	private static String		originalPath;
-	private static File			testFile;
-	private CdTool				cdTool;
+	private static Path rootDirectory;
+	private static String rootDirectoryString;
+	private static List<Path> testDirectoryList;
+	private static List<String> tdRelativeString;
+	private static List<String> tdAbsoluteString;
+	private static String originalPath;
+	private static File testFile;
+	private CdTool cdTool;
 
 	@BeforeClass
 	public static void before() throws IOException {
 		// create new dir and files inside
 		originalPath = System.getProperty("user.dir");
-		rootDirectoryString = System.getProperty("user.dir") + File.separator + "cdToolTest";
+		rootDirectoryString = System.getProperty("user.dir") + File.separator
+				+ "cdToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -66,7 +67,8 @@ public class CdToolTest {
 		for (int i = 0; i < 3; i++) {
 			try {
 				dirPath += File.separator + "level-" + i;
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString + dirPath);
+				Path temp = FileSystems.getDefault().getPath(
+						rootDirectoryString + dirPath);
 				Files.createDirectory(temp);
 				testDirectoryList.add(temp);
 				tdRelativeString.add(dirPath.substring(1));
@@ -116,13 +118,15 @@ public class CdToolTest {
 		cdTool.execute(new File(rootDirectoryString), null);
 
 		assertEquals(0, cdTool.getStatusCode());
-		assertEquals(normalizePath(System.getProperty("user.home")), normalizePath(System.getProperty("user.dir")));
+		assertEquals(normalizePath(System.getProperty("user.home")),
+				normalizePath(System.getProperty("user.dir")));
 	}
 
 	@Test
 	public void testCdWithAFile() {
 		// Test error-handling 3
-		String[] args = new String[] { rootDirectoryString + File.separator + "testFile" };
+		String[] args = new String[] { rootDirectoryString + File.separator
+				+ "testFile" };
 		cdTool = new CdTool(args);
 		cdTool.execute(new File(rootDirectoryString), null);
 
@@ -136,7 +140,8 @@ public class CdToolTest {
 		cdTool.execute(new File(rootDirectoryString), tdRelativeString.get(0));
 
 		assertEquals(0, cdTool.getStatusCode());
-		assertEquals(normalizePath(System.getProperty("user.home")), normalizePath(System.getProperty("user.dir")));
+		assertEquals(normalizePath(System.getProperty("user.home")),
+				normalizePath(System.getProperty("user.dir")));
 	}
 
 	@Test
@@ -146,7 +151,8 @@ public class CdToolTest {
 		cdTool.execute(new File(rootDirectoryString), null);
 
 		assertEquals(0, cdTool.getStatusCode());
-		assertEquals(normalizePath(tdAbsoluteString.get(0)), normalizePath(System.getProperty("user.dir")));
+		assertEquals(normalizePath(tdAbsoluteString.get(0)),
+				normalizePath(System.getProperty("user.dir")));
 	}
 
 	@Test
@@ -156,7 +162,8 @@ public class CdToolTest {
 		cdTool.execute(new File(rootDirectoryString), null);
 
 		assertEquals(0, cdTool.getStatusCode());
-		assertEquals(normalizePath(tdAbsoluteString.get(0)), normalizePath(System.getProperty("user.dir")));
+		assertEquals(normalizePath(tdAbsoluteString.get(0)),
+				normalizePath(System.getProperty("user.dir")));
 	}
 
 	@Test
@@ -166,7 +173,8 @@ public class CdToolTest {
 		cdTool.execute(new File(tdAbsoluteString.get(2)), null);
 
 		assertEquals(0, cdTool.getStatusCode());
-		assertEquals(normalizePath(tdAbsoluteString.get(0)), normalizePath(System.getProperty("user.dir")));
+		assertEquals(normalizePath(tdAbsoluteString.get(0)),
+				normalizePath(System.getProperty("user.dir")));
 	}
 
 	@Test
@@ -176,7 +184,8 @@ public class CdToolTest {
 		cdTool.execute(new File(tdAbsoluteString.get(0)), null);
 
 		assertEquals(0, cdTool.getStatusCode());
-		assertEquals(normalizePath(tdAbsoluteString.get(0)), normalizePath(System.getProperty("user.dir")));
+		assertEquals(normalizePath(tdAbsoluteString.get(0)),
+				normalizePath(System.getProperty("user.dir")));
 	}
 
 	@Test

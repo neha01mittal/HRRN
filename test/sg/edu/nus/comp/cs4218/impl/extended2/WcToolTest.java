@@ -36,7 +36,7 @@ public class WcToolTest {
 	// test the functionality of getCharacterCount to count the number of
 	// characters in a file and the execute to call the method
 	@Test
-	public void getCharacterCountTest() throws IOException {
+	public void testGetCharacterCount() throws IOException {
 		assertEquals("30",
 				wctool.getCharacterCount(readFile("testCase_2.txt", std)));
 		assertEquals("11",
@@ -48,14 +48,14 @@ public class WcToolTest {
 	}
 
 	@Test
-	public void getCharacterCountTest02() throws IOException {
+	public void testGetCharacterCount02() throws IOException {
 		String[] args3 = { "-m", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals("\t33\ttestCase_2.txt\n", wctool3.execute(null, null));
 	}
 
 	@Test
-	public void getCharacterCountTest03() throws IOException {
+	public void testGetCharacterCountTest03() throws IOException {
 		String[] args4 = { "-m", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
 		assertEquals("\t16\ttestCase_3.txt\n", wctool4.execute(null, null));
@@ -64,7 +64,7 @@ public class WcToolTest {
 	// test the functionality of getWordCount to count the number of words in a
 	// file and the execute to call the method
 	@Test
-	public void getWordCountTest() throws IOException {
+	public void testGetWordCount() throws IOException {
 		assertEquals("10", wctool.getWordCount(readFile("testCase_1.txt", std)));
 		assertEquals("4", wctool.getWordCount(readFile("testCase_2.txt", std)));
 		assertEquals("6", wctool.getWordCount(readFile("testCase_3.txt", std)));
@@ -73,14 +73,14 @@ public class WcToolTest {
 	}
 
 	@Test
-	public void getWordCountTest02() throws IOException {
+	public void testGetWordCount02() throws IOException {
 		String[] args2 = { "-w", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
 		assertEquals("\t10\ttestCase_1.txt\n", wctool2.execute(null, null));
 	}
 
 	@Test
-	public void getWordCountTest03() throws IOException {
+	public void testGetWordCount03() throws IOException {
 		String[] args3 = { "-w", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals("\t4\ttestCase_2.txt\n", wctool3.execute(null, null));
@@ -88,7 +88,7 @@ public class WcToolTest {
 	}
 
 	@Test
-	public void getWordCountTest04() throws IOException {
+	public void testGetWordCount04() throws IOException {
 		String[] args4 = { "-w", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
 		assertEquals("\t6\ttestCase_3.txt\n", wctool4.execute(null, null));
@@ -97,7 +97,7 @@ public class WcToolTest {
 	// test the functionality of getNewLineCount to count the number of lines in
 	// a file and the execute to call the method
 	@Test
-	public void getNewLineCountTest() throws IOException {
+	public void testGetNewLineCount() throws IOException {
 		assertEquals(wctool.getNewLineCount(readFile("testCase_1.txt", std)),
 				"4");
 		assertEquals(wctool.getNewLineCount(readFile("testCase_2.txt", std)),
@@ -110,21 +110,21 @@ public class WcToolTest {
 				"4");
 	}
 	@Test
-	public void getNewLineCountTest02() throws IOException {
+	public void testGetNewLineCount02() throws IOException {
 		String[] args2 = { "-l", "testCase_1.txt" };
 		wctool2 = new WcTool(args2);
 		assertEquals("\t4\ttestCase_1.txt\n", wctool2.execute(null, null));
 	}
 	
 	@Test
-	public void getNewLineCountTest03() throws IOException {
+	public void testGetNewLineCount03() throws IOException {
 		String[] args3 = { "-l", "testCase_2.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals("\t3\ttestCase_2.txt\n", wctool3.execute(null, null));
 	}
 	
 	@Test
-	public void getNewLineCountTest04() throws IOException {
+	public void testGetNewLineCount04() throws IOException {
 		String[] args4 = { "-l", "testCase_3.txt" };
 		wctool4 = new WcTool(args4);
 		assertEquals("\t5\ttestCase_3.txt\n", wctool4.execute(null, null));
@@ -132,7 +132,7 @@ public class WcToolTest {
 
 	// test the functionality of printing help message
 	@Test
-	public void getHelpTest() {
+	public void testGetHelp() {
 		assertEquals(wctool.getHelp(), "-m : Print only the character counts\t"
 				+ " -w : Print only the word counts\t"
 				+ " -l : Print only the newline counts\t"
@@ -141,7 +141,7 @@ public class WcToolTest {
 	}
 
 	@Test
-	public void getHelpTest02() {
+	public void testGetHelp02() {
 		String[] args2 = { "-help" };
 		wctool2 = new WcTool(args2);
 		assertEquals(wctool2.execute(null, null),
@@ -153,7 +153,7 @@ public class WcToolTest {
 	}
 
 	@Test
-	public void getHelpTest03() {
+	public void testGetHelp03() {
 		String[] args = { "-help" };
 		wctool = new WcTool(args);
 		assertEquals(wctool.execute(f, ""),
@@ -166,7 +166,7 @@ public class WcToolTest {
 
 	// test if the invalid cases are being handled
 	@Test
-	public void validationTest() {
+	public void testValidationNoFile() {
 		String[] args2 = { "-m", "notExist.txt" };
 		wctool2 = new WcTool(args2);
 		assertEquals(wctool2.execute(null, null),
@@ -175,7 +175,7 @@ public class WcToolTest {
 	}
 
 	@Test
-	public void validationTest02() {
+	public void testValidationNoExisitingFile() {
 		String[] args3 = { "-l", "notExist.txt" };
 		wctool3 = new WcTool(args3);
 		assertEquals(wctool3.execute(null, null),
@@ -184,7 +184,7 @@ public class WcToolTest {
 	}
 
 	@Test
-	public void validationTest03() {
+	public void testValidationWithW() {
 		String[] args4 = { "-w", "notExist.txt" };
 		wctool4 = new WcTool(args4);
 		assertEquals(wctool4.execute(null, null),
@@ -193,7 +193,7 @@ public class WcToolTest {
 	}
 
 	@Test
-	public void validationTest04() {
+	public void testValidationTestWithX() {
 		String[] args5 = { "-x", "testCase_1.txt" };
 		wctool5 = new WcTool(args5);
 		assertEquals(wctool5.execute(null, null), "Invalid arguments.");
@@ -204,7 +204,7 @@ public class WcToolTest {
 	}
 
 	@Test
-	public void testWc() {
+	public void testWcWithStdin() {
 		String[] args = { "-l" };
 		String stdin = "txt2html/HTML::TextToHTML Sample Conversion\n"
 				+ "\n"
@@ -273,7 +273,7 @@ public class WcToolTest {
 	}
 	
 	@Test
-	public void wordCountTestEmpty() {
+	public void testWordCountEmpty() {
 		String[] args = {"-l", "emptyFile.txt"};
 		WcTool wt = new WcTool(args);
 		String result = wt.getWordCount("");

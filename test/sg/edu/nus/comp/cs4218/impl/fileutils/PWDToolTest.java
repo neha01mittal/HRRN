@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
+
 /**
  * Show the current directory
  * 
@@ -38,10 +39,11 @@ public class PWDToolTest {
 	}
 
 	@Test
-	public void getStringForDirectoryTest() throws IOException {
+	public void testGetStringForDirectory() throws IOException {
 		// Test expected behavior
 		// Create a tmp-file and get (existing) parent directory
-		String existsDirString = File.createTempFile("exists", "tmp").getParent();
+		String existsDirString = File.createTempFile("exists", "tmp")
+				.getParent();
 		File existsDir = new File(existsDirString);
 
 		String dirString = pwdtool.getStringForDirectory(existsDir);
@@ -51,7 +53,7 @@ public class PWDToolTest {
 	}
 
 	@Test
-	public void getStringForNonExistingDirectoryTest() throws IOException {
+	public void testGetStringForNonExistingDirectory() throws IOException {
 		// Test error-handling 1
 		// Reference non-existing file
 		File notExistsDir = new File("notexists");
@@ -61,7 +63,7 @@ public class PWDToolTest {
 	}
 
 	@Test
-	public void getStringForNullDirectoryTest() throws IOException {
+	public void testGetStringForNullDirectory() throws IOException {
 		// Test error-handling 2
 		pwdtool.getStringForDirectory(null);
 

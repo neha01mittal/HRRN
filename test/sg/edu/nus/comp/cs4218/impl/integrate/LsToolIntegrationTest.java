@@ -39,6 +39,7 @@ public class LsToolIntegrationTest {
 	public static void afterClass() throws IOException {
 		TestUtils.delete(f1);
 	}
+
 	@Test
 	public void testLs() {
 		String commandline = "ls | ls";
@@ -96,7 +97,7 @@ public class LsToolIntegrationTest {
 
 	@Test
 	public void testMove2() {
-		String commandline = "move " + file1 +  "| ls";
+		String commandline = "move " + file1 + "| ls";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
@@ -130,6 +131,7 @@ public class LsToolIntegrationTest {
 		assertEquals(expectedOutput, output);
 		file1.mkdir();
 	}
+
 	@Test
 	public void testDelete2() {
 		String commandline = "delete testFolder2 | ls";
@@ -169,16 +171,16 @@ public class LsToolIntegrationTest {
 
 	@Test
 	public void testCat2() {
-		String commandline = "cat " + file1 + file2+"| ls";
+		String commandline = "cat " + file1 + file2 + "| ls";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
 		assertEquals(expectedOutput, output);
 	}
-	
+
 	@Test
 	public void testWc() {
-		String commandline = "wc -l "+file1+"| ls";
+		String commandline = "wc -l " + file1 + "| ls";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
@@ -196,7 +198,7 @@ public class LsToolIntegrationTest {
 
 	@Test
 	public void testUniq() {
-		String commandline = "uniq -f "+file1+"| ls";
+		String commandline = "uniq -f " + file1 + "| ls";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
@@ -205,7 +207,7 @@ public class LsToolIntegrationTest {
 
 	@Test
 	public void testUniq2() {
-		String commandline = "uniq -f -l "+file1+" | ls";
+		String commandline = "uniq -f -l " + file1 + " | ls";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
@@ -219,7 +221,7 @@ public class LsToolIntegrationTest {
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
 		assertEquals(expectedOutput, output);
-	} 
+	}
 
 	@Test
 	public void testPaste2() {
@@ -232,7 +234,7 @@ public class LsToolIntegrationTest {
 
 	@Test
 	public void testCut() {
-		String commandline = "cut -f "+file1+ "| ls";
+		String commandline = "cut -f " + file1 + "| ls";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
@@ -241,7 +243,7 @@ public class LsToolIntegrationTest {
 
 	@Test
 	public void testCut2() {
-		String commandline = "cut -f -c "+file1+ "| ls";
+		String commandline = "cut -f -c " + file1 + "| ls";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
@@ -256,6 +258,7 @@ public class LsToolIntegrationTest {
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
 		assertEquals(expectedOutput, output);
 	}
+
 	@Test
 	public void testSort2() {
 		String commandline = "sort | ls";
@@ -267,7 +270,7 @@ public class LsToolIntegrationTest {
 
 	@Test
 	public void testComm() {
-		String commandline = "comm "+file1+" "+file2+"| ls";
+		String commandline = "comm " + file1 + " " + file2 + "| ls";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";
@@ -276,7 +279,7 @@ public class LsToolIntegrationTest {
 
 	@Test
 	public void testComm2() {
-		String commandline = "comm -d "+file1+" "+file2+"| ls";
+		String commandline = "comm -d " + file1 + " " + file2 + "| ls";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "test1.txt\ntest2.txt\ntestFolder2";

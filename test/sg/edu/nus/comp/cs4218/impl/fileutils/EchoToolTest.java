@@ -9,25 +9,25 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
-/**
-echo writes its arguments separated by blanks and terminated by a newline on
-the standard output
-Prints the user input as it is. 
-@usage	echo [ | string]
-@options
-echo word: Prints word
-echo “word”: Prints word
-echo “”“word”””: Prints word
-echo ‘’’word’’’: Prints word
-echo ‘“word”’: Prints “word” (To look for word in double quotes, it needs to escaped by single quotes before and after the double quotes)
-echo word\n : Prints echo word\n
-echo word            word2 :Prints word word2
 
-@note
-Removes the first enclosing (single and double) quotes pair- it finds the first matching pair and removes them. If there is an unmatched quote, it just prints it. Does not escapes any escape sequences like \n \t. If the command is followed by no input, the output with a new line. 
-@success
-@exceptions
-*/ 
+/**
+ * echo writes its arguments separated by blanks and terminated by a newline on
+ * the standard output Prints the user input as it is.
+ * 
+ * @usage echo [ | string]
+ * @options echo word: Prints word echo ���word���: Prints word echo
+ *          ���������word���������: Prints word echo ���������word���������:
+ *          Prints word echo ������word������: Prints ���word��� (To look for
+ *          word in double quotes, it needs to escaped by single quotes before
+ *          and after the double quotes) echo word\n : Prints echo word\n echo
+ *          word word2 :Prints word word2
+ * @note Removes the first enclosing (single and double) quotes pair- it finds
+ *       the first matching pair and removes them. If there is an unmatched
+ *       quote, it just prints it. Does not escapes any escape sequences like \n
+ *       \t. If the command is followed by no input, the output with a new line.
+ * @success
+ * @exceptions
+ */
 public class EchoToolTest {
 
 	private IEchoTool echotool;
@@ -84,7 +84,8 @@ public class EchoToolTest {
 		for (String arg : args) {
 			expectedOutput += arg + " ";
 		}
-		expectedOutput = expectedOutput.substring(0, expectedOutput.length() - 1);
+		expectedOutput = expectedOutput.substring(0,
+				expectedOutput.length() - 1);
 		echotool = new EchoTool(args);
 		String result = echotool.execute(null, null);
 

@@ -42,23 +42,24 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
  */
 public class LsToolTest {
 
-	private static Path			rootDirectory;
-	private static Path			emptyFolder;
-	private static String		rootDirectoryString;
-	private static List<Path>	testFileList;
-	private static List<Path>	testFileListAll;
-	private static List<Path>	testFileListLevel0;
-	private static List<Path>	testFileListLevel0All;
-	private static int			nestedLevel;
-	private static int			totalVisibleFile;
-	private static int			totalInvisibleFile;
-	private LsTool				lsTool;
+	private static Path rootDirectory;
+	private static Path emptyFolder;
+	private static String rootDirectoryString;
+	private static List<Path> testFileList;
+	private static List<Path> testFileListAll;
+	private static List<Path> testFileListLevel0;
+	private static List<Path> testFileListLevel0All;
+	private static int nestedLevel;
+	private static int totalVisibleFile;
+	private static int totalInvisibleFile;
+	private LsTool lsTool;
 
 	@BeforeClass
 	public static void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") +  File.separator + "lsToolTest";
+		rootDirectoryString = System.getProperty("user.dir") + File.separator
+				+ "lsToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -74,7 +75,8 @@ public class LsToolTest {
 			totalInvisibleFile = 5;
 			for (int i = 0; i < totalInvisibleFile; i++) {
 				try {
-					String filePath = rootDirectoryString + subDirString + File.separator + ".testFile-" + i + "";
+					String filePath = rootDirectoryString + subDirString
+							+ File.separator + ".testFile-" + i + "";
 					Path temp = FileSystems.getDefault().getPath(filePath);
 					Files.createFile(temp);
 					testFileListAll.add(temp);
@@ -82,7 +84,8 @@ public class LsToolTest {
 						testFileListLevel0All.add(temp);
 					}
 					try {
-						Process p = Runtime.getRuntime().exec("attrib +h " + filePath);
+						Process p = Runtime.getRuntime().exec(
+								"attrib +h " + filePath);
 						p.waitFor();
 					} catch (Exception e) {
 						// whatever doesn't matter
@@ -94,7 +97,8 @@ public class LsToolTest {
 			totalVisibleFile = 10;
 			for (int i = 0; i < totalVisibleFile; i++) {
 				try {
-					String filePath = rootDirectoryString + subDirString + File.separator + "testFile-" + i + "";
+					String filePath = rootDirectoryString + subDirString
+							+ File.separator + "testFile-" + i + "";
 					Path temp = FileSystems.getDefault().getPath(filePath);
 					Files.createFile(temp);
 					testFileListAll.add(temp);
@@ -109,7 +113,8 @@ public class LsToolTest {
 			}
 
 			subDirString += File.separator + "zlevel-" + j;
-			Path tempDir = FileSystems.getDefault().getPath(rootDirectoryString + subDirString);
+			Path tempDir = FileSystems.getDefault().getPath(
+					rootDirectoryString + subDirString);
 			Files.createDirectory(tempDir);
 			testFileListAll.add(tempDir);
 			testFileList.add(tempDir);
@@ -147,7 +152,11 @@ public class LsToolTest {
 
 		// check for filenames
 		for (int i = 0; i < testFileListLevel0.size(); i++) {
-			assertEquals(testFileListLevel0.get(i), FileSystems.getDefault().getPath(rootDirectoryString + File.separator + resultArray[i]));
+			assertEquals(
+					testFileListLevel0.get(i),
+					FileSystems.getDefault().getPath(
+							rootDirectoryString + File.separator
+									+ resultArray[i]));
 		}
 	}
 
@@ -166,7 +175,11 @@ public class LsToolTest {
 
 		// check for filenames
 		for (int i = 0; i < testFileListLevel0All.size(); i++) {
-			assertEquals(testFileListLevel0All.get(i), FileSystems.getDefault().getPath(rootDirectoryString + File.separator + resultArray[i]));
+			assertEquals(
+					testFileListLevel0All.get(i),
+					FileSystems.getDefault().getPath(
+							rootDirectoryString + File.separator
+									+ resultArray[i]));
 		}
 	}
 
@@ -179,7 +192,8 @@ public class LsToolTest {
 
 		lsTool = new LsTool(args);
 
-		String result = lsTool.execute(new File(System.getProperty("user.dir")), null);
+		String result = lsTool.execute(
+				new File(System.getProperty("user.dir")), null);
 		String expected = "ls: lalal: No such file or directory";
 		assertEquals(expected, result);
 	}
@@ -209,7 +223,8 @@ public class LsToolTest {
 
 		// check for filenames
 		for (int i = 0; i < testFileList.size(); i++) {
-			assertEquals(testFileList.get(i), FileSystems.getDefault().getPath(resultArray[i]));
+			assertEquals(testFileList.get(i),
+					FileSystems.getDefault().getPath(resultArray[i]));
 		}
 	}
 
@@ -228,7 +243,8 @@ public class LsToolTest {
 
 		// check for filenames
 		for (int i = 0; i < testFileListAll.size(); i++) {
-			assertEquals(testFileListAll.get(i), FileSystems.getDefault().getPath(resultArray[i]));
+			assertEquals(testFileListAll.get(i), FileSystems.getDefault()
+					.getPath(resultArray[i]));
 		}
 	}
 
@@ -257,7 +273,11 @@ public class LsToolTest {
 
 		// check for filenames
 		for (int i = 0; i < testFileListLevel0.size(); i++) {
-			assertEquals(testFileListLevel0.get(i), FileSystems.getDefault().getPath(rootDirectoryString + File.separator + resultArray[i]));
+			assertEquals(
+					testFileListLevel0.get(i),
+					FileSystems.getDefault().getPath(
+							rootDirectoryString + File.separator
+									+ resultArray[i]));
 		}
 	}
 
@@ -272,7 +292,8 @@ public class LsToolTest {
 
 	@Test
 	public void testWithPathToFileRelativePath() {
-		String[] args = new String[] { testFileListLevel0.get(0).toFile().getPath() };
+		String[] args = new String[] { testFileListLevel0.get(0).toFile()
+				.getPath() };
 		lsTool = new LsTool(args);
 		String result = lsTool.execute(new File(rootDirectoryString), null);
 
@@ -282,7 +303,8 @@ public class LsToolTest {
 
 	@Test
 	public void testWithPathToFileAbsolutePath() {
-		String[] args = new String[] { testFileListLevel0.get(0).toFile().getAbsolutePath() };
+		String[] args = new String[] { testFileListLevel0.get(0).toFile()
+				.getAbsolutePath() };
 		lsTool = new LsTool(args);
 		String result = lsTool.execute(new File(rootDirectoryString), null);
 
@@ -294,7 +316,8 @@ public class LsToolTest {
 	public void testWithOnlyStdin() {
 		lsTool = new LsTool(null);
 
-		String result = lsTool.execute(new File(rootDirectoryString), testFileListLevel0.get(0).toFile().getAbsolutePath());
+		String result = lsTool.execute(new File(rootDirectoryString),
+				testFileListLevel0.get(0).toFile().getAbsolutePath());
 		String[] resultArray = result.split("\n");
 
 		assertEquals(0, lsTool.getStatusCode());
@@ -304,7 +327,11 @@ public class LsToolTest {
 
 		// check for filenames
 		for (int i = 0; i < testFileListLevel0.size(); i++) {
-			assertEquals(testFileListLevel0.get(i), FileSystems.getDefault().getPath(rootDirectoryString + File.separator + resultArray[i]));
+			assertEquals(
+					testFileListLevel0.get(i),
+					FileSystems.getDefault().getPath(
+							rootDirectoryString + File.separator
+									+ resultArray[i]));
 		}
 	}
 
@@ -313,7 +340,8 @@ public class LsToolTest {
 		String[] args = new String[] { "-a" };
 		lsTool = new LsTool(args);
 
-		String result = lsTool.execute(new File(rootDirectoryString), testFileListLevel0.get(0).toFile().getAbsolutePath());
+		String result = lsTool.execute(new File(rootDirectoryString),
+				testFileListLevel0.get(0).toFile().getAbsolutePath());
 		String[] resultArray = result.split("\n");
 
 		assertEquals(0, lsTool.getStatusCode());
@@ -323,7 +351,11 @@ public class LsToolTest {
 
 		// check for filenames
 		for (int i = 0; i < testFileListLevel0All.size(); i++) {
-			assertEquals(testFileListLevel0All.get(i), FileSystems.getDefault().getPath(rootDirectoryString + File.separator + resultArray[i]));
+			assertEquals(
+					testFileListLevel0All.get(i),
+					FileSystems.getDefault().getPath(
+							rootDirectoryString + File.separator
+									+ resultArray[i]));
 		}
 	}
 }

@@ -26,18 +26,19 @@ import sg.edu.nus.comp.cs4218.impl.utils.TestUtils;
 
 public class MyFunctionsCopyToolTest {
 
-	private static CopyTool		copyTool;
-	private static Path			rootDirectory;
-	private static String		rootDirectoryString;
-	private static List<Path>	testDirectoryList;
-	private static List<String>	testDirectoryListRelativeString;
-	private static List<String>	testDirectoryListAbsoluteString;
+	private static CopyTool copyTool;
+	private static Path rootDirectory;
+	private static String rootDirectoryString;
+	private static List<Path> testDirectoryList;
+	private static List<String> testDirectoryListRelativeString;
+	private static List<String> testDirectoryListAbsoluteString;
 
 	@BeforeClass
 	public static void before() throws IOException {
 
 		// create new dir and files inside
-		rootDirectoryString = System.getProperty("user.dir") +  File.separator +"myCopyToolTest";
+		rootDirectoryString = System.getProperty("user.dir") + File.separator
+				+ "myCopyToolTest";
 
 		rootDirectory = Paths.get(rootDirectoryString);
 		Files.createDirectory(rootDirectory);
@@ -51,12 +52,14 @@ public class MyFunctionsCopyToolTest {
 			try {
 				dirPath += "level" + i;
 
-				Path temp = FileSystems.getDefault().getPath(rootDirectoryString +  File.separator + dirPath);
+				Path temp = FileSystems.getDefault().getPath(
+						rootDirectoryString + File.separator + dirPath);
 				Files.createDirectory(temp);
 
 				testDirectoryList.add(temp);
 				testDirectoryListRelativeString.add(dirPath);
-				testDirectoryListAbsoluteString.add(rootDirectoryString +  File.separator + dirPath);
+				testDirectoryListAbsoluteString.add(rootDirectoryString
+						+ File.separator + dirPath);
 			} catch (IOException e) {
 				Logger logger = Logger.getAnonymousLogger();
 				logger.log(Level.SEVERE, "an exception was thrown", e);
@@ -74,9 +77,12 @@ public class MyFunctionsCopyToolTest {
 	@Test
 	public void testRecursiveCopyWithAbsolutePath() {
 		copyTool = new CopyTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt", "something");
-		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test2.txt");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator
+				+ "test.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test2.txt");
 		copyTool.recursivecopy(f1, f2);
 		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
@@ -87,9 +93,12 @@ public class MyFunctionsCopyToolTest {
 	@Test
 	public void testRecursiveCopyWithTwoExtensions() {
 		copyTool = new CopyTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt.txt");
-		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt.txt", "something");
-		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test2.txt");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test.txt.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator
+				+ "test.txt.txt", "something");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test2.txt");
 		copyTool.recursivecopy(f1, f2);
 		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
@@ -99,8 +108,10 @@ public class MyFunctionsCopyToolTest {
 	// Test file name with invalid characters
 	@Test
 	public void testRecursiveCopyWithInvalidCharacters() {
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test@#22.xt");
-		File f2 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test@#22.xt");
+		File f2 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test.txt");
 		String a[] = { f1.getPath().toString(), f2.getPath().toString() };
 		copyTool = new CopyTool(a);
 		copyTool.recursivecopy(f1, f2);
@@ -112,12 +123,14 @@ public class MyFunctionsCopyToolTest {
 	@Test
 	public void testRecursiveCopyIntoInvalidPath() {
 		copyTool = new CopyTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) +
-				File.separator + "test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + File.separator +
-				"test.txt", "something");
-		String a[] = { f1.getPath().toString(),
-				testDirectoryListAbsoluteString.get(0) +  File.separator + "blah" +  File.separator + "test.txt" };
+		File f1 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator
+				+ "test.txt", "something");
+		String a[] = {
+				f1.getPath().toString(),
+				testDirectoryListAbsoluteString.get(0) + File.separator
+						+ "blah" + File.separator + "test.txt" };
 		copyTool = new CopyTool(a);
 		copyTool.recursivecopy(rootDirectory.toFile(), f1);
 		f1.delete();
@@ -128,13 +141,17 @@ public class MyFunctionsCopyToolTest {
 	@Test
 	public void testCopyAndReplaceExistingFile() {
 		copyTool = new CopyTool(null);
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt");
-		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
-		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt", "something");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test1.txt");
+		File f2 = new File(testDirectoryListAbsoluteString.get(1)
+				+ File.separator + "test1.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator
+				+ "test1.txt", "something");
 
 		copyTool.copy(f1, f2);
 
-		f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
+		f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator
+				+ "test1.txt");
 
 		assertTrue(TestUtils.compare(f1, f2));
 		f1.delete();
@@ -145,9 +162,12 @@ public class MyFunctionsCopyToolTest {
 	@Test
 	public void testCopyFolderIntoFile() {
 
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt");
-		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test.txt", "something");
-		String a[] = { testDirectoryListAbsoluteString.get(0), f1.getPath().toString() };
+		File f1 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test.txt");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator
+				+ "test.txt", "something");
+		String a[] = { testDirectoryListAbsoluteString.get(0),
+				f1.getPath().toString() };
 		copyTool = new CopyTool(a);
 		copyTool.execute(rootDirectory.toFile(), "");
 
@@ -162,7 +182,8 @@ public class MyFunctionsCopyToolTest {
 		String result = "true";
 
 		File from = new File(testDirectoryListAbsoluteString.get(1));
-		create(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt", "something");
+		create(testDirectoryListAbsoluteString.get(0) + File.separator
+				+ "test1.txt", "something");
 		File to = new File(testDirectoryListAbsoluteString.get(0));
 		copyTool.recursivecopy(from, to);
 		String[] fList = from.list();
@@ -175,9 +196,11 @@ public class MyFunctionsCopyToolTest {
 			}
 		}
 		assertTrue(result == "true");
-		File f1 = new File(testDirectoryListAbsoluteString.get(0) + File.separator + "test1.txt");
+		File f1 = new File(testDirectoryListAbsoluteString.get(0)
+				+ File.separator + "test1.txt");
 		f1.delete();
-		File f2 = new File(testDirectoryListAbsoluteString.get(1) + File.separator + "test1.txt");
+		File f2 = new File(testDirectoryListAbsoluteString.get(1)
+				+ File.separator + "test1.txt");
 		f2.delete();
 	}
 
@@ -185,7 +208,8 @@ public class MyFunctionsCopyToolTest {
 		Writer writer = null;
 
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(filename), "utf-8"));
 			writer.write(content);
 		} catch (IOException ex) {
 			// report

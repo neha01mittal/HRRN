@@ -30,7 +30,7 @@ public class EchoToolIntegrationTest {
 		f2 = new File(f1, "testFolder2");
 		file1 = new File(f1, "test1.txt");
 		file2 = new File(f1, "test2.txt");
-		f3 = new File(f2,"testFolder3");
+		f3 = new File(f2, "testFolder3");
 		f1.mkdir();
 		f2.mkdir();
 		f3.mkdir();
@@ -51,7 +51,7 @@ public class EchoToolIntegrationTest {
 		String expectedOutput = "this is test";
 		assertEquals(expectedOutput, output);
 	}
-	
+
 	@Test
 	public void testPwd() {
 		String commandline = "pwd | echo this is test";
@@ -63,9 +63,9 @@ public class EchoToolIntegrationTest {
 
 	@Test
 	public void testPwd2() {
-		String commandline = "pwd rubbishvalue | echo "+f1.getAbsolutePath();
+		String commandline = "pwd rubbishvalue | echo " + f1.getAbsolutePath();
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
-		String output= pipingTool.execute(f1, null);
+		String output = pipingTool.execute(f1, null);
 		String expectedOutput = f1.getAbsolutePath();
 		assertEquals(expectedOutput, output);
 	}
@@ -74,16 +74,16 @@ public class EchoToolIntegrationTest {
 	public void testCd() {
 		String commandline = "cd .. | echo";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
-		String output=pipingTool.execute(f2, null);
+		String output = pipingTool.execute(f2, null);
 		String expectedOutput = "";
 		assertEquals(expectedOutput, output);
 	}
 
 	@Test
 	public void testCd2() {
-		String commandline = "cd "+f2+"| echo this is test";
+		String commandline = "cd " + f2 + "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
-		String output=pipingTool.execute(f1, null);
+		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
 		assertEquals(expectedOutput, output);
 	}
@@ -92,7 +92,7 @@ public class EchoToolIntegrationTest {
 	public void testMove() {
 		String commandline = "move " + file1 + " " + f1 + "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
-		String output=pipingTool.execute(f1, null);
+		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
 		assertEquals(expectedOutput, output);
 		file1.mkdir();
@@ -100,7 +100,7 @@ public class EchoToolIntegrationTest {
 
 	@Test
 	public void testMove2() {
-		String commandline = "move " + file1 +  "| echo this is test";
+		String commandline = "move " + file1 + "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
@@ -134,6 +134,7 @@ public class EchoToolIntegrationTest {
 		assertEquals(expectedOutput, output);
 		file1.mkdir();
 	}
+
 	@Test
 	public void testDelete2() {
 		String commandline = "delete testFolder2 | echo";
@@ -173,16 +174,16 @@ public class EchoToolIntegrationTest {
 
 	@Test
 	public void testCat2() {
-		String commandline = "cat " + file1 + file2+"| echo this is test";
+		String commandline = "cat " + file1 + file2 + "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
 		assertEquals(expectedOutput, output);
 	}
-	
+
 	@Test
 	public void testWc() {
-		String commandline = "wc -l "+file1+"| echo this is test";
+		String commandline = "wc -l " + file1 + "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
@@ -200,7 +201,7 @@ public class EchoToolIntegrationTest {
 
 	@Test
 	public void testUniq() {
-		String commandline = "uniq -f "+file1+"| echo this is test";
+		String commandline = "uniq -f " + file1 + "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
@@ -209,7 +210,7 @@ public class EchoToolIntegrationTest {
 
 	@Test
 	public void testUniq2() {
-		String commandline = "uniq -f -l "+file1+" | echo this is test";
+		String commandline = "uniq -f -l " + file1 + " | echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
@@ -218,12 +219,13 @@ public class EchoToolIntegrationTest {
 
 	@Test
 	public void testPaste() {
-		String commandline = "paste " + file1 + " " + file2 + "| echo this is test";
+		String commandline = "paste " + file1 + " " + file2
+				+ "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
 		assertEquals(expectedOutput, output);
-	} 
+	}
 
 	@Test
 	public void testPaste2() {
@@ -236,7 +238,7 @@ public class EchoToolIntegrationTest {
 
 	@Test
 	public void testCut() {
-		String commandline = "cut -f "+file1+ "| echo this is test";
+		String commandline = "cut -f " + file1 + "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
@@ -245,7 +247,7 @@ public class EchoToolIntegrationTest {
 
 	@Test
 	public void testCut2() {
-		String commandline = "cut -f -c "+file1+ "| echo this is test";
+		String commandline = "cut -f -c " + file1 + "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
@@ -260,6 +262,7 @@ public class EchoToolIntegrationTest {
 		String expectedOutput = "this is test";
 		assertEquals(expectedOutput, output);
 	}
+
 	@Test
 	public void testSort2() {
 		String commandline = "sort | echo this is test";
@@ -271,7 +274,8 @@ public class EchoToolIntegrationTest {
 
 	@Test
 	public void testComm() {
-		String commandline = "comm "+file1+" "+file2+"| echo this is test";
+		String commandline = "comm " + file1 + " " + file2
+				+ "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";
@@ -280,7 +284,8 @@ public class EchoToolIntegrationTest {
 
 	@Test
 	public void testComm2() {
-		String commandline = "comm -d "+file1+" "+file2+"| echo this is test";
+		String commandline = "comm -d " + file1 + " " + file2
+				+ "| echo this is test";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		String expectedOutput = "this is test";

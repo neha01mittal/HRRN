@@ -12,7 +12,7 @@ import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 
 public class WcToolIntegrationTest {
 
-	private static File	rootParent;
+	private static File rootParent;
 
 	@BeforeClass
 	public static void init() {

@@ -20,12 +20,12 @@ public class CatToolIntegrationTest {
 
 	// ls, pwd, cd, copy, delete, move, paste, comm, grep, wc, uniq, sort, copy
 
-	private static File	rootParent;
-	private static File	f1;
-	private static File	f2;
-	private static File	f3;
-	private static File	file1;
-	private static File	file2;
+	private static File rootParent;
+	private static File f1;
+	private static File f2;
+	private static File f3;
+	private static File file1;
+	private static File file2;
 
 	@BeforeClass
 	public static void init() {
@@ -297,7 +297,8 @@ public class CatToolIntegrationTest {
 		Writer writer = null;
 
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(filename), "utf-8"));
 			writer.write(content);
 		} catch (IOException ex) {
 			// report

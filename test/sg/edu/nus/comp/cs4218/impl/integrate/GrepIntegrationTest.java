@@ -13,7 +13,7 @@ import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 
 public class GrepIntegrationTest {
 
-	private static File	rootParent;
+	private static File rootParent;
 
 	@BeforeClass
 	public static void init() {
@@ -79,8 +79,8 @@ public class GrepIntegrationTest {
 		String commandline = "paste testCase_4.txt testCase_5.txt | grep a";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "apple\tapple\n" + "ban\tcar\n" +
-				"banana\tcarrot\n" + "carrot\tban\n" + "carro\tbanana";
+		String expectedOutput = "apple\tapple\n" + "ban\tcar\n"
+				+ "banana\tcarrot\n" + "carrot\tban\n" + "carro\tbanana";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -89,7 +89,8 @@ public class GrepIntegrationTest {
 		String commandline = "sort testCase_5.txt | grep a";
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "apple\n" + "ban\n" + "banana\n" + "car\n" + "carrot";
+		String expectedOutput = "apple\n" + "ban\n" + "banana\n" + "car\n"
+				+ "carrot";
 		assertEquals(expectedOutput, output);
 	}
 
@@ -137,10 +138,10 @@ public class GrepIntegrationTest {
 		String expectedOutput = "";
 		assertEquals(expectedOutput, output);
 	}
-	
+
 	@Test
 	public void testCatAndGrep() {
-		String[] commands = {"cat testCase_2.txt", "grep \"(g|e)\" -"};
+		String[] commands = { "cat testCase_2.txt", "grep \"(g|e)\" -" };
 		PipingTool pipingTool = new PipingTool(commands);
 		String output = pipingTool.execute(rootParent, null);
 		String expectedOutput = "gek1517";

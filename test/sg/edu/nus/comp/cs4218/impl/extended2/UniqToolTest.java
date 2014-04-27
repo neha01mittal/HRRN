@@ -27,7 +27,7 @@ public class UniqToolTest {
 
 	// testing interface methods
 	@Test
-	public void executeHelpTest() {
+	public void testExecuteHelp() {
 		String[] args = { "-i", "-help", "input.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -48,7 +48,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeNoOptionTest() {
+	public void testExecuteNoOption() {
 		String[] args = { "uniqTestCase.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -59,7 +59,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeNoOptionTest1() {
+	public void testExecuteNoOption2() {
 		String[] args = { "uniqTestCase1.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -70,7 +70,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeNoOptionTest2() {
+	public void testExecuteNoOption3() {
 		String[] args = { "uniqTestCase2.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -82,7 +82,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeIgnoreCaseTest() {
+	public void testExecuteIgnoreCase() {
 		String[] args = { "-i", "uniqTestCase.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -94,7 +94,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeIgnoreCaseTest1() {
+	public void testExecuteIgnoreCase1() {
 		String[] args = { "-i", "uniqTestCase1.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -106,7 +106,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeIgnoreCaseTest2() {
+	public void testExecuteIgnoreCase2() {
 		String[] args = { "-i", "uniqTestCase2.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -119,7 +119,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeFieldNegativeTest() {
+	public void testExecuteFieldNegative() {
 		String[] args = { "-f", "-1", "uniqTestCase.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -131,7 +131,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeField0Test() {
+	public void testExecuteField1() {
 		String[] args = { "-f", "0", "uniqTestCase.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -143,7 +143,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeFieldTest() {
+	public void testExecuteField2() {
 		String[] args = { "-f", "1", "uniqTestCase.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -154,7 +154,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeStdinTest() {
+	public void testExecuteStdin() {
 		// Test case wrong !!!!!
 		// String stdin = "-i -f 1 uniqTestCase2.txt";
 
@@ -191,7 +191,7 @@ public class UniqToolTest {
 	// }
 
 	@Test
-	public void executeIgnoreCaseFieldTest() {
+	public void testExecuteIgnoreCaseField() {
 		String[] args = { "-f", "0", "-i", "uniqTestCase.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -203,7 +203,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeIgnoreCaseFieldTest1() {
+	public void testExecuteIgnoreCaseField2() {
 		String[] args = { "-i", "-f", "0", "uniqTestCase1.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -215,7 +215,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeIgnoreCaseFieldTest2() {
+	public void testExecuteIgnoreCaseField3() {
 		String[] args = { "-i", "-f", "0", "uniqTestCase2.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -227,7 +227,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeIgnoreCaseFieldTest3() {
+	public void testExecuteIgnoreCaseField4() {
 		String[] args = { "-i", "-f", "1", "uniqTestCase2.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -238,7 +238,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeFieldWithNoNumTest() throws IOException {
+	public void testExecuteFieldWithNoNum() throws IOException {
 		String[] args = { "-f", "input.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -249,7 +249,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeFieldWithSpaceTest() throws IOException {
+	public void testExecuteFieldWithSpace() throws IOException {
 		String[] args = { "-f", " ", "input.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -260,7 +260,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeInvalidFileTest() throws IOException {
+	public void testExecuteInvalidFile() throws IOException {
 		String[] args = { "-i", "input2q3t.tx3t" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -271,7 +271,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeInvalidNumTest() throws IOException {
+	public void testExecuteInvalidNum() throws IOException {
 		String[] args = { "-f", "1-", "input.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -282,7 +282,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeNegativeNumTest() throws IOException {
+	public void testExecuteNegativeNum() throws IOException {
 		String[] args = { "-f", "-1", "uniqTestCase.txt" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -293,7 +293,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void executeDashTest() throws IOException {
+	public void testExecuteDash() throws IOException {
 		String[] args = { "-i", "-" };
 		uniqTool = new UniqTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -303,7 +303,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueCheckCaseBothSameTest() {
+	public void testGetUniqueCheckCaseBothSame() {
 		boolean checkCase = true;
 		uniqTool.currentLine = "I thInk iT Will Work.";
 		String input = "I thInk iT Will Work.";
@@ -312,7 +312,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueCheckCaseBothDifferentTest() {
+	public void testGetUniqueCheckCaseBothDifferent() {
 		boolean checkCase = true;
 		uniqTool.currentLine = "I thInk iT Will Work.";
 		String input = "I thInk iT Will Wor";
@@ -321,7 +321,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueIgnoreCaseBothSameTest() {
+	public void testGetUniqueIgnoreCaseBothSame() {
 		boolean checkCase = false;
 		uniqTool.currentLine = "I THINK IT WILL WORK.";
 		String input = "I thInk iT Will Work.";
@@ -330,7 +330,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueIgnoreCaseBothDifferentTest() {
+	public void testGetUniqueIgnoreCaseBothDifferent() {
 		boolean checkCase = false;
 		uniqTool.currentLine = "I THINK IT WILL WORK.";
 		String input = "I THINK IT WILL WOR";
@@ -340,7 +340,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumCheckCaseNegativeTest() {
+	public void testGetUniqueSkipNumCheckCaseNegative() {
 		int num = -1;
 		boolean checkCase = false;
 		uniqTool.currentLine = "o thInk iT Will Work.";
@@ -351,7 +351,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumCheckCase0Test() {
+	public void testGetUniqueSkipNumCheckCase0() {
 		int num = 0;
 		boolean checkCase = false;
 		uniqTool.currentLine = "o thInk iT Will Work.";
@@ -362,7 +362,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumCheckCase1Test() {
+	public void testGetUniqueSkipNumCheckCase1() {
 		int num = 1;
 		boolean checkCase = false;
 		uniqTool.currentLine = "abc thInk iT Will Work.";
@@ -373,7 +373,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumCheckCase3Test() {
+	public void testGetUniqueSkipNumCheckCase3() {
 		int num = 3;
 		boolean checkCase = false;
 		uniqTool.currentLine = "I thInk ERG Will Work.";
@@ -384,7 +384,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumCheckCaseFieldsInLineEqualsNumTest() {
+	public void testGetUniqueSkipNumCheckCaseFieldsInLineEqualsNum() {
 		int num = 5;
 		boolean checkCase = false;
 		uniqTool.currentLine = "I thInk iT Will Work.";
@@ -395,7 +395,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumCheckCaseFieldsInLineLessThanNumTest() {
+	public void testGetUniqueSkipNumCheckCaseFieldsInLineLessThanNum() {
 		int num = 6;
 		boolean checkCase = false;
 		uniqTool.currentLine = "I thInk iT Will Work.";
@@ -406,7 +406,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumCheckCaseLineWithDifferentLengthTest() {
+	public void testGetUniqueSkipNumCheckCaseLineWithDifferentLength() {
 		int num = 2;
 		boolean checkCase = false;
 		uniqTool.currentLine = "I thInk iT Will Work.";
@@ -417,7 +417,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumIgnoreCase0Test() {
+	public void testGetUniqueSkipNumIgnoreCase0() {
 		int num = 0;
 		boolean checkCase = false;
 		uniqTool.currentLine = "i THINK IT WILL WORK.";
@@ -428,7 +428,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumIgnoreCase1Test() {
+	public void testGetUniqueSkipNumIgnoreCase1() {
 		int num = 1;
 		boolean checkCase = false;
 		uniqTool.currentLine = "abc THINK IT WILL WORK.";
@@ -439,7 +439,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumIgnoreCase3Test() {
+	public void testGetUniqueSkipNumIgnoreCase3() {
 		int num = 3;
 		boolean checkCase = false;
 		uniqTool.currentLine = "I thInk ERG WILL WORK.";
@@ -450,7 +450,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumIgnoreCaseFieldsInLineEqualsNumTest() {
+	public void testGetUniqueSkipNumIgnoreCaseFieldsInLineEqualsNum() {
 		int num = 5;
 		boolean checkCase = false;
 		uniqTool.currentLine = "I THINK IT WILL WORK.";
@@ -461,7 +461,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumIgnoreCaseFieldsInLineLessThanNumTest() {
+	public void testGetUniqueSkipNumIgnoreCaseFieldsInLineLessThanNum() {
 		int num = 6;
 		boolean checkCase = false;
 		uniqTool.currentLine = "I THINK IT WILL WORK.";
@@ -472,7 +472,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumIgnoreCaseLineWithDifferentLengthTest() {
+	public void testGetUniqueSkipNumIgnoreCaseLineWithDifferentLength() {
 		int num = 2;
 		boolean checkCase = false;
 		uniqTool.currentLine = "I THINK IT WILL WORK.";
@@ -483,7 +483,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getUniqueSkipNumIgnoreCaseEmptyTest() {
+	public void testGetUniqueSkipNumIgnoreCaseEmpty() {
 		int num = 0;
 		boolean checkCase = false;
 		uniqTool.currentLine = " ";
@@ -494,7 +494,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getTestBugInHackthon1() {
+	public void testGetTestBugInHackthon1() {
 
 		String stdin = readFile("uniqTestCase3.txt");
 		uniqTool = new UniqTool(new String[] { "-i", "-" });
@@ -506,7 +506,7 @@ public class UniqToolTest {
 	}
 
 	@Test
-	public void getTestBugInHackthon2() {
+	public void testGetTestBugInHackthon2() {
 
 		String stdin = readFile("uniqTestCase3.txt");
 		uniqTool = new UniqTool(new String[] { "-i", "-f", "1", "-" });

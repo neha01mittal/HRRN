@@ -26,7 +26,7 @@ public class CutToolTest {
 
 	// testing interface methods
 	@Test
-	public void executeHelpTest() {
+	public void testExecuteHelpTest() {
 		String[] args = { "-c", "2-4,1", "-help", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -44,7 +44,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeUnsortedListCTest() {
+	public void testExecuteUnsortedListCTest() {
 		String[] args = { "-c", "2-4,1", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -56,7 +56,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeUnsortedListDTest() {
+	public void testExecuteUnsortedListDTest() {
 		String[] args = { "-d", "3", "-f", "1", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -68,7 +68,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeInvalidDelimTest() {
+	public void testExecuteInvalidDelimTest() {
 		String[] args = { "-d", "3**", "-f", "1", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -80,7 +80,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeUnsortedListFTest() {
+	public void testExecuteUnsortedListFTest() {
 		String[] args = { "-f", "1", "-d", "3", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -92,7 +92,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeUnsortedListF0Test() {
+	public void testExecuteUnsortedListF0Test() {
 		String[] args = { "-f", "0", "-d", "3", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -106,7 +106,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeUnsortedListFRangeTest() {
+	public void testExecuteUnsortedListFRangeTest() {
 		String[] args = { "-f", "1-2,2-5", "-d", "3", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -118,7 +118,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeStdinTest() {
+	public void testExecuteStdinTest() {
 		String stdin = "-f 1-2,2-5 -d 3 input.txt";
 		cutTool = new CutTool(null);
 		String workingDir = System.getProperty("user.dir");
@@ -130,7 +130,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeMutipleOptionsTest() throws IOException {
+	public void testExecuteMutipleOptionsTest() throws IOException {
 		String[] args = { "-f", "1-3", "-c", "3", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -142,7 +142,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeDelimWithNoFieldTest() throws IOException {
+	public void testExecuteDelimWithNoFieldTest() throws IOException {
 		String[] args = { "-d", "3", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -153,7 +153,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeDelimWithSpaceTest() throws IOException {
+	public void testExecuteDelimWithSpaceTest() throws IOException {
 		String[] args = { "-d", " ", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -164,7 +164,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeInvalidFileTest() throws IOException {
+	public void testExecuteInvalidFileTest() throws IOException {
 		String[] args = { "-c", "1", "input2q3t.tx3t" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -175,7 +175,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeListMissingDigitTest() throws IOException {
+	public void testExecuteListMissingDigitTest() throws IOException {
 		String[] args = { "-c", "1-", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -186,7 +186,7 @@ public class CutToolTest {
 	}
 	
 	@Test
-	public void executeListMissingDigitTest2() throws IOException {
+	public void testExecuteListMissingDigitTest2() throws IOException {
 		String[] args = { "-c", "-2", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -197,7 +197,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void executeDashTest() throws IOException {
+	public void testExecuteDashTest() throws IOException {
 		String[] args = { "-c", "1-3", "-" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -208,7 +208,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void cutSpecfiedCharactersTest() throws IOException {
+	public void testCutSpecfiedCharactersTest() throws IOException {
 		String currentLine = "Executing.the.program";
 		String list = "1,2-4,5";
 		assertEquals(cutTool.cutSpecfiedCharacters(list, currentLine), "Execu");
@@ -217,11 +217,10 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void cutSpecfiedCharactersNegativeTest() throws IOException {
+	public void testCutSpecfiedCharactersNegativeTest() throws IOException {
 		String currentLine = "Executing.the.program";
 		String list = "1,2-4";
 		assertNotEquals(cutTool.cutSpecfiedCharacters(list, currentLine), "Execu");
-
 	}
 
 	/**
@@ -230,7 +229,7 @@ public class CutToolTest {
 	 * 
 	 */
 	@Test
-	public void cutSpecifiedCharactersUseDelimiterNegativeTest() {
+	public void testCutSpecifiedCharactersUseDelimiterNegativeTest() {
 		String currentLine = "Executing.the.program";
 
 		String list = "-1";
@@ -245,7 +244,7 @@ public class CutToolTest {
 	 * @CorrectedMADE: Giving line number 0 is invalid.
 	 */
 	@Test
-	public void cutSpecifiedCharactersUseDelimiter0Test() {
+	public void testCutSpecifiedCharactersUseDelimiter0Test() {
 		String currentLine = "Executing.the.program";
 
 		String list = "0";
@@ -257,7 +256,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void cutSpecifiedCharactersUseDelimiter1Test() {
+	public void testCutSpecifiedCharactersUseDelimiter1Test() {
 		String currentLine = "Executing.the.program";
 
 		String list = "1";
@@ -267,7 +266,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void cutSpecifiedCharactersUseDelimiterARangeTest() {
+	public void testCutSpecifiedCharactersUseDelimiterARangeTest() {
 		String currentLine = "Executing.the.program";
 
 		// String list = "0-4";
@@ -278,7 +277,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void cutSpecifiedCharactersUseDelimiterARangeSpecialTest() {
+	public void testCutSpecifiedCharactersUseDelimiterARangeSpecialTest() {
 		String currentLine = "Executing.the.program";
 
 		String list = "2-2";
@@ -288,7 +287,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void cutSpecifiedCharactersUseDelimiterAFewRangeTest() {
+	public void testCutSpecifiedCharactersUseDelimiterAFewRangeTest() {
 		String currentLine = "Executing.the.program";
 
 		String list = "1,1-5";
@@ -299,7 +298,7 @@ public class CutToolTest {
 
 	// test helper methods
 	@Test
-	public void sortAndRemoveDuplicateNumbersUnsortedTest() {
+	public void testSortAndRemoveDuplicateNumbersUnsortedTest() {
 		String list = "3-4,1,5,2-3,1";
 		// assertEquals(cutTool.sortAndRemoveDuplicateNumbers(list), "1,2-4,5");
 		// assertEquals(cutTool.getStatusCode(), 0);
@@ -311,7 +310,7 @@ public class CutToolTest {
 	 */
 	//User Defined Function
 	@Test
-	public void sortAndRemoveDuplicateNumbersUnsortedOverlapTest() {
+	public void testSortAndRemoveDuplicateNumbersUnsortedOverlapTest() {
 		String list = "3-4,1,2-6,2-3";
 		// assertEquals(cutTool.sortAndRemoveDuplicateNumbers(list), "1,2-6");
 		// assertEquals(cutTool.getStatusCode(), 0);
@@ -323,7 +322,7 @@ public class CutToolTest {
 	 */
 	//User Defined Function
 	@Test
-	public void sortAndRemoveDuplicateNumbersUnsortedOverlapTest2() {
+	public void testSortAndRemoveDuplicateNumbersUnsortedOverlapTest2() {
 		String list = "3-4,1,2-6,2-3";
 		// assertEquals(cutTool.sortAndRemoveDuplicateNumbers(list), "1,2-6");
 		// assertEquals(cutTool.getStatusCode(), 0);
@@ -335,14 +334,14 @@ public class CutToolTest {
 	 */
 	//User Defined Function
 	@Test
-	public void sortAndRemoveDuplicateNumbersUnsortedOverlapTest3() {
+	public void testSortAndRemoveDuplicateNumbersUnsortedOverlapTest3() {
 		String list = "10-1";
 		// assertEquals(cutTool.sortAndRemoveDuplicateNumbers(list), "10-1");
 		// assertEquals(cutTool.getStatusCode(), 0);
 	}
 	
 	@Test
-	public void sortAndRemoveNumbersTest1() {
+	public void testSortAndRemoveNumbersTest1() {
 		String[] args = { "-c", "3-4,1,2-6,2-3,5", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -354,7 +353,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void sortAndRemoveNumbersTest2() {
+	public void testSortAndRemoveNumbersTest2() {
 		String[] args = { "-c", "8,7,6,5,4,4,5,6,7,8", "input.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -366,7 +365,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void stdinValidationTest() {
+	public void testStdinValidationTestWithNullStdin() {
 		String[] args = { "-c", "1-3", "-" };
 		CutTool cuttooltest = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -375,7 +374,7 @@ public class CutToolTest {
 	}
 
 	@Test
-	public void stdinValidationTest2() {
+	public void testStdinValidationTestWithCOption() {
 		String[] args = { "-c", "1-3", "-" };
 		CutTool cuttooltest = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
@@ -385,7 +384,7 @@ public class CutToolTest {
 	}
 	
 	@Test
-	public void stdinValidationTest3() {
+	public void testStdinValidationTestWithDandFOptions() {
 		String[] args = { "-d", "3", "-f" , "1", "-" };
 		CutTool cuttooltest = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");

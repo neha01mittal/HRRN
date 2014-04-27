@@ -51,7 +51,7 @@ public class PipingToolTest {
 	}
 
 	@Test
-	public void testPipeToInvalid() {
+	public void testInvalidPipeTo1() {
 		String commandline = "ls | a";
 		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 
@@ -62,7 +62,7 @@ public class PipingToolTest {
 	}
 
 	@Test
-	public void testInvalidPipeTo() {
+	public void testInvalidPipeTo2() {
 		String commandline = "ls | b";
 		pipingTool = new PipingTool(commandline.split("\\s\\|\\s"));
 

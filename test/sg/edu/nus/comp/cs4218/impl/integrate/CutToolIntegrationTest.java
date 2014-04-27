@@ -13,9 +13,9 @@ public class CutToolIntegrationTest {
 
 	// ls, pwd, cd, copy, delete, move, paste, comm, grep, wc, uniq, sort, copy
 
-	private static File	f1;
-	private static File	file1;
-	private static File	file2;
+	private static File f1;
+	private static File file1;
+	private static File file2;
 
 	@BeforeClass
 	public static void init() {
@@ -58,7 +58,8 @@ public class CutToolIntegrationTest {
 
 	@Test
 	public void testMove() {
-		String commandline = "move " + file1 + " " + f1 + "| cut -d 3 -f 1 " + file1;
+		String commandline = "move " + file1 + " " + f1 + "| cut -d 3 -f 1 "
+				+ file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "12\n12\n12\n12");
@@ -74,7 +75,8 @@ public class CutToolIntegrationTest {
 
 	@Test
 	public void testCopy2() {
-		String commandline = "copy " + file1 + " " + f1 + " | cut -d 3 -f 1 " + file1;
+		String commandline = "copy " + file1 + " " + f1 + " | cut -d 3 -f 1 "
+				+ file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "12\n12\n12\n12");
@@ -82,7 +84,8 @@ public class CutToolIntegrationTest {
 
 	@Test
 	public void testDelete() {
-		String commandline = "delete " + file2 + "| cut -f 1-2,2-5 -d 3 " + file1;
+		String commandline = "delete " + file2 + "| cut -f 1-2,2-5 -d 3 "
+				+ file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "12345\n1234567\n123456789\n12345");
@@ -154,7 +157,8 @@ public class CutToolIntegrationTest {
 
 	@Test
 	public void testUniq2() {
-		String commandline = "uniq -f -l " + file1 + " | cut -d 3 -f 1 " + file1;
+		String commandline = "uniq -f -l " + file1 + " | cut -d 3 -f 1 "
+				+ file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "12\n12\n12\n12");
@@ -162,7 +166,8 @@ public class CutToolIntegrationTest {
 
 	@Test
 	public void testPaste() {
-		String commandline = "paste " + file1 + " " + file2 + "| cut -d 3 -f 1 " + file1;
+		String commandline = "paste " + file1 + " " + file2
+				+ "| cut -d 3 -f 1 " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "12\n12\n12\n12");
@@ -186,7 +191,8 @@ public class CutToolIntegrationTest {
 
 	@Test
 	public void testCut2() {
-		String commandline = "cut -f -c " + file1 + "| cut - -d 3 -f 1 " + file1;
+		String commandline = "cut -f -c " + file1 + "| cut - -d 3 -f 1 "
+				+ file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "12\n12\n12\n12");
@@ -210,7 +216,8 @@ public class CutToolIntegrationTest {
 
 	@Test
 	public void testComm() {
-		String commandline = "comm " + file1 + " " + file2 + "| cut -d 3 -f 1 " + file1;
+		String commandline = "comm " + file1 + " " + file2 + "| cut -d 3 -f 1 "
+				+ file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "12\n12\n12\n12");
@@ -218,7 +225,8 @@ public class CutToolIntegrationTest {
 
 	@Test
 	public void testComm2() {
-		String commandline = "comm -d " + file1 + " " + file2 + "| cut -d 3 -f 1 " + file1;
+		String commandline = "comm -d " + file1 + " " + file2
+				+ "| cut -d 3 -f 1 " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		String output = pipingTool.execute(f1, null);
 		assertEquals(output, "12\n12\n12\n12");

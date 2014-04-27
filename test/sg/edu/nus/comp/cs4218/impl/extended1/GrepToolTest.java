@@ -303,7 +303,7 @@ public class GrepToolTest {
 	}
 
 	@Test
-	public void testOptionB() {
+	public void testGrepToolWithOptionB() {
 		File f = new File("data/unitTest/file1.txt");
 		String input = "grep -B 2 \"reserve\" " + f.getAbsolutePath();
 
@@ -334,7 +334,7 @@ public class GrepToolTest {
 	}
 
 	@Test
-	public void testOptionC() {
+	public void testGrepToolWithOptionC() {
 		File f = new File("data/unitTest/file1.txt");
 		String input = "grep -C 2 \"reserve\" " + f.getAbsolutePath();
 
@@ -494,24 +494,6 @@ public class GrepToolTest {
 		assertEquals(expected, result);
 	}
 
-	private static String readFile(String file, GrepToolTest gtt)
-			throws FileNotFoundException {
-		String path;
-		File f = new File(file);
-		if (f.isAbsolute())
-			path = file;
-		else
-			path = originalDirString + File.separator + file;
-		try {
-			byte[] encoded = Files.readAllBytes(Paths.get(path));
-			String fileContent = Charset.forName("UTF-8").decode(ByteBuffer.wrap(encoded)).toString();
-			return fileContent.replace("\r", "");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
-
 	@Test
 	public void testParser() {
 		String input = "grep -A 2 \"temp\" file1.txt";
@@ -610,5 +592,24 @@ public class GrepToolTest {
 		String matchingLines = gt.getMatchingLinesOnlyMatchingPart("a",
 				"a a a b c d a");
 		assertEquals("aaaa", matchingLines);
+	}
+	
+
+	private static String readFile(String file, GrepToolTest gtt)
+			throws FileNotFoundException {
+		String path;
+		File f = new File(file);
+		if (f.isAbsolute())
+			path = file;
+		else
+			path = originalDirString + File.separator + file;
+		try {
+			byte[] encoded = Files.readAllBytes(Paths.get(path));
+			String fileContent = Charset.forName("UTF-8").decode(ByteBuffer.wrap(encoded)).toString();
+			return fileContent.replace("\r", "");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

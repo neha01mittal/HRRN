@@ -20,15 +20,15 @@ import sg.edu.nus.comp.cs4218.impl.Shell;
 
 public class IntegrationTest {
 
-	private final ByteArrayOutputStream	outContent	= new ByteArrayOutputStream();
-	private final ByteArrayOutputStream	errContent	= new ByteArrayOutputStream();
-	private static String				originalDirString;
-	private static String				testDirString;
-	private static List<File>			testDirFileList;
-	private Shell						shell;
-	private static InputStream			originalStdin;
-	private static PrintStream			originalStdout;
-	private static PrintStream			originalStderr;
+	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	private static String originalDirString;
+	private static String testDirString;
+	private static List<File> testDirFileList;
+	private Shell shell;
+	private static InputStream originalStdin;
+	private static PrintStream originalStdout;
+	private static PrintStream originalStderr;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -39,7 +39,8 @@ public class IntegrationTest {
 		originalStderr = System.err;
 
 		// create new dir and files inside
-		testDirString = originalDirString + File.separator + "data" + File.separator + "integrationTest2";
+		testDirString = originalDirString + File.separator + "data"
+				+ File.separator + "integrationTest2";
 		FilenameFilter fileNameFilter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
@@ -50,7 +51,8 @@ public class IntegrationTest {
 				return false;
 			}
 		};
-		testDirFileList = Arrays.asList(new File(testDirString).listFiles(fileNameFilter));
+		testDirFileList = Arrays.asList(new File(testDirString)
+				.listFiles(fileNameFilter));
 	}
 
 	@AfterClass

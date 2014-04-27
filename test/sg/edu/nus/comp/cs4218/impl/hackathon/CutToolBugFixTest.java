@@ -12,7 +12,7 @@ import sg.edu.nus.comp.cs4218.impl.extended2.CutTool;
 
 public class CutToolBugFixTest {
 
-	private CutTool	cutTool;
+	private CutTool cutTool;
 
 	@Before
 	public void before() {
@@ -30,10 +30,10 @@ public class CutToolBugFixTest {
 	 * 
 	 * @fix location: Shell.java
 	 * 
-	 * class Shell line 324
+	 *      class Shell line 324
 	 */
 	@Test
-	public void executeUnsortedListF0Test() {
+	public void testExecuteUnsortedListF0() {
 		String[] args = { "-d", " ", "-f", "3", "file4.txt" };
 		cutTool = new CutTool(args);
 		String workingDir = System.getProperty("user.dir");
