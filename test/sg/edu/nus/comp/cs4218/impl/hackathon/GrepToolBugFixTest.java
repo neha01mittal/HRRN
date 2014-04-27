@@ -47,8 +47,8 @@ public class GrepToolBugFixTest {
 	public void testMatchngLinesTrailingContextWithRegex() {
 		String[] args = new String[0];
 		GrepTool gt = new GrepTool(args);
-		String CONTENT_ALPHABET = "a\na\na\n" + "b\nb\n" + "c\nc\n" + "z\n";
-		String matchingLines = gt.getMatchingLinesWithTrailingContext(1, "(a|b|z)", CONTENT_ALPHABET);
+		String contentAlphabet = "a\na\na\n" + "b\nb\n" + "c\nc\n" + "z\n";
+		String matchingLines = gt.getMatchingLinesWithTrailingContext(1, "(a|b|z)", contentAlphabet);
 		assertEquals("a\na\na\nb\nb\nc\nz", matchingLines);
 	}
 	
