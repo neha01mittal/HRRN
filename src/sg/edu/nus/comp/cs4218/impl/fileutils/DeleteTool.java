@@ -116,16 +116,13 @@ public class DeleteTool extends ATool implements IDeleteTool {
 				// Delete the source folders
 				for (int i = 0; i < fList.length; i++) {
 					File source = new File(file, fList[i]);
-					if (Files.deleteIfExists(source.toPath()))
-						setStatusCode(0);
-					else
+					if (!Files.deleteIfExists(source.toPath())){
 						setStatusCode(1);
+					}
 				}
-				if (!Files.deleteIfExists(file.toPath())){
-					setStatusCode(1);
-				} else{
+				if (Files.deleteIfExists(file.toPath())){
 					setStatusCode(0);
-				}
+				} 
 			} else {
 				// Found a file. Delete it
 				if (Files.deleteIfExists(file.toPath()))
