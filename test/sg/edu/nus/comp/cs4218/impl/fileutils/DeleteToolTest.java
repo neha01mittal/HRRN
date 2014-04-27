@@ -1,6 +1,8 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -88,7 +90,7 @@ public class DeleteToolTest {
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
-		assert (!(f1.exists()));
+		assertFalse (f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 0);
 	}
 
@@ -101,7 +103,7 @@ public class DeleteToolTest {
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
-		assert (!(f1.exists()));
+		assertFalse (f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 0);
 
 		// // Delete Again and Check for StatusCode = 1
@@ -116,7 +118,7 @@ public class DeleteToolTest {
 
 		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "test1.txt");
 		deleteTool.delete(f1);
-		assert (!f1.exists());
+		assertFalse (f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 1);
 	}
 
@@ -129,7 +131,7 @@ public class DeleteToolTest {
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
-		assert (!(f1.exists()));
+		assertFalse (f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 0);
 	}
 
@@ -147,7 +149,7 @@ public class DeleteToolTest {
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
-		assert (!(f1.exists() || f2.exists()));
+		assertFalse (f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 0);
 
 	}
@@ -158,10 +160,16 @@ public class DeleteToolTest {
 		String a[] = { f1.toString() };
 		deleteTool = new DeleteTool(a);
 		deleteTool.execute(rootDirectory.toFile(), "");
-		assert (!f1.exists());
+		assertFalse (f1.exists());
 		assertEquals(deleteTool.getStatusCode(), 0);
 	}
-
+	
+	@Test
+	public void testDeleteInvalidCommand() {
+		deleteTool = new DeleteTool(null);
+		deleteTool.execute(rootDirectory.toFile(), "");
+		assertEquals(deleteTool.getStatusCode(), 1);
+	}
 	public void create(String filename, String content) {
 		Writer writer = null;
 

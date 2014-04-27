@@ -322,12 +322,15 @@ public class CutTool extends ATool implements ICutTool {
 			if (argList.get(x).equals("-c")) {
 				String result = cutSpecfiedCharacters(inputList.get(x),
 						fileContents);
-				return contructStringIfValid(finalString, stdin, x, found,
+				finalString = contructStringIfValid(finalString, stdin, x, found,
 						result);
+				break;
+				
 
 			} else if (argList.get(x).equals("-f")) {
-				return processCharacterList(finalString, stdin, fileContents,
+				finalString = processCharacterList(finalString, stdin, fileContents,
 						x, found);
+				break;
 			}
 		}
 		return finalString;
@@ -382,9 +385,7 @@ public class CutTool extends ATool implements ICutTool {
 		if (result != INVALID_COMMAND)
 			setStatusCode(0);
 		if (stdin != null && stdin != "") {
-			if (x > found)
-				output = INVALID_COMMAND;
-			else
+			if (x <= found)
 				output = result;
 		} else
 			output = result;
@@ -410,9 +411,7 @@ public class CutTool extends ATool implements ICutTool {
 		if (result != INVALID_COMMAND)
 			setStatusCode(0);
 		if (stdin != null && stdin != "" && (found > -1)) {
-			if (x > found)
-				characterList = INVALID_COMMAND;
-			else
+			if (x <= found)
 				characterList = result;
 		} else
 			characterList = result;
@@ -501,26 +500,18 @@ public class CutTool extends ATool implements ICutTool {
 	public String getStringForFile(File toRead) {
 		BufferedReader br;
 		String content = "";
-		if (toRead.isFile() && toRead.canRead()) { // checks for Exists and !isDirectory
-			try {
+		try {
 				br = new BufferedReader(new FileReader(toRead));
 				String line = null;
-				try {
-					// content += "Reading file: " + toRead.getName() + ": ";
-					while ((line = br.readLine()) != null) {
+				while ((line = br.readLine()) != null) {
 						content += line + "\n";
 					}
 					br.close();
 					setStatusCode(0);
-				} catch (IOException e) {
-					content = ERROR_NO_SUCH_FILE_OR_DIRECTORY;
-				}
-			} catch (FileNotFoundException e) {
+				
+			} catch (IOException e) {
 				content = ERROR_NO_SUCH_FILE_OR_DIRECTORY;
 			}
-		}else{
-			content = ERROR_NO_SUCH_FILE_OR_DIRECTORY;
-		}
 		return content;
 	}
 

@@ -65,12 +65,6 @@ public class DeleteTool extends ATool implements IDeleteTool {
 		if (!(f1.isAbsolute())) {
 			f1 = new File(workingDir, inputList.get(0));
 		}
-		try {
-			f1 = new File(f1.getCanonicalPath());
-
-		} catch (IOException e) {
-			setStatusCode(1);
-		}
 		if (delete(f1)) {
 			setStatusCode(0);
 		}

@@ -1,5 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.integrate;
 
+import static org.junit.Assert.assertFalse;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,7 +55,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "ls | delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 	
 	@Test
@@ -61,7 +63,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "pwd | delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -69,7 +71,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "pwd rubbishvalue | delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -77,7 +79,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "cd .. | delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -85,7 +87,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "cd "+f2+"| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -93,7 +95,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "move " + file1 + " " + f2 + "| delete " + f2; 
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(f2.exists()));
+		assertFalse (f2.exists());
 		f2.mkdirs();
 	}
 
@@ -102,7 +104,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "move " + file1 +  "| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -110,7 +112,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "copy  | delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -120,7 +122,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "copy " + file2 + " " + file1 + " | delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 		file2.delete();
 	}
 
@@ -131,14 +133,14 @@ public class DeleteToolIntegrationTest {
 		String commandline = "delete " + file2 + "| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 	@Test
 	public void testDelete2() {
 		String commandline = "delete testFolder2 | delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 		f2.mkdirs();
 	}
 
@@ -147,7 +149,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "echo This is test| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -155,7 +157,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "echo | delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -163,7 +165,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "cat " + file1 + "| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -171,7 +173,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "cat -" + file1 + "| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 	
 	@Test
@@ -179,7 +181,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "wc -l "+file1+"| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -187,7 +189,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "wc -x test1.txt | delete " + file1; 
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -195,7 +197,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "uniq -f "+file1+"| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -203,7 +205,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "uniq -f -l "+file1+" | delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -211,7 +213,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "paste " + file1 + " " + file2 + "| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	} 
 
 	@Test
@@ -219,7 +221,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "paste " + file1 + "| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -227,7 +229,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "cut -c 1,2 "+file1+ "| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -235,7 +237,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "cut -f -c "+file1+ "| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -243,14 +245,14 @@ public class DeleteToolIntegrationTest {
 		String commandline = "sort -c " + file1 + "| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 	@Test
 	public void testSort2() {
 		String commandline = "sort | delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -258,7 +260,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "comm "+file1+" "+file2+"| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 
 	@Test
@@ -266,7 +268,7 @@ public class DeleteToolIntegrationTest {
 		String commandline = "comm -d "+file1+" "+file2+"| delete " + file1;
 		PipingTool pipingTool = new PipingTool(commandline.split("\\|"));
 		pipingTool.execute(f1, null);
-		assert (!(file1.exists()));
+		assertFalse (file1.exists());
 	}
 	
 	public void create(String filename, String content) {

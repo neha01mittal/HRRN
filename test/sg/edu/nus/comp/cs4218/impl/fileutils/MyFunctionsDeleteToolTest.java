@@ -1,5 +1,8 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -71,7 +74,7 @@ public class MyFunctionsDeleteToolTest {
 		create(testDirectoryListAbsoluteString.get(0) +  File.separator + "test1.txt", "something");
 
 		deleteTool.recursivedelete(f1);
-		assert (!(f1.exists()));
+		assertFalse (f1.exists()) ;
 	}
 
 	@Test
@@ -82,7 +85,7 @@ public class MyFunctionsDeleteToolTest {
 		create(testDirectoryListRelativeString.get(0) +  File.separator + "test1.txt", "something"); 
 
 		deleteTool.recursivedelete(f1);
-		assert (!(f1.exists()));
+		assertFalse (f1.exists()) ;
 	}
 
 	@Test
@@ -92,7 +95,8 @@ public class MyFunctionsDeleteToolTest {
 		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "test1.txt");
 		deleteTool.recursivedelete(f1);
 		deleteTool.recursivedelete(f1);
-		assert (f1.exists());
+		assertFalse (f1.exists()) ;
+		assertTrue (deleteTool.getStatusCode() == 1);
 
 	}
 
@@ -102,7 +106,7 @@ public class MyFunctionsDeleteToolTest {
 
 		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "new");
 		deleteTool.recursivedelete(f1);
-		assert (!(f1.exists()));
+		assertFalse (f1.exists()) ;
 
 	}
 
@@ -114,7 +118,8 @@ public class MyFunctionsDeleteToolTest {
 		File f2 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "new" + File.separator + "test1.txt");
 		create(testDirectoryListRelativeString.get(0) +  File.separator + "new" + File.separator + "test1.txt", "something");
 		deleteTool.recursivedelete(f1);
-		assert (!(f1.exists() || f2.exists()));
+		assertFalse (f1.exists()) ;
+		assertFalse (f2.exists()) ;
 
 	}
 
@@ -125,7 +130,8 @@ public class MyFunctionsDeleteToolTest {
 		File f1 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "new");
 		deleteTool.recursivedelete(f1);
 		deleteTool.recursivedelete(f1);
-		assert (f1.exists());
+		assertFalse (f1.exists()) ;
+		assertTrue (deleteTool.getStatusCode() == 1);
 
 	}
 

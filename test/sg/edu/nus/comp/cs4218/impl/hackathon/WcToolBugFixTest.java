@@ -26,4 +26,22 @@ public class WcToolBugFixTest {
 		String expectedOutput = "0";
 		assertEquals(result, expectedOutput);
 	}
+	
+	@Test
+	public void wordCountNullInput() {
+		String[] args = {"-l", "emptyFile.txt"};
+		WcTool wt = new WcTool(args);
+		String result = wt.getWordCount(null);
+		String expectedOutput = "0";
+		assertEquals(result, expectedOutput);
+	}
+	
+	@Test
+	public void wordCountCharacterCountNullInput() {
+		String[] args = {"-m", "emptyFile.txt"};
+		WcTool wt = new WcTool(args);
+		String result = wt.getCharacterCount(null);
+		String expectedOutput = "0";
+		assertEquals(result, expectedOutput);
+	}
 }

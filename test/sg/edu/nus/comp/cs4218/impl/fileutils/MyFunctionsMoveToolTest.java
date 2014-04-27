@@ -1,5 +1,8 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 import org.junit.After;
@@ -71,7 +75,7 @@ public class MyFunctionsMoveToolTest {
 		create(testDirectoryListAbsoluteString.get(0) +  File.separator + "test.txt", "something");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) +  File.separator + "test2.txt");
 		moveTool.recursivemove(f1, f2);
-		assert ((!(f1.exists())) && f2.exists());
+		assertFalse (f1.exists()) ;assertTrue( f2.exists());
 		f2.delete();
 	}
 
@@ -82,7 +86,7 @@ public class MyFunctionsMoveToolTest {
 		create(testDirectoryListRelativeString.get(0) +  File.separator + "test.txt", "something");
 		File f2 = new File(testDirectoryListRelativeString.get(0) +  File.separator + "test2.txt");
 		moveTool.recursivemove(f1, f2);
-		assert ((!(f1.exists())) && f2.exists());
+		assertFalse (f1.exists()) ; assertFalse( f2.exists());
 		f2.delete();
 	}
 
@@ -97,7 +101,7 @@ public class MyFunctionsMoveToolTest {
 
 		f2 = new File(testDirectoryListAbsoluteString.get(1) +  File.separator + "test1.txt");
 
-		assert ((!(f1.exists())) && f2.exists());
+		assertFalse (f1.exists()) ;assertFalse( f2.exists());
 		f2.delete();
 	}
 
@@ -112,7 +116,7 @@ public class MyFunctionsMoveToolTest {
 
 		moveTool.recursivemove(from, to);
 
-		assert ((!(from.exists())) && to.exists());
+		assertFalse (f1.exists()) ;assertTrue( to.exists());
 		f1 = new File(testDirectoryListAbsoluteString.get(0) +  File.separator + "level0level1" +  File.separator + "test1.txt");
 		f1.delete();
 		f1 = new File(testDirectoryListAbsoluteString.get(0) +  File.separator + "level0level1");
@@ -127,7 +131,7 @@ public class MyFunctionsMoveToolTest {
 		File to = new File(testDirectoryListAbsoluteString.get(1) + File.separator + ".." +  File.separator + "newfolder");
 		File f2 = new File(testDirectoryListAbsoluteString.get(1)  + File.separator + ".." +  File.separator + "newfolder" + File.separator + "test1.txt");
 		moveTool.recursivemove(f1, to);
-		assert ((!(f1.exists())) && to.exists());
+		assertFalse (f1.exists()) ;assertTrue( to.exists());
 		f2.delete();
 		to.delete();
 
@@ -143,7 +147,7 @@ public class MyFunctionsMoveToolTest {
 		moveTool = new MoveTool(a);
 		moveTool.recursivemove(rootDirectory.toFile(), f1);
 		f1.delete();
-		assert (moveTool.getStatusCode() == 1);
+		assertTrue (moveTool.getStatusCode() == 1);
 	}
 
 	// Test file name with two extensions (.txt.txt)
@@ -154,7 +158,7 @@ public class MyFunctionsMoveToolTest {
 		create(testDirectoryListAbsoluteString.get(0) +  File.separator + "test.txt.txt", "something");
 		File f2 = new File(testDirectoryListAbsoluteString.get(0) +  File.separator + "test2.txt");
 		moveTool.recursivemove(f1, f2);
-		assert ((!(f1.exists())) && f2.exists());
+		assertFalse (f1.exists()) ;assertTrue( f2.exists());
 		f2.delete();
 	}
 

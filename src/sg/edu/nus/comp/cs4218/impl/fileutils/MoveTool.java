@@ -54,9 +54,7 @@ public class MoveTool extends ATool implements IMoveTool {
 
 		// TODO Auto-generated method stub
 		if (args == null || args.length < 1) {
-			if (stdin == null || stdin.trim().length() < 1) {
-				return "No input received.";
-			}
+			return "No input received.";
 		} else {
 
 			for (String arg : args) {
