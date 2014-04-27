@@ -139,13 +139,13 @@ public class PipingTool extends ATool implements IPipingTool {
 	 * @return The tool which handles the command
 	 */
 	public ITool parse(String commandline) {
-		commandline = commandline.trim();
-		String[] cmdSplit = commandline.split("\\s+");
-		if (commandline.length() > 0) {
+		String newCommandline = commandline.trim();
+		String[] cmdSplit = newCommandline.split("\\s+");
+		if (newCommandline.length() > 0) {
 			// This guarantee valid
 			String cmd = cmdSplit[0].toLowerCase();
 			// Now we need to construct arguments
-			String[] args = Shell.getArgsArray(commandline);
+			String[] args = Shell.getArgsArray(newCommandline);
 			switch (cmd) {
 				case "cat":
 					return new CatTool(args);

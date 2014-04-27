@@ -98,24 +98,25 @@ public class PasteTool extends ATool implements IPasteTool {
 	 * @return Content to be printed
 	 */
 	private String extractCharacter(String content, String[] listOfFileContents) {
+		String newContent = content;
 		for (String f : listOfFileContents) {
 			List<String> inputLineList = Arrays.asList(f.split("\n"));
 			for (int a = 0; a < inputLineList.size(); a++) {
-				content = content + inputLineList.get(a);
+				newContent = newContent + inputLineList.get(a);
 				if (a < (inputLineList.size() - 1))
-					content = content + "\t";
+					newContent = newContent + "\t";
 			}
-			if (content.endsWith("\t")) {
-				int size = content.length();
-				content = content.substring(0, size - 1);
+			if (newContent.endsWith("\t")) {
+				int size = newContent.length();
+				newContent = newContent.substring(0, size - 1);
 			}
-			content = content + "\n";
+			newContent = newContent + "\n";
 		}
-		if (content.endsWith("\n")) {
-			int size = content.length();
-			content = content.substring(0, size - 1);
+		if (newContent.endsWith("\n")) {
+			int size = newContent.length();
+			newContent = newContent.substring(0, size - 1);
 		}
-		return content;
+		return newContent;
 	}
 
 	/**
@@ -165,6 +166,8 @@ public class PasteTool extends ATool implements IPasteTool {
 		String[][] matrix = new String[numFiles][];
 		int x = 0;
 		int y = 0;
+		String newContent = content;
+		int maxLine = highest;
 		for (String f : listOfFileContents) {
 			List<String> inputLineList = Arrays.asList(f.split("\n"));
 			matrix[x] = new String[inputLineList.size()];
@@ -173,31 +176,31 @@ public class PasteTool extends ATool implements IPasteTool {
 				y++;
 			}
 			x++;
-			if (y > highest)
-				highest = y;
+			if (y > maxLine)
+				maxLine = y;
 			y = 0;
 		}
-		for (y = 0; y < highest; y++) {
+		for (y = 0; y < maxLine; y++) {
 			for (x = 0; x < numFiles; x++) {
 				if (y < matrix[x].length) {
-					content = content + matrix[x][y];
+					newContent = newContent + matrix[x][y];
 					if ((x + 1) < numFiles)
-						content = content + delim;
+						newContent = newContent + delim;
 				}
 
 			}
-			if (content.endsWith(delim)) {
-				int size = content.length();
+			if (newContent.endsWith(delim)) {
+				int size = newContent.length();
 				int sizeDelim = delim.length();
-				content = content.substring(0, size - sizeDelim);
+				newContent = newContent.substring(0, size - sizeDelim);
 			}
-			content = content + "\n";
+			newContent = newContent + "\n";
 		}
-		if (content.endsWith("\n")) {
-			int size = content.length();
-			content = content.substring(0, size - 1);
+		if (newContent.endsWith("\n")) {
+			int size = newContent.length();
+			newContent = newContent.substring(0, size - 1);
 		}
-		return content;
+		return newContent;
 	}
 
 	/**
@@ -233,14 +236,14 @@ public class PasteTool extends ATool implements IPasteTool {
 		int found = 0;
 		if(args!= null ){
 		for (String arg : args) {
-			found = buildListBasedOnOptions(stdin, x, found, arg);
+			found = buildListBasedOnOptions(stdin, x, arg);
 			if (getStatusCode() == 1)
 				return WRONG_COMMAND;
 			x++;
 		}
 		}
 		if(inputList.size() == 0 && found == 0){
-			addFileContent(stdin, x, found);
+			addFileContent(stdin);
 		}
 		if (argList.contains("-help")) {
 			return helpOption();
@@ -296,18 +299,17 @@ public class PasteTool extends ATool implements IPasteTool {
 	 * 
 	 * @param stdin Standard input
 	 * @param x Location of "-"
-	 * @param found If "-" is found or not
 	 * @param arg The argument passed
 	 * @return location of "-"
 	 */
-	private int buildListBasedOnOptions(String stdin, int x, int found,
-			String arg) {
+	private int buildListBasedOnOptions(String stdin, int x, String arg) {
+		int found = 0;
 		if (arg.startsWith("-")) {
 			if (arg.equals("-s") || arg.equals("-d") || arg.equals("-help"))
 				argList.add(arg);
 			else if (arg.equals("-")){
 				found = 1;
-				addFileContent(stdin, x, found);
+				addFileContent(stdin);
 			}
 			else {
 				setStatusCode(1);
@@ -341,9 +343,8 @@ public class PasteTool extends ATool implements IPasteTool {
 	 * @param x Position of "-"
 	 * @param found If "-" was found or not
 	 */
-	private void addFileContent(String stdin, int x, int found) {
+	private void addFileContent(String stdin) {
 		if(stdin != null && stdin != ""){
-			found = x;
 			Writer writer = null;
 			try {
 				stdinFile = new File(directory, "StdinContentClass.txt");
