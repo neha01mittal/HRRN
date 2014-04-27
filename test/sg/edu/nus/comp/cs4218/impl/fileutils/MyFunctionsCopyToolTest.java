@@ -15,6 +15,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -56,7 +58,8 @@ public class MyFunctionsCopyToolTest {
 				testDirectoryListRelativeString.add(dirPath);
 				testDirectoryListAbsoluteString.add(rootDirectoryString +  File.separator + dirPath);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger logger = Logger.getAnonymousLogger();
+				logger.log(Level.SEVERE, "an exception was thrown", e);
 			}
 		}
 	}

@@ -78,14 +78,17 @@ public class GrepTool extends ATool implements IGrepTool {
 
 		Map<String, ArrayList<String>> parsed = parse();
 		String pattern = getPatternFromInput();
-		if (pattern.compareTo("") == 0)
+		if (pattern.compareTo("") == 0) {
+			this.setStatusCode(1);
 			return "Invalid command";
+		}
 		fileList = getFileListFromInput();
 		fileLength = new int[fileList.size()];
 
 		String fileContent;
 		if (stdin != null && stdin.compareTo("") != 0
-				&& getFileListFromInput().size() == 0)
+				&& getFileListFromInput().size() == 0
+				|| args[args.length - 1].compareTo("-") == 0)
 			fileContent = stdin;
 		else
 			fileContent = getFileContentFromInput(getFileListFromInput());
@@ -282,7 +285,9 @@ public class GrepTool extends ATool implements IGrepTool {
 	 */
 	private int getListOfMatchingLines(String pattern, String input) {
 		int result = 0;
-
+		if (input == null || input.compareTo("") == 0)
+			return 0;
+		
 		try {
 			String[] lines = input.split("\n");
 			ArrayList<String> matchingLines = new ArrayList<String>();
@@ -329,7 +334,7 @@ public class GrepTool extends ATool implements IGrepTool {
 
 		int i = 0;
 		while (i < args.length) {
-			if (args[i].startsWith("-")) {
+			if (args[i].startsWith("-") && args[i].compareTo("-") != 0) {
 				lastOpt = i;
 				String option = args[i].substring(1);
 				if (parsed.get(option) == null) {
@@ -610,12 +615,8 @@ public class GrepTool extends ATool implements IGrepTool {
 		Pattern p = Pattern.compile(pattern);
 		Matcher m = p.matcher(line);
 		m.matches();
-		if (m.find()) {
-			int i = 0;
-			do {
-				result += m.group(i);
-				i++;
-			} while (i < m.groupCount());
+		while (m.find()) {
+			 result += m.group();
 		}
 		return result;
 	}

@@ -45,7 +45,7 @@ public class WcTool extends ATool implements IWcTool {
 	 */
 	@Override
 	public String getCharacterCount(String input) {
-		if (input == null || readStatus == 1)
+		if (input == null || input.compareTo("") == 0 || readStatus == 1)
 			return "0";
 		int result = input.length();
 		setStatusCode(0);
@@ -59,9 +59,9 @@ public class WcTool extends ATool implements IWcTool {
 	 */
 	@Override
 	public String getWordCount(String input) {
-		if (input == null || readStatus == 1)
+		if (input == null || input.compareTo("") == 0 || readStatus == 1)
 			return "0";
-
+		
 		String[] words = input.split("[ \\n]");
 		int result = words.length;
 		setStatusCode(0);
@@ -75,7 +75,7 @@ public class WcTool extends ATool implements IWcTool {
 	 */
 	@Override
 	public String getNewLineCount(String input) {
-		if (input == null || readStatus == 1)
+		if (input == null || input.compareTo("") == 0 || readStatus == 1)
 			return "0";
 
 		int result = input.length() - input.replaceAll("\n", "").length();
@@ -111,18 +111,19 @@ public class WcTool extends ATool implements IWcTool {
 			return result.toString();
 		}
 		String content = populateContent(stdin);
-
+		
 		for (int i = 0; i < args.length; i++) {
-			String arg = args[i];
-			if (arg.compareTo("-") == 0)
-				content = stdin;
-			else if (arg.startsWith("-") && arg.compareTo("-m") != 0
-					&& arg.compareTo("-w") != 0 && arg.compareTo("-l") != 0
-					&& arg.compareTo("-help") != 0) {
-				result.append("Invalid arguments.");
-				return result.toString();
-			}
-		}
+	        String arg = args[i];
+	        if (arg.compareTo("-") == 0 && i ==  args.length - 1)
+	        	content = stdin;
+	        else if (arg.startsWith("-") && arg.compareTo("-m") != 0
+	        		&& arg.compareTo("-w") != 0 && arg.compareTo("-l") != 0
+	        		&& arg.compareTo("-help") != 0) {
+	        	this.setStatusCode(1);
+	        	result.append("Invalid arguments.");
+	        	return result.toString();
+	        }
+	    }
 		addOptionsToArgList();
 
 		if (argList.contains("-help")) {
@@ -154,6 +155,7 @@ public class WcTool extends ATool implements IWcTool {
 				try {
 					processFile(result, args[i]);
 				} catch (IOException e1) {
+					this.setStatusCode(1);
 					result.append("word count: open failed: " + args[i]
 							+ ": No such file or directory.");
 				}
@@ -192,7 +194,7 @@ public class WcTool extends ATool implements IWcTool {
 	 */
 	private String populateContent(String stdin) {
 		String content = null;
-		if (stdin != null && stdin.compareTo("") != 0) {
+		if (stdin != null && stdin.compareTo("") != 0 || args[args.length - 1].compareTo("-") == 0) {
 			content = stdin;
 		}
 		return content;
@@ -336,6 +338,7 @@ public class WcTool extends ATool implements IWcTool {
 			byte[] encoded = Files.readAllBytes(Paths.get(filePath));
 			return encoding.decode(ByteBuffer.wrap(encoded)).toString();
 		} catch (IOException e) {
+			this.setStatusCode(1);
 			throw new IOException(fileName);
 		}
 	}

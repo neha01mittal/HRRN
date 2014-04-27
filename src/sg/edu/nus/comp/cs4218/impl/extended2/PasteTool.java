@@ -27,7 +27,6 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
  *  command1 | paste [file1 ..] - : "-" is replaced by file contents
  *  command1 | paste -s - [file1 ..] 
  *  command1 | paste -d "," [file1 ..] - 
- * @author ranjini
  *
  */
 public class PasteTool extends ATool implements IPasteTool {
@@ -356,14 +355,10 @@ public class PasteTool extends ATool implements IPasteTool {
 				stdinFile = new File(directory, "StdinContentClass.txt");
 				writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(stdinFile.getAbsolutePath().toString()), "utf-8"));
 				writer.write(stdin);
+				writer.close();
 			} catch (IOException ex) {
 				// report
-			} finally {
-				try {
-					writer.close();
-				} catch (Exception ex) {
-				}
-			}
+			} 
 		}
 		inputList.add(stdinFile.getAbsolutePath());
 	}
@@ -386,31 +381,26 @@ public class PasteTool extends ATool implements IPasteTool {
 	public String getStringForFile(File toRead) {
 		BufferedReader br;
 		String content = "";
-		if (!toRead.isFile()) { // checks for Exists and !isDirectory
-			content = ERROR_NO_SUCH_FILE_OR_DIRECTORY;
-		}
-
-		else if (!toRead.canRead()) {
-			content = ERROR_UNABLE_TO_READ_THIS_FILE_TYPE;
-		} else {
+		if (toRead.isFile() && toRead.canRead()) { // checks for Exists and !isDirectory
 			try {
 				br = new BufferedReader(new FileReader(toRead));
 				String line = null;
 				try {
-
+					// content += "Reading file: " + toRead.getName() + ": ";
 					while ((line = br.readLine()) != null) {
 						content += line + "\n";
 					}
 					br.close();
 					setStatusCode(0);
 				} catch (IOException e) {
-					e.printStackTrace();
+					content = ERROR_NO_SUCH_FILE_OR_DIRECTORY;
 				}
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				content = ERROR_NO_SUCH_FILE_OR_DIRECTORY;
 			}
+		}else{
+			content = ERROR_NO_SUCH_FILE_OR_DIRECTORY;
 		}
 		return content;
 	}
-
 }

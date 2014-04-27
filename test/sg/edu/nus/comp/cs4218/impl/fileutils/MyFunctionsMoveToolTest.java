@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +53,7 @@ public class MyFunctionsMoveToolTest {
 				testDirectoryListRelativeString.add(dirPath);
 				testDirectoryListAbsoluteString.add(rootDirectoryString +  File.separator +  dirPath);
 			} catch (IOException e) {
-				e.printStackTrace();
+				//catch
 			}
 		}
 	}
@@ -163,13 +164,9 @@ public class MyFunctionsMoveToolTest {
 		try {
 			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
 			writer.write(content);
+			writer.close();
 		} catch (IOException ex) {
 			// report
-		} finally {
-			try {
-				writer.close();
-			} catch (Exception ex) {
-			}
 		}
 	}
 

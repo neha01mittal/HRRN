@@ -275,13 +275,9 @@ public class DeleteToolIntegrationTest {
 		try {
 			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
 			writer.write(content);
+			writer.close();
 		} catch (IOException ex) {
 			// report
-		} finally {
-			try {
-				writer.close();
-			} catch (Exception ex) {
-			}
 		}
 	}
 }

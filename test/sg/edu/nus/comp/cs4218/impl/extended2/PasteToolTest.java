@@ -337,7 +337,7 @@ public class PasteToolTest {
 	 * @Corrected Reasons on top of file
 	 */
 	@Test
-	public void validationTest2() {
+	public void validationTestNoStdinOrDirectory() {
 
 		String[] args3 = { "-s", "-" };
 		pastetool3 = new PasteTool(args3);
@@ -351,7 +351,7 @@ public class PasteToolTest {
 	 * piping is implemented now
 	 */
 	@Test
-	public void validationTest3() {
+	public void validationTestNotStdin() {
 		String[] args4 = { "-d", "/", "-" };
 		pastetool4 = new PasteTool(args4);
 		// assertEquals(pastetool4.execute(null, null),
@@ -361,43 +361,53 @@ public class PasteToolTest {
 	}
 	
 	@Test
-	public void validationTest4() {
+	public void validationTestNoArgsOrStdin() {
 		assertEquals(pastetool.execute(f, null), "No arguments and no standard input.");
 
 	}
 	
 	@Test
-	public void stdinValidationTest() {
+	public void stdinValidationTestWithOptionS() {
 		String[] args = { "-s", "-" };
 		pastetool = new PasteTool(args);
 		assertEquals(pastetool.execute(f, "1234\n1234"), "1234\t1234");
 	}
 	
 	@Test
-	public void stdinValidationTest2() {
+	public void stdinValidationTestWithDelimiter() {
 		String[] args = { "-d", "$", "-" };
 		pastetool = new PasteTool(args);
 		assertEquals(pastetool.execute(f, "1234\n1234"), "1234\n1234");
 	}
 
 	@Test
-	public void stdinValidationTest3() {
+	public void stdinValidationTestMulitpleFile() {
 		String[] args = { "-d", "@",  "testCase_1.txt", "-" };
 		pastetool = new PasteTool(args);
 		assertEquals(pastetool.execute(f, "1234\n1234"), "1. IBM@1234\n" + "2. Symantec@1234\n" + "3. Palantir\n" + "10. hp\n" + "11. ihis");
 	}
 	
 	@Test
-	public void stdinValidationTest4() {
+	public void stdinValidationTestNoDash() {
 		String[] args = { "-s"};
 		pastetool = new PasteTool(args);
 		assertEquals(pastetool.execute(f, "1234\n1234"), "1234\t1234");
 	}
 	
 	@Test
-	public void stdinValidationTest5() {
+	public void stdinValidationTest() {
 		pastetool = new PasteTool(null);
 		assertEquals(pastetool.execute(f, "1234\n1234"), "1234\n1234");
 	}
-
+	
+	/**
+	 * NEW Test - To cover branch coverage
+	 */
+	@Test
+	public void validationTestCheckNullDirectory() {
+		String[] args = { "-s", "testCase_1.txt" };
+		pastetool = new PasteTool(args);
+		assertEquals(pastetool.execute(null, null), "Error: No such file or directory\n");
+	}
+	
 }

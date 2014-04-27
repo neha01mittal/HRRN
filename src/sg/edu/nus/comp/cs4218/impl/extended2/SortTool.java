@@ -26,13 +26,15 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class SortTool extends ATool implements ISortTool {
 
-	private static final String IN_ORDER = "In order.";
+	private static final String	IN_ORDER	= "In order.";
 	private final List<String>	argList;
 	private final List<String>	inputList;
 
 	/**
 	 * constructor for sort tool
-	 * @param arguments user defined 
+	 * 
+	 * @param arguments
+	 *            user defined
 	 */
 	public SortTool(String[] arguments) {
 		super(arguments);
@@ -40,10 +42,12 @@ public class SortTool extends ATool implements ISortTool {
 		argList = new ArrayList<String>();
 		inputList = new ArrayList<String>();
 	}
-	
+
 	/**
-	 * @param workingDir current working directory for relative file browsing
-	 * @param stdin standard input received from pipe
+	 * @param workingDir
+	 *            current working directory for relative file browsing
+	 * @param stdin
+	 *            standard input received from pipe
 	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
@@ -101,8 +105,10 @@ public class SortTool extends ATool implements ISortTool {
 
 	/**
 	 * 
-	 * @param input processed user input based on options
-	 * @return if args list contains -c then returns output after checking if it is sorted else sorts file normally an returns
+	 * @param input
+	 *            processed user input based on options
+	 * @return if args list contains -c then returns output after checking if it
+	 *         is sorted else sorts file normally an returns
 	 */
 	private String processOptionC(String input) {
 		if (argList.contains("-c")) {
@@ -113,7 +119,8 @@ public class SortTool extends ATool implements ISortTool {
 	}
 
 	/**
-	 * @param input processed user input based on options
+	 * @param input
+	 *            processed user input based on options
 	 * @return sorted file contents
 	 */
 	@Override
@@ -132,7 +139,8 @@ public class SortTool extends ATool implements ISortTool {
 	}
 
 	/**
-	 * @param input processed user input based on options
+	 * @param input
+	 *            processed user input based on options
 	 * @return status if it in order or not
 	 */
 	@Override
@@ -162,9 +170,11 @@ public class SortTool extends ATool implements ISortTool {
 
 	/**
 	 * 
-	 * @param workingDir current working directory 
-	 * @param path path of the file to be read
-	 * @return reads the contents of the file and returns the full text 
+	 * @param workingDir
+	 *            current working directory
+	 * @param path
+	 *            path of the file to be read
+	 * @return reads the contents of the file and returns the full text
 	 */
 	private String readFile(File workingDir, String path) {
 		File newFile = new File(path);

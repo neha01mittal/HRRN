@@ -585,4 +585,30 @@ public class GrepToolTest {
 		String pattern = gt.getPatternFromInput();
 		assertEquals("\"=\"", pattern);
 	}
+	
+	@Test
+	public void testCountLinesEmptyParas() {
+		String[] args = new String[0];
+		GrepTool gt = new GrepTool(args);
+		int matchingLines = gt.getCountOfMatchingLines("", "");
+		assertEquals(0, matchingLines);
+	}
+	
+	@Test
+	public void testMatchngLinesTrailingContextWithRegex() {
+		String[] args = new String[0];
+		GrepTool gt = new GrepTool(args);
+		String CONTENT_ALPHABET = "a\na\na\n" + "b\nb\n" + "c\nc\n" + "z\n";
+		String matchingLines = gt.getMatchingLinesWithTrailingContext(1, "(a|b|z)", CONTENT_ALPHABET);
+		assertEquals("a\na\na\nb\nb\nc\nz", matchingLines);
+	}
+	
+	@Test
+	public void testMatchingLinesOnly() {
+		String[] args = new String[0];
+		GrepTool gt = new GrepTool(args);
+		String matchingLines = gt.getMatchingLinesOnlyMatchingPart("a",
+				"a a a b c d a");
+		assertEquals("aaaa", matchingLines);
+	}
 }
