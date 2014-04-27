@@ -144,7 +144,7 @@ public class GrepIntegrationTest {
 		String[] commands = {"cat testCase_2.txt", "grep \"(g|e)\" -"};
 		PipingTool pipingTool = new PipingTool(commands);
 		String output = pipingTool.execute(rootParent, null);
-		String expectedOutput = "gewk1517";
+		String expectedOutput = "gek1517";
 		assertEquals(expectedOutput, output);
 	}
 }
